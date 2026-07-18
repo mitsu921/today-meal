@@ -696,11 +696,11 @@ async function pickMode(m){
 ${data.pantry.length?`냉장고에 있음: ${data.pantry.map(p=>p.name).join(", ")}`:""}
 - 재료 양 표기, 기본 양념은 basics에. step은 실제 순서(기다리는 건 앞에), 분 단위.
 JSON만, 백틱 금지:
-{"total_min":0,"level":"쉬움|보통|손이 감","ingredients":[{"name":"","amt":""}],"basics":[""],"steps":[{"do":"구체적 동작 한 문장","min":0}],"secret":"맛 포인트 한 문장"}`,1000);
+{"total_min":0,"level":"쉬움|보통|손이 감","ingredients":[{"name":"","amt":""}],"basics":[""],"steps":[{"do":"구체적 동작 한 문장","min":0}],"secret":"맛 포인트 한 문장"}`,1400);
     }else{
       delivery=await ask(`"${res.name}"(${menu}) 배달 주문 조언.
 JSON만, 백틱 금지:
-{"search":["검색어1","검색어2"],"order_tips":["옵션 팁1","옵션 팁2"],"healthy":"영양 팁 한 문장"}`,350);
+{"search":["검색어1","검색어2"],"order_tips":["옵션 팁1","옵션 팁2"],"healthy":"영양 팁 한 문장"}`,600);
     }
     renderMode();
   }catch(e){
