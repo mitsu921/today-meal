@@ -598,7 +598,7 @@ function setAuthMode(m){
  $('#auth-msg').textContent='';
 }
 $('#kakao-btn').onclick=async()=>{
- const {error}=await sb.auth.signInWithOAuth({provider:'kakao',options:{redirectTo:location.origin,scopes:'profile_nickname'}});
+ const {error}=await sb.auth.signInWithOAuth({provider:'kakao',options:{redirectTo:location.origin,scopes:'profile_nickname account_email'}});
  if(error)toast('카카오 연결 실패: '+error.message);
 };
 $('#tab-login').onclick=()=>setAuthMode('login');
