@@ -296,7 +296,13 @@ const save=()=>localStorage.setItem('mom-meal',JSON.stringify(D));
 let person="우리 아이",meal="점심",res=null,recipe=null,delivery=null,mode=null,busy=false,seen=[],eaten=false,scrapped=false;
 
 function toast(t){const n=$('#toast');n.textContent=t;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),1800)}
-function go(v){if(v==='upload'&&!me){toast('레시피를 올리려면 로그인이 필요해요');v='login';}if(v==='explore'){loadFeed();}app.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.dataset.view===v));app.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.go===v));window.scrollTo(0,0);
+function go(v){
+ if(v==='upload'&&!me){
+  refreshAuth().then(()=>{ if(me){go('upload');} else {toast('레시피를 올리려면 로그인이 필요해요');go('login');} });
+  return;
+ }
+ if(v==='kitchen'){refreshAuth();}
+ if(v==='explore'){loadFeed();}app.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.dataset.view===v));app.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.go===v));window.scrollTo(0,0);
  if(v==='fridge')renderPantry(); if(v==='shop')renderShop(); if(v==='kitchen')renderKitchen();}
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
 
@@ -567,7 +573,14 @@ async function refreshAuth(){
  if(me) await ensureProfile();
  renderAuthUI();
 }
-sb.auth.onAuthStateChange(async(_e,s)=>{me=s?s.user:null;if(me)await ensureProfile();renderAuthUI();});
+sb.auth.onAuthStateChange(async(ev,s)=>{
+ me=s?s.user:null;
+ if(me)await ensureProfile();
+ renderAuthUI();
+ if(ev==='SIGNED_IN'&&(location.search.includes('code=')||location.hash.includes('access_token'))){
+  history.replaceState(null,'',location.pathname);
+ }
+});
 
 function renderAuthUI(){
  const box=$('#auth-box'); if(!box)return;
