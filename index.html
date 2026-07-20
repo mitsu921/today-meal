@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,6 +6,7 @@
 <title>오늘 뭐먹지 — 워킹맘의 식사 비서</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>if(!window.supabase)document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>')</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
     #family-meal-app{max-width:430px;margin:auto;min-height:760px;background:#fffdf8;color:#26392d;font-family:Arial,"Apple SD Gothic Neo",sans-serif;position:relative}#family-meal-app *{box-sizing:border-box}#family-meal-app button,#family-meal-app input,#family-meal-app textarea{font:inherit}#family-meal-app button{border:0;cursor:pointer}#family-meal-app .view{display:none;min-height:700px;padding-bottom:78px}#family-meal-app .view.active{display:block}#family-meal-app .head{padding:23px 20px 14px;background:linear-gradient(135deg,#f3fbef,#fff6e9)}#family-meal-app h1{font-size:27px;letter-spacing:-1.5px;margin:14px 0 5px}#family-meal-app h2{font-size:19px;letter-spacing:-.7px;margin:0 0 12px}#family-meal-app h3{font-size:15px;margin:0}#family-meal-app .muted{color:#78877d;font-size:13px;margin:0;line-height:1.5}#family-meal-app .line{display:flex;align-items:center;justify-content:space-between}#family-meal-app .back{background:none;font-size:22px;color:#2e513a;padding:0}#family-meal-app .section{padding:19px 20px 0}#family-meal-app .chips{display:flex;gap:7px;overflow:auto;padding-bottom:3px}#family-meal-app .chip{white-space:nowrap;border-radius:20px;padding:8px 11px;background:#f0f3ef;color:#526158;font-size:12px}.chip.active{background:#3c7b51!important;color:#fff!important;font-weight:bold}#family-meal-app .families{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}#family-meal-app .family{padding:9px 3px;border-radius:14px;background:#f4f6f3;font-size:11px;color:#324338}.family.selected{outline:2px solid #86bd92;background:#e7f5e8;font-weight:bold}.family span{display:block;font-size:25px;margin-bottom:4px}#family-meal-app .hero{margin:17px 20px 0;padding:18px;border-radius:21px;color:white;background:linear-gradient(135deg,#3b7c51,#70ae75);box-shadow:0 9px 20px #3774442b}.hero .tag{font-size:11px;background:#ffffff2c;border-radius:14px;padding:5px 8px;display:inline-block}.hero strong{font-size:23px;letter-spacing:-1px}.dish{font-size:45px}.meta{font-size:12px;margin:6px 0 13px}.hero-actions{display:flex;gap:8px}.hero-actions button{flex:1;border-radius:12px;padding:10px;background:white;color:#39734b;font-size:13px;font-weight:bold}.hero-actions .alt{background:#ffffff25;color:white}#family-meal-app .recipe-row{display:flex;gap:11px;overflow:auto;padding-bottom:5px}.recipe-card{flex:0 0 162px;background:white;border:1px solid #e7ebe6;border-radius:15px;overflow:hidden}.picture{height:100px;display:grid;place-items:center;font-size:50px;background:#fde2ba}.picture.green{background:#dbeed5}.recipe-card div:last-child{padding:9px 10px}.recipe-title{font-size:13px;font-weight:bold;margin:4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tiny{font-size:10px;color:#77857d}.like{font-size:11px;color:#ef8744}.benefit{margin:18px 20px 0;padding:14px;display:flex;gap:10px;align-items:center;background:#fff2d8;border-radius:15px}.benefit b{font-size:13px}.benefit p{font-size:11px;color:#776449;margin:4px 0 0}.search{margin:0 20px;padding:11px 12px;border-radius:13px;background:#f1f4ef;color:#7b897f;font-size:13px}.list{padding:12px 20px}.list-item{width:100%;display:flex;align-items:center;gap:12px;padding:12px 0;background:none;text-align:left;border-bottom:1px solid #edf0ec;color:#25382c}.list-item .smile{font-size:37px}.list-item b{display:block;font-size:14px;margin-bottom:4px}.list-item span:last-child{margin-left:auto;color:#7b897f}.detail-cover{height:205px;display:grid;place-items:center;font-size:96px;background:linear-gradient(135deg,#ffd9a3,#fff3d5)}.detail{padding:20px}.author-row{display:flex;gap:9px;align-items:center;font-size:12px;color:#718077}.avatar{height:31px;width:31px;border-radius:50%;background:#d9eddc;display:grid;place-items:center}.detail-title{font-size:24px;letter-spacing:-1px;margin:15px 0 7px}.stats{font-size:12px;color:#718077;border-bottom:1px solid #e9ece7;padding-bottom:15px}.ingredient{padding:13px 0;border-bottom:1px solid #eef0ed;font-size:13px}.ingredient span{float:right;color:#718077}.step{display:flex;gap:10px;padding:10px 0;font-size:13px;line-height:1.5}.number{height:22px;width:22px;border-radius:50%;background:#e6f4e8;color:#36754a;display:grid;place-items:center;font-size:11px;font-weight:bold;flex:none}.form{padding:18px 20px}.form label{display:block;font-size:13px;font-weight:bold;margin:15px 0 7px}.form input,.form textarea{width:100%;border:1px solid #dde5dc;border-radius:11px;padding:11px;background:#fff;font-size:13px}.form textarea{height:94px;resize:vertical}.photo-add{height:105px;border:1px dashed #8ab597;border-radius:14px;background:#f6fbf4;color:#477e55;display:grid;place-items:center;font-size:13px}.primary{width:100%;padding:13px;border-radius:13px;background:#39774e;color:white;font-size:14px;font-weight:bold;margin-top:20px}.profile{margin:18px 20px;padding:17px;background:#edf7ee;border-radius:18px}.profile .big{font-size:34px;margin-right:10px}.profile strong{font-size:16px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin:18px 0}.statrow b{font-size:17px;display:block}.statrow span{font-size:10px;color:#78877d}.saved{margin:0 20px;padding:14px;border:1px solid #e7ebe6;border-radius:14px}.bottom{display:flex;position:absolute;bottom:0;width:100%;padding:10px 8px 14px;background:white;border-top:1px solid #e6ebe5;justify-content:space-around}.nav{background:none;color:#7d897f;font-size:10px}.nav i{display:block;font-style:normal;font-size:19px;margin-bottom:3px}.nav.on{color:#36764c;font-weight:bold}.toast{position:absolute;left:50%;bottom:65px;transform:translateX(-50%);border-radius:14px;background:#2e4736;color:white;padding:10px 14px;font-size:12px;opacity:0;transition:.2s;pointer-events:none}.toast.show{opacity:1}
@@ -528,10 +528,13 @@ app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.toggle('active'
 renderTop();heroIdle();
 
 /* ═══════════ 커뮤니티 (Supabase) ═══════════ */
+try{
+if(!window.supabase) throw new Error("연결 프로그램을 못 불러왔어요 (통신망이 cdn 차단 가능). 와이파이<->데이터를 바꿔 다시 열어보세요.");
+
 const SB_URL="https://jnwlaevfvhxpmmnkmyrw.supabase.co";
 const SB_KEY="sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35";
 const sb=window.supabase.createClient(SB_URL,SB_KEY);
-let me=null, myNick="", myLikes=new Set(), feedData=[], upTarget="온 가족", upFile=null, authMode="login";
+var me=null, myNick="", myLikes=new Set(), feedData=[], upTarget="온 가족", upFile=null, authMode="login";
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
@@ -698,6 +701,11 @@ $('#feed-list').onclick=async e=>{
 };
 
 refreshAuth();loadFeed();
+}catch(commErr){
+ var _ab=app.querySelector("#auth-box");
+ if(_ab)_ab.innerHTML='<span class="big">⚠️</span><div><b>[진단10] 커뮤니티 연결 실패</b><p class="muted" style="font-size:12px;margin:2px 0 0">'+String(commErr).slice(0,140)+' ← 이 문구를 알려주세요</p></div>';
+ console.error("[진단10]",commErr);
+}
 })();
 
 </script>
