@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -518,7 +519,7 @@ $('#allergy-save').onclick=()=>{D.allergy=$('#allergy-input').value.trim();save(
 
 /* ── 기타 ── */
 $('#greet').onclick=()=>{const n=prompt("어떻게 불러드릴까요? (예: 지은)",D.name||"");if(n!==null){D.name=n.trim();save();renderTop();}};
-$('#upload-btn').onclick=()=>toast("커뮤니티는 오픈 준비 중이에요! 조금만 기다려주세요 🙏");
+
 app.querySelectorAll('#families .family').forEach(x=>x.onclick=()=>{app.querySelectorAll('.family').forEach(y=>y.classList.remove('selected'));x.classList.add('selected');person=x.dataset.person;if(!res)heroIdle();else $('#hero-tag')&&($('#hero-tag').textContent=person+" 맞춤 · AI가 골랐어요")});
 app.querySelectorAll('#meal-chips .chip').forEach(x=>x.onclick=()=>{app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.remove('active'));x.classList.add('active');meal=x.dataset.meal;if(!res)heroIdle()});
 
