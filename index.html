@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -633,7 +634,19 @@ $('#up-submit').onclick=async()=>{
  const title=$('#up-title').value.trim(), body=$('#up-body').value.trim();
  if(!title)return toast('레시피 이름을 적어주세요');
  if(!body)return toast('재료와 만드는 법을 적어주세요');
- $('#up-submit').disabled=true;$('#up-submit').textContent='올리는 중...';
+ $('#up-submit').disabled=true;$('#up-submit').textContent='🧮 영양 분석 중...';
+ // AI 영양사: 재료·조리법을 읽고 1인분 기준 영양 정보를 계산 (실패해도 등록은 진행)
+ let nutri=null;
+ try{
+  nutri=await ask(`영양사로서 아래 레시피를 분석하라.
+제목: ${title}
+대상: ${upTarget}
+내용: ${body.slice(0,800)}
+1인분 기준으로 추정. 탄4/단4/지9 kcal 원칙과 총 kcal이 일치하게.
+JSON만, 백틱 금지:
+{"kcal":0,"carb":0,"protein":0,"fat":0,"note":"균형 평가 한 문장(예: 단백질이 든든해요)","tip":"보완 팁 한 문장(예: 채소 반찬을 곁들이면 균형 완성)"}`,300);
+ }catch(e){nutri=null;}
+ $('#up-submit').textContent='올리는 중...';
  try{
   let image_url=null;
   if(upFile){
@@ -642,17 +655,19 @@ $('#up-submit').onclick=async()=>{
    if(se){toast('사진 업로드 실패 — 사진 없이 올릴게요');}
    else{image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;}
   }
-  const {error}=await sb.from('recipes').insert({user_id:me.id,title,body,target:upTarget,image_url});
+  const rec={user_id:me.id,title,body,target:upTarget,image_url};
+  if(nutri&&nutri.kcal){rec.kcal=Math.round(nutri.kcal);rec.carb=Math.round(nutri.carb||0);rec.protein=Math.round(nutri.protein||0);rec.fat=Math.round(nutri.fat||0);rec.nutri_note=String(nutri.note||'')+(nutri.tip?' · '+nutri.tip:'');}
+  const {error}=await sb.from('recipes').insert(rec);
   if(error)return toast('등록 실패: '+error.message);
   $('#up-title').value='';$('#up-body').value='';upFile=null;$('#up-photo-btn').textContent='📷 사진 추가하기';
-  toast('레시피를 올렸어요! 🎉');go('explore');
+  toast(nutri&&nutri.kcal?'레시피를 올렸어요! AI 영양사가 분석도 마쳤어요 🧑‍⚕️':'레시피를 올렸어요! 🎉');go('explore');
  }finally{$('#up-submit').disabled=false;$('#up-submit').textContent='등록하기';}
 };
 
 /* ── 탐색 피드 ── */
 async function loadFeed(){
  const {data,error}=await sb.from('recipes')
-  .select('id,title,body,target,emoji,image_url,created_at,user_id,profiles(nickname),likes(count)')
+  .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count)')
   .order('created_at',{ascending:false}).limit(50);
  if(error){$('#feed-empty').textContent='피드를 불러오지 못했어요. 잠시 뒤 다시 열어주세요.';return;}
  feedData=data||[];
@@ -663,6 +678,17 @@ async function loadFeed(){
  renderFeed();renderHomeFeed();
 }
 function likeCount(r){return r.likes&&r.likes[0]?r.likes[0].count:0}
+function nutriHtml(r){
+ if(!r.kcal)return'';
+ const tot=(r.carb||0)+(r.protein||0)+(r.fat||0)||1;
+ const w=x=>Math.round(x/tot*100);
+ return '<div style="margin-top:8px;padding:9px 11px;background:#f4f9f3;border-radius:11px">'
+  +'<div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:800;color:#39734b"><span>🧑‍⚕️ AI 영양사</span><span>'+r.kcal+' kcal <span style="color:#9aa79b;font-weight:600">/1인분 추정</span></span></div>'
+  +'<div class="macrobar" style="margin:7px 0 5px;height:9px"><div style="width:'+w(r.carb)+'%"></div><div style="width:'+w(r.protein)+'%"></div><div style="width:'+w(r.fat)+'%"></div></div>'
+  +'<div style="font-size:10.5px;color:#526158;font-weight:700">탄 '+(r.carb||0)+'g · 단 '+(r.protein||0)+'g · 지 '+(r.fat||0)+'g</div>'
+  +(r.nutri_note?'<div style="font-size:11.5px;color:#39734b;margin-top:4px;line-height:1.45">'+esc(r.nutri_note)+'</div>':'')
+  +'</div>';
+}
 function renderFeed(){
  const list=$('#feed-list'), empty=$('#feed-empty');
  if(!feedData.length){empty.style.display='block';empty.textContent='아직 올라온 레시피가 없어요. 첫 번째 맘셰프가 되어보세요! ➕ 올리기 탭에서 시작!';list.innerHTML='';return;}
@@ -674,6 +700,7 @@ function renderFeed(){
    '<div class="line" style="margin-top:9px"><b style="font-size:15px">'+esc(r.title)+'</b>'+
    '<button class="likebtn'+(liked?' on':'')+'" data-like="'+r.id+'">♥ '+likeCount(r)+'</button></div>'+
    '<div class="tiny" style="margin-top:3px">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+' · '+esc(r.target||'')+'</div>'+
+   nutriHtml(r)+
    '<p class="muted post-body" id="body-'+r.id+'" style="display:none;white-space:pre-wrap;margin-top:8px;font-size:13px">'+esc(r.body)+'</p>'+
    '<div class="line" style="margin-top:7px"><button class="textbtn" data-open="'+r.id+'">자세히 보기</button>'+
    (me&&me.id===r.user_id?'<button class="textbtn warnc" data-del="'+r.id+'">삭제</button>':'')+
@@ -689,7 +716,7 @@ function renderHomeFeed(){
  }
  el.innerHTML=top.map(r=>'<article class="recipe-card" data-goexp="1">'+
   (r.image_url?'<div class="picture" style="background:url('+esc(r.image_url)+') center/cover"></div>':'<div class="picture green">'+esc(r.emoji||'🍽️')+'</div>')+
-  '<div><span class="tiny">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+'</span><p class="recipe-title">'+esc(r.title)+'</p><span class="like">♥ '+likeCount(r)+' 추천</span></div></article>').join('');
+  '<div><span class="tiny">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+'</span><p class="recipe-title">'+esc(r.title)+'</p><span class="like">♥ '+likeCount(r)+' 추천'+(r.kcal?' · '+r.kcal+'kcal':'')+'</span></div></article>').join('');
  el.querySelectorAll('[data-goexp]').forEach(c=>c.onclick=()=>go('explore'));
 }
 $('#feed-list').onclick=async e=>{
