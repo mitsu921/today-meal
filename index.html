@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -548,18 +547,15 @@ app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.toggle('active'
 renderTop();heroIdle();
 
 /* ═══════════ 커뮤니티 (Supabase) ═══════════ */
-try{
-if(!window.supabase) throw new Error("연결 프로그램을 못 불러왔어요 (통신망이 cdn 차단 가능). 와이파이<->데이터를 바꿔 다시 열어보세요.");
-
 const SB_URL="https://jnwlaevfvhxpmmnkmyrw.supabase.co";
 const SB_KEY="sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35";
-const sb=window.supabase.createClient(SB_URL,SB_KEY);
+var sb=null;
 var me=null, myNick="", myLikes=new Set(), feedData=[], upTarget="온 가족", upFile=null, authMode="login";
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 async function ensureProfile(){
- if(!me) return;
+ if(!me||!sb) return;
  const {data}=await sb.from('profiles').select('nickname').eq('id',me.id).maybeSingle();
  if(data){myNick=data.nickname;}
  else{
@@ -568,11 +564,13 @@ async function ensureProfile(){
    await sb.from('profiles').upsert({id:me.id,nickname:myNick});}
 }
 async function refreshAuth(){
+ if(!sb){renderAuthUI();return;}
  const {data:{session}}=await sb.auth.getSession();
  me=session?session.user:null;
  if(me) await ensureProfile();
  renderAuthUI();
 }
+function watchAuth(){
 sb.auth.onAuthStateChange(async(ev,s)=>{
  me=s?s.user:null;
  if(me)await ensureProfile();
@@ -581,6 +579,7 @@ sb.auth.onAuthStateChange(async(ev,s)=>{
   history.replaceState(null,'',location.pathname);
  }
 });
+}
 
 function renderAuthUI(){
  const box=$('#auth-box'); if(!box)return;
@@ -645,6 +644,7 @@ app.querySelectorAll('#up-target .chip').forEach(c=>c.onclick=()=>{
 $('#up-photo-btn').onclick=()=>$('#up-photo').click();
 $('#up-photo').onchange=e=>{
  upFile=e.target.files[0]||null;
+ if(upFile&&upFile.size>10*1024*1024){toast('사진은 10MB 이하로 올려주세요');upFile=null;e.target.value='';$('#up-photo-btn').textContent='📷 사진 추가하기';return;}
  $('#up-photo-btn').textContent=upFile?'✓ '+upFile.name.slice(0,22):'📷 사진 추가하기';
 };
 $('#up-submit').onclick=async()=>{
@@ -684,6 +684,7 @@ JSON만, 백틱 금지:
 
 /* ── 탐색 피드 ── */
 async function loadFeed(){
+ if(!sb){const fe=$('#feed-empty');if(fe)fe.textContent='커뮤니티 연결에 실패했어요. 새로고침해 주세요.';return;}
  const {data,error}=await sb.from('recipes')
   .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count),comments(count)')
   .order('created_at',{ascending:false}).limit(50);
@@ -805,13 +806,19 @@ $('#feed-list').onclick=async e=>{
  }
 };
 
-refreshAuth();loadFeed();
-if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
+/* ── 시동: 보호막은 여기서만 ── */
+try{
+ if(!window.supabase) throw new Error("연결 프로그램을 못 불러왔어요. 와이파이<->데이터를 바꿔 새로고침해 보세요.");
+ sb=window.supabase.createClient(SB_URL,SB_KEY);
+ watchAuth();
+ refreshAuth();
+ loadFeed();
 }catch(commErr){
  var _ab=app.querySelector("#auth-box");
  if(_ab)_ab.innerHTML='<span class="big">⚠️</span><div><b>[진단10] 커뮤니티 연결 실패</b><p class="muted" style="font-size:12px;margin:2px 0 0">'+String(commErr).slice(0,140)+' ← 이 문구를 알려주세요</p></div>';
  console.error("[진단10]",commErr);
 }
+if(navigator.serviceWorker&&navigator.serviceWorker.register){try{navigator.serviceWorker.register('/sw.js').catch(function(){});}catch(e){}}
 })();
 
 </script>
