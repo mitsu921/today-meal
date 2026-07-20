@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,6 +8,11 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta name="google-adsense-account" content="ca-pub-7169767076437690">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#36734d">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="오늘뭐먹지">
 <script>if(!window.supabase)document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>')</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
@@ -666,7 +672,7 @@ JSON만, 백틱 금지:
 /* ── 탐색 피드 ── */
 async function loadFeed(){
  const {data,error}=await sb.from('recipes')
-  .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count)')
+  .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count),comments(count)')
   .order('created_at',{ascending:false}).limit(50);
  if(error){$('#feed-empty').textContent='피드를 불러오지 못했어요. 잠시 뒤 다시 열어주세요.';return;}
  feedData=data||[];
@@ -677,6 +683,20 @@ async function loadFeed(){
  renderFeed();renderHomeFeed();
 }
 function likeCount(r){return r.likes&&r.likes[0]?r.likes[0].count:0}
+function cmtCount(r){return r.comments&&r.comments[0]?r.comments[0].count:0}
+async function loadComments(id){
+ const box=$('#cmt-list-'+id); if(!box)return;
+ const {data,error}=await sb.from('comments')
+  .select('id,body,created_at,user_id,profiles(nickname)')
+  .eq('recipe_id',id).order('created_at',{ascending:true}).limit(100);
+ if(error){box.textContent='댓글을 불러오지 못했어요';return;}
+ if(!data.length){box.textContent='첫 댓글을 남겨보세요!';return;}
+ box.innerHTML=data.map(c=>
+  '<div style="margin-bottom:7px;line-height:1.5"><b style="color:#2e4736">'+esc(c.profiles?c.profiles.nickname:'맘셰프')+'</b> '+
+  '<span style="color:#3c4a40">'+esc(c.body)+'</span>'+
+  (me&&me.id===c.user_id?' <button class="textbtn warnc" data-cmt-del="'+c.id+'" data-of="'+id+'" style="font-size:10.5px">지우기</button>':'')+
+  '</div>').join('');
+}
 function nutriHtml(r){
  if(!r.kcal)return'';
  const tot=(r.carb||0)+(r.protein||0)+(r.fat||0)||1;
@@ -701,9 +721,16 @@ function renderFeed(){
    '<div class="tiny" style="margin-top:3px">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+' · '+esc(r.target||'')+'</div>'+
    nutriHtml(r)+
    '<p class="muted post-body" id="body-'+r.id+'" style="display:none;white-space:pre-wrap;margin-top:8px;font-size:13px">'+esc(r.body)+'</p>'+
-   '<div class="line" style="margin-top:7px"><button class="textbtn" data-open="'+r.id+'">자세히 보기</button>'+
+   '<div class="line" style="margin-top:7px"><span><button class="textbtn" data-open="'+r.id+'">자세히 보기</button>'+
+   ' &nbsp; <button class="textbtn" data-cmt="'+r.id+'">💬 댓글 '+cmtCount(r)+'</button></span>'+
    (me&&me.id===r.user_id?'<button class="textbtn warnc" data-del="'+r.id+'">삭제</button>':'')+
-   '</div></article>';
+   '</div>'+
+   '<div id="cmt-'+r.id+'" style="display:none;margin-top:9px;border-top:1px dashed #e2e8e1;padding-top:9px">'+
+   '<div id="cmt-list-'+r.id+'" class="tiny" style="color:#77857d">불러오는 중...</div>'+
+   '<div style="display:flex;gap:6px;margin-top:8px">'+
+   '<input id="cmt-in-'+r.id+'" placeholder="따뜻한 댓글을 남겨주세요" style="flex:1;padding:9px 11px;border:1px solid #dfe6de;border-radius:10px;font-size:13px">'+
+   '<button class="textbtn" data-cmt-send="'+r.id+'" style="background:#36734d;color:#fff;border-radius:10px;padding:0 13px">등록</button>'+
+   '</div></div></article>';
  }).join('');
 }
 function renderHomeFeed(){
@@ -719,7 +746,7 @@ function renderHomeFeed(){
  el.querySelectorAll('[data-goexp]').forEach(c=>c.onclick=()=>go('explore'));
 }
 $('#feed-list').onclick=async e=>{
- const open=e.target.closest('[data-open]'), like=e.target.closest('[data-like]'), del=e.target.closest('[data-del]');
+ const open=e.target.closest('[data-open]'), like=e.target.closest('[data-like]'), del=e.target.closest('[data-del]'), cmt=e.target.closest('[data-cmt]'), csend=e.target.closest('[data-cmt-send]'), cdel=e.target.closest('[data-cmt-del]');
  if(open){
   const b=$('#body-'+open.dataset.open);
   const show=b.style.display==='none';
@@ -738,9 +765,35 @@ $('#feed-list').onclick=async e=>{
   await sb.from('recipes').delete().eq('id',Number(del.dataset.del));
   toast('삭제했어요');loadFeed();
  }
+ if(cmt){
+  const id=cmt.dataset.cmt, box=$('#cmt-'+id);
+  const show=box.style.display==='none';
+  box.style.display=show?'block':'none';
+  if(show)loadComments(id);
+ }
+ if(csend){
+  if(!me){toast('댓글을 쓰려면 로그인이 필요해요');return go('login');}
+  const id=csend.dataset.cmtSend, inp=$('#cmt-in-'+id);
+  const body=(inp.value||'').trim();
+  if(!body)return toast('댓글 내용을 적어주세요');
+  csend.disabled=true;
+  const {error}=await sb.from('comments').insert({recipe_id:Number(id),user_id:me.id,body});
+  csend.disabled=false;
+  if(error)return toast('등록 실패: '+error.message);
+  inp.value='';loadComments(id);
+  const btn=$('#feed-list').querySelector('[data-cmt="'+id+'"]');
+  if(btn){const n=parseInt(btn.textContent.replace(/[^0-9]/g,'')||'0',10)+1;btn.textContent='💬 댓글 '+n;}
+ }
+ if(cdel){
+  if(!confirm('이 댓글을 지울까요?'))return;
+  await sb.from('comments').delete().eq('id',Number(cdel.dataset.cmtDel));
+  loadComments(cdel.dataset.of);
+  toast('지웠어요');
+ }
 };
 
 refreshAuth();loadFeed();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
 }catch(commErr){
  var _ab=app.querySelector("#auth-box");
  if(_ab)_ab.innerHTML='<span class="big">⚠️</span><div><b>[진단10] 커뮤니티 연결 실패</b><p class="muted" style="font-size:12px;margin:2px 0 0">'+String(commErr).slice(0,140)+' ← 이 문구를 알려주세요</p></div>';
