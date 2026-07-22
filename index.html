@@ -685,10 +685,24 @@ JSON만, 백틱 금지:
 /* ── 탐색 피드 ── */
 async function loadFeed(){
  if(!sb){const fe=$('#feed-empty');if(fe)fe.textContent='커뮤니티 연결에 실패했어요. 새로고침해 주세요.';return;}
- const {data,error}=await sb.from('recipes')
+ // 1차: 댓글 수까지 포함해서 요청
+ let {data,error}=await sb.from('recipes')
   .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count),comments(count)')
   .order('created_at',{ascending:false}).limit(50);
- if(error){$('#feed-empty').textContent='피드를 불러오지 못했어요. 잠시 뒤 다시 열어주세요.';return;}
+ if(error){
+  // 2차: 댓글 수만 빼고 재시도 (댓글 표가 아직 준비 전이어도 피드는 산다)
+  const r2=await sb.from('recipes')
+   .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count)')
+   .order('created_at',{ascending:false}).limit(50);
+  if(r2.error){
+   // 3차: 영양 칸도 빼고 최소한으로
+   const r3=await sb.from('recipes')
+    .select('id,title,body,target,emoji,image_url,created_at,user_id,profiles(nickname),likes(count)')
+    .order('created_at',{ascending:false}).limit(50);
+   if(r3.error){$('#feed-empty').textContent='[진단11] '+(r3.error.message||'원인 미상')+' ← 이 문구를 알려주세요';return;}
+   data=r3.data;
+  } else { data=r2.data; }
+ }
  feedData=data||[];
  if(me){
   const {data:lk}=await sb.from('likes').select('recipe_id').eq('user_id',me.id);
