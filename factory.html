@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>레시피 공장 — 오늘뭐먹지 운영자용</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{margin:0;background:#fffdf8;color:#26392d;font-family:"Apple SD Gothic Neo",Arial,sans-serif}
+.wrap{max-width:520px;margin:auto;padding:22px 18px 60px}
+h1{font-size:21px;letter-spacing:-.6px}
+.note{background:#fff4df;border-radius:12px;padding:11px 13px;font-size:12.5px;line-height:1.6;color:#7d694f}
+label{display:block;font-size:12.5px;font-weight:800;margin:14px 0 5px;color:#39734b}
+input,textarea,select{width:100%;box-sizing:border-box;padding:11px 12px;border:1.5px solid #dfe6de;border-radius:11px;font-size:14px;font-family:inherit;background:#fff}
+textarea{resize:vertical}
+.row{display:flex;gap:8px}
+.row>div{flex:1}
+button{font-family:inherit;cursor:pointer;border:0;border-radius:12px;font-weight:800}
+.ai{width:100%;padding:13px;background:#5a4ae3;color:#fff;font-size:14.5px;margin-top:8px}
+.go{width:100%;padding:14px;background:#36734d;color:#fff;font-size:15px;margin-top:16px}
+.photo{width:100%;padding:11px;background:#eef4ee;color:#39734b;font-size:13px;margin-top:4px}
+button:disabled{opacity:.55}
+.msg{margin-top:10px;font-size:13px;color:#c0654a;font-weight:700;min-height:18px}
+.ok{color:#36734d}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.chip{padding:8px 12px;border-radius:18px;background:#f2f4f0;color:#536057;font-size:12.5px}
+.chip.on{background:#36734d;color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏭 레시피 공장 <span style="font-size:12px;color:#9aa79b">운영자용</span></h1>
+  <div class="note">
+    <b>사용법:</b> 음식 이름 → <b>AI 초안</b> → 내용을 <b>직접 읽고 고친 뒤</b> → 등록.
+    등록 글에는 "AI 초안·운영자 검수" 표기가 붙습니다(체크 해제 가능).
+    하루 1~3개, 검수한 것만 올리는 걸 권장해요 — 애드센스 심사 중엔 특히!
+  </div>
+
+  <div id="auth-state" class="msg">로그인 확인 중...</div>
+
+  <label>음식 이름 (AI 초안용)</label>
+  <div class="row">
+    <div><input id="dish" placeholder="예: 두부 계란 덮밥"></div>
+    <button class="ai" style="width:130px;margin:0" id="draft">🤖 AI 초안</button>
+  </div>
+
+  <label>제목</label>
+  <input id="f-title" placeholder="예: 아이도 잘 먹는 두부 계란 덮밥">
+
+  <label>대상</label>
+  <div class="chips" id="f-target">
+    <button class="chip on" data-t="온 가족">온 가족</button><button class="chip" data-t="아이">아이</button>
+    <button class="chip" data-t="아이 간식">아이 간식</button><button class="chip" data-t="다이어트">다이어트</button>
+    <button class="chip" data-t="남편">남편</button>
+  </div>
+
+  <div class="row">
+    <div><label>⏱️ 조리시간(분)</label><input id="f-time" type="number" placeholder="20"></div>
+    <div><label>👨‍👩‍👧 인분</label><input id="f-serv" type="number" placeholder="2"></div>
+    <div><label>🔥 난이도</label><select id="f-level"><option>쉬움</option><option>보통</option><option>손이 감</option></select></div>
+  </div>
+
+  <label>🥬 재료 (한 줄에 하나)</label>
+  <textarea id="f-ing" style="height:110px" placeholder="두부 1모&#10;계란 3개&#10;..."></textarea>
+
+  <label>🔪 만드는 법 (한 줄에 한 단계)</label>
+  <textarea id="f-steps" style="height:150px" placeholder="1) ...&#10;2) ..."></textarea>
+
+  <label>💡 요리 팁</label>
+  <textarea id="f-tip" style="height:60px"></textarea>
+
+  <label>🥗 영양정보 (1인분)</label>
+  <div class="row">
+    <div><input id="f-kcal" type="number" placeholder="kcal"></div>
+    <div><input id="f-carb" type="number" placeholder="탄(g)"></div>
+    <div><input id="f-prot" type="number" placeholder="단(g)"></div>
+    <div><input id="f-fat" type="number" placeholder="지(g)"></div>
+  </div>
+  <input id="f-note" placeholder="균형 평가 한 줄 (예: 단백질이 든든해요)" style="margin-top:6px">
+
+  <label>🍽️ 완성 사진 (선택 — 실제로 만든 사진을 권장)</label>
+  <input id="f-photo" type="file" accept="image/*" style="display:none">
+  <button class="photo" id="photo-btn">📷 사진 선택</button>
+
+  <label style="display:flex;align-items:center;gap:7px;font-weight:700;color:#536057">
+    <input type="checkbox" id="f-label" checked style="width:auto"> 글 끝에 "🤖 AI 초안 · 운영자 검수" 표기
+  </label>
+
+  <button class="go" id="submit">등록하기</button>
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+const SB_URL="https://jnwlaevfvhxpmmnkmyrw.supabase.co";
+const SB_KEY="sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35";
+const PROXY_URL="/api/menu";
+const $=s=>document.querySelector(s);
+let sb=null, me=null, target="온 가족", photoFile=null;
+
+function msg(t,ok){const m=$('#msg');m.textContent=t;m.className='msg'+(ok?' ok':'');}
+
+try{
+  sb=window.supabase.createClient(SB_URL,SB_KEY);
+  sb.auth.getSession().then(({data:{session}})=>{
+    me=session?session.user:null;
+    $('#auth-state').textContent=me?'✅ 로그인됨 — 등록하면 내 계정 글로 올라갑니다':'⚠️ 로그인이 안 돼 있어요. 메인 사이트에서 로그인한 뒤 이 페이지를 새로고침하세요.';
+    $('#auth-state').className='msg'+(me?' ok':'');
+  });
+}catch(e){$('#auth-state').textContent='연결 실패: 새로고침해 주세요';}
+
+document.querySelectorAll('#f-target .chip').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('#f-target .chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');target=c.dataset.t;
+});
+
+$('#photo-btn').onclick=()=>$('#f-photo').click();
+$('#f-photo').onchange=e=>{
+  photoFile=e.target.files[0]||null;
+  if(photoFile&&photoFile.size>10*1024*1024){msg('사진은 10MB 이하로!');photoFile=null;e.target.value='';return;}
+  $('#photo-btn').textContent=photoFile?'✓ '+photoFile.name.slice(0,24):'📷 사진 선택';
+};
+
+async function ask(prompt,maxTokens){
+  const r=await fetch(PROXY_URL,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:maxTokens||700,messages:[{role:"user",content:prompt}]})});
+  const d=await r.json();
+  if(r.status===429)throw new Error(d.message||'요청 한도');
+  const txt=(d.content||[]).map(i=>i.type==="text"?i.text:"").filter(Boolean).join("\n");
+  return JSON.parse(txt.replace(/```json|```/g,"").trim());
+}
+
+$('#draft').onclick=async()=>{
+  const dish=$('#dish').value.trim();
+  if(!dish)return msg('음식 이름을 먼저 적어주세요');
+  $('#draft').disabled=true;$('#draft').textContent='생성 중...';msg('');
+  try{
+    const d=await ask(`요리 콘텐츠 에디터이자 영양사로서 "${dish}" 레시피를 작성하라.
+대상: ${target}. 한국 가정식 기준, 초보도 따라할 수 있게 구체적으로.
+1인분 기준 영양 추정(탄4/단4/지9 kcal 일치).
+JSON만, 백틱 금지:
+{"title":"매력적인 제목(15자 내)","time_min":0,"servings":2,"level":"쉬움|보통|손이 감",
+"ingredients":["재료와 분량"],"steps":["구체적 단계"],"tip":"요리 팁 한두 문장",
+"kcal":0,"carb":0,"protein":0,"fat":0,"note":"균형 평가 한 줄"}`,1400);
+    $('#f-title').value=d.title||dish;
+    $('#f-time').value=d.time_min||'';
+    $('#f-serv').value=d.servings||2;
+    $('#f-level').value=['쉬움','보통','손이 감'].includes(d.level)?d.level:'보통';
+    $('#f-ing').value=(d.ingredients||[]).join('\n');
+    $('#f-steps').value=(d.steps||[]).map((s,i)=>(i+1)+') '+s).join('\n');
+    $('#f-tip').value=d.tip||'';
+    $('#f-kcal').value=Math.round(d.kcal||0);$('#f-carb').value=Math.round(d.carb||0);
+    $('#f-prot').value=Math.round(d.protein||0);$('#f-fat').value=Math.round(d.fat||0);
+    $('#f-note').value=d.note||'';
+    msg('초안 완성! 꼭 직접 읽고 고친 뒤 등록하세요 ✍️',1);
+  }catch(e){msg('초안 실패: '+e.message);}
+  finally{$('#draft').disabled=false;$('#draft').textContent='🤖 AI 초안';}
+};
+
+$('#submit').onclick=async()=>{
+  if(!me)return msg('로그인이 필요해요 — 메인 사이트에서 로그인 후 새로고침');
+  const title=$('#f-title').value.trim();
+  if(!title)return msg('제목을 적어주세요');
+  const ing=$('#f-ing').value.trim(), steps=$('#f-steps').value.trim();
+  if(!ing||!steps)return msg('재료와 만드는 법을 채워주세요');
+  $('#submit').disabled=true;$('#submit').textContent='올리는 중...';
+  try{
+    let image_url=null;
+    if(photoFile){
+      const path=me.id+'/'+Date.now()+'.'+(photoFile.name.split('.').pop()||'jpg');
+      const {error:se}=await sb.storage.from('photos').upload(path,photoFile);
+      if(!se)image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;
+    }
+    const body=['⏱️ 조리시간: '+($('#f-time').value||'?')+'분 · 👨‍👩‍👧 '+($('#f-serv').value||'?')+'인분 · 🔥 '+$('#f-level').value,
+      '','🥬 재료',ing,'','🔪 만드는 법',steps,
+      $('#f-tip').value.trim()?'\n💡 팁: '+$('#f-tip').value.trim():'',
+      $('#f-label').checked?'\n🤖 AI 초안 · 운영자 검수 콘텐츠':''
+    ].join('\n').replace(/\n{3,}/g,'\n\n').trim();
+    const rec={user_id:me.id,title,body,target,image_url};
+    const kcal=Number($('#f-kcal').value);
+    if(kcal){rec.kcal=kcal;rec.carb=Number($('#f-carb').value)||0;rec.protein=Number($('#f-prot').value)||0;rec.fat=Number($('#f-fat').value)||0;rec.nutri_note=$('#f-note').value.trim()||null;}
+    const {error}=await sb.from('recipes').insert(rec);
+    if(error)return msg('등록 실패: '+error.message);
+    msg('등록 완료! 탐색 탭에서 확인하세요 🎉',1);
+    ['#dish','#f-title','#f-time','#f-ing','#f-steps','#f-tip','#f-kcal','#f-carb','#f-prot','#f-fat','#f-note'].forEach(s=>$(s).value='');
+    photoFile=null;$('#photo-btn').textContent='📷 사진 선택';
+  }catch(e){msg('오류: '+String(e).slice(0,100));}
+  finally{$('#submit').disabled=false;$('#submit').textContent='등록하기';}
+};
+</script>
+</body>
+</html>
