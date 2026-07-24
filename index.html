@@ -390,7 +390,7 @@ let D=JSON.parse(localStorage.getItem('mom-meal')||'null')||{name:"",allergy:"",
 const save=()=>localStorage.setItem('mom-meal',JSON.stringify(D));
 let person="우리 아이",meal="점심",res=null,recipe=null,mode=null,busy=false,seen=[],eaten=false,scrapped=false;
 
-function toast(t){const n=$('#toast');n.textContent=t;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),1800)}
+function toast(t){const n=$('#toast');n.textContent=t;n.classList.add('show');const dur=Math.min(6000,Math.max(1800,t.length*55));clearTimeout(n._tt);n._tt=setTimeout(()=>n.classList.remove('show'),dur)}
 function go(v){
  if(v==='upload'&&!me){
   refreshAuth().then(()=>{ if(me){go('upload');} else {toast('레시피를 올리려면 로그인이 필요해요');go('login');} });
@@ -521,6 +521,7 @@ async function decide(){
 /* ── 만들기/쿠팡 장보기 ── */
 async function pick(m){
  mode=m;
+ if(m==="shop")toast("검색 링크 준비 중...");
  const menu=res.tray.map(t=>t.item).join(", ");
  const cb=$('#btn-cook'), sb=$('#btn-shop');
  const cookLabel=cb?cb.textContent:"🍳 만들어 먹기";
@@ -538,7 +539,7 @@ async function pick(m){
   }else{
    renderShop();
   }
- }catch(e){const msg=e.message&&e.message.startsWith("limit:")?e.message.slice(6):"불러오기 실패! 다시 눌러주세요.";toast(msg);mode=null;}
+ }catch(e){const msg=e&&e.message&&e.message.startsWith("limit:")?e.message.slice(6):"[진단12] "+String(e&&e.message?e.message:e).slice(0,140)+" ← 이 문구를 알려주세요";toast(msg);mode=null;}
  finally{if(cb){cb.disabled=false;cb.textContent=cookLabel;}if(sb)sb.disabled=false;}
 }
 function renderDetail(){
