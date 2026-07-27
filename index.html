@@ -71,7 +71,7 @@ details.fold.sub .body p{font-size:13px!important}
 
 /* ── 커뮤니티 ── */
 #family-meal-app .post{background:#fff;border:1px solid #e7ebe6;border-radius:16px;padding:13px;margin-bottom:12px}
-#family-meal-app .post-img{width:100%;border-radius:12px;max-height:230px;object-fit:cover;display:block}
+#family-meal-app .post-img{width:100%;border-radius:12px;max-height:160px;object-fit:cover;display:block}
 #family-meal-app .likebtn{background:#fff1e8;color:#ef8744;border-radius:16px;padding:6px 11px;font-size:12px;font-weight:800}
 #family-meal-app .likebtn.on{background:#ef8744;color:#fff}
 #family-meal-app .textbtn{background:none;font-size:12px;font-weight:800;color:#36764c;padding:4px 0}
@@ -315,6 +315,7 @@ details.fold.sub .body p{font-size:13px!important}
       </div>
     </div>
     <div class="section">
+      <input id="feed-search" placeholder="🔍 레시피 검색 (예: 계란, 아이 간식)" style="width:100%;padding:11px 14px;border:1.5px solid #dfe6de;border-radius:12px;font-size:13.5px;background:#fff;margin-bottom:12px">
       <p class="muted" id="feed-empty">불러오는 중...</p>
       <div id="feed-list"></div>
     </div>
@@ -680,18 +681,18 @@ renderTop();heroIdle();
 const SB_URL="https://jnwlaevfvhxpmmnkmyrw.supabase.co";
 const SB_KEY="sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35";
 var sb=null;
-var me=null, myNick="", myLikes=new Set(), feedData=[], upTarget="온 가족", upFile=null, authMode="login";
+var me=null, myNick="", myLikes=new Set(), feedData=[], feedQuery="", upTarget="온 가족", upFile=null, authMode="login";
 
 async function shrinkImage(file){
  try{
   const img=await createImageBitmap(file);
-  const MAX=1280;
+  const MAX=900;
   const scale=Math.min(1, MAX/Math.max(img.width,img.height));
-  if(scale>=1&&file.size<400*1024) return file; // 이미 작으면 그대로
+  if(scale>=1&&file.size<250*1024) return file; // 이미 작으면 그대로
   const w=Math.round(img.width*scale), h=Math.round(img.height*scale);
   const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
   cv.getContext('2d').drawImage(img,0,0,w,h);
-  const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.82));
+  const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.74));
   if(!blob) return file;
   return new File([blob], (file.name.replace(/\.[^.]+$/,'')||'photo')+'.jpg', {type:'image/jpeg'});
  }catch(e){ return file; } // 압축 실패 시 원본 그대로
@@ -985,9 +986,12 @@ function nutriHtml(r){
 }
 function renderFeed(){
  const list=$('#feed-list'), empty=$('#feed-empty');
+ const q=feedQuery.trim().toLowerCase();
+ const shown=q?feedData.filter(r=>(r.title||"").toLowerCase().includes(q)||(r.body||"").toLowerCase().includes(q)||(r.target||"").toLowerCase().includes(q)):feedData;
  if(!feedData.length){empty.style.display='block';empty.textContent='아직 올라온 레시피가 없어요. 첫 번째 맘셰프가 되어보세요! ➕ 올리기 탭에서 시작!';list.innerHTML='';return;}
+ if(!shown.length){empty.style.display='block';empty.textContent='"'+feedQuery+'" 검색 결과가 없어요';list.innerHTML='';return;}
  empty.style.display='none';
- list.innerHTML=feedData.map(r=>{
+ list.innerHTML=shown.map(r=>{
   const liked=myLikes.has(r.id);
   return '<article class="post">'+
    (r.image_url?'<img class="post-img" loading="lazy" src="'+esc(r.image_url)+'" alt="">':'<div class="picture" style="height:120px;border-radius:12px">'+esc(r.emoji||'🍽️')+'</div>')+
@@ -1074,6 +1078,8 @@ $('#feed-list').onclick=async e=>{
   toast('지웠어요');
  }
 };
+const feedSearchInput=app.querySelector('#feed-search');
+if(feedSearchInput)feedSearchInput.addEventListener('input',e=>{feedQuery=e.target.value;renderFeed();});
 
 /* ── 시동: 보호막은 여기서만 ── */
 try{
