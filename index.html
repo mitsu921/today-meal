@@ -447,11 +447,16 @@ function heroIdle(){
  $('#decide-btn').onclick=decide;
  $('#result-extra').innerHTML="";
 }
+function inPantry(name){
+ return D.pantry.some(p=>name.includes(p.name)||p.name.includes(name));
+}
 function addMissingToShop(){
  if(!res)return;
- const miss=(res.missing||[]).filter(x=>x.name);
- const items=miss.length?miss:res.tray.filter(t=>t.item).map(t=>({name:t.item,amt:""}));
- if(!items.length){toast("담을 재료가 없어요");return;}
+ const map={};
+ (res.missing||[]).forEach(x=>{if(x.name)map[x.name]={name:x.name,amt:x.amt||""};});
+ res.tray.filter(t=>t.item).forEach(t=>{if(!map[t.item])map[t.item]={name:t.item,amt:""};});
+ const items=Object.values(map).filter(x=>!inPantry(x.name));
+ if(!items.length){toast("필요한 재료가 이미 냉장고에 다 있어요! 👍");return;}
  let n=0;
  items.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++;}});
  save();renderTop();
