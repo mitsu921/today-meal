@@ -164,7 +164,7 @@ details.fold.sub .body p{font-size:13px!important}
         구성된 한 상을 차려주고 칼로리와 탄수화물·단백질·지방 비율까지 계산해 보여줍니다.
         냉장고에 있는 재료를 등록해두면 유통기한이 임박한 재료부터 쓰는 메뉴를 우선 추천해서,
         음식물 쓰레기와 식비를 함께 줄일 수 있어요. 추천받은 메뉴는 초보자용 레시피로 직접
-        만들 수도 있고, 없는 재료나 밀키트를 쿠팡에서 바로 검색해 살 수도 있습니다. 추천 기능은 가입 없이
+        만들 수도 있고, 없는 재료를 장보기 목록에 한 번에 담아둘 수도 있습니다. 추천 기능은 가입 없이
         무료로 쓸 수 있고, 회원가입(이메일 또는 카카오)을 하면 레시피를 올리고 추천·댓글을
         나누는 엄마들의 커뮤니티까지 이용할 수 있습니다.
       </p></div>
@@ -181,7 +181,7 @@ details.fold.sub .body p{font-size:13px!important}
         누르면 되고, 최근에 나온 메뉴는 자동으로 빼고 다시 골라줘요.<br><br>
         <b>3. 만들기 또는 장보기</b> — 만들어 먹기를 고르면 재료 목록(집에 있는 재료엔 "있음" 표시)과
         단계별 요리법이 나오고, 없는 재료는 한 번에 장보기 리스트로 옮길 수 있습니다.
-        쿠팡에서 사기를 고르면 부족한 재료나 밀키트를 쿠팡 검색으로 바로 연결해드려요.<br><br>
+        장보기에 담기를 고르면 부족한 재료가 바로 장보기 탭으로 옮겨져요.<br><br>
         <b>4. 기록 쌓기</b> — 먹고 나서 "이거 먹었어요"를 누르면 기록 탭에 쌓입니다. 3일 연속
         탄수화물 비중이 높거나 단백질이 부족하면 알려드리고, 다음 추천에 자동으로 반영됩니다.
       </p></div>
@@ -402,8 +402,17 @@ function go(v){
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
 
 async function ask(prompt,maxTokens){
- const r=await fetch(PROXY_URL,{method:"POST",headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:maxTokens||700,messages:[{role:"user",content:prompt}]})});
+ const ctrl=new AbortController();
+ const timer=setTimeout(()=>ctrl.abort(),25000);
+ let r;
+ try{
+  r=await fetch(PROXY_URL,{method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:maxTokens||700,messages:[{role:"user",content:prompt}]}),
+   signal:ctrl.signal});
+ }catch(e){
+  if(e.name==="AbortError")throw new Error("limit:요청이 너무 오래 걸려요. 네트워크를 확인하고 다시 눌러주세요.");
+  throw new Error("limit:연결에 실패했어요. 네트워크를 확인하고 다시 눌러주세요.");
+ }finally{clearTimeout(timer);}
  if(r.status===429){const d=await r.json().catch(()=>({}));throw new Error("limit:"+(d.message||"잠시 뒤에 다시 눌러주세요!"))}
  const d=await r.json();
  const txt=(d.content||[]).map(i=>i.type==="text"?i.text:"").filter(Boolean).join("\n");
@@ -438,6 +447,17 @@ function heroIdle(){
  $('#decide-btn').onclick=decide;
  $('#result-extra').innerHTML="";
 }
+function addMissingToShop(){
+ if(!res)return;
+ const miss=(res.missing||[]).filter(x=>x.name);
+ const items=miss.length?miss:res.tray.filter(t=>t.item).map(t=>({name:t.item,amt:""}));
+ if(!items.length){toast("담을 재료가 없어요");return;}
+ let n=0;
+ items.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++;}});
+ save();renderTop();
+ toast(n?n+"개를 장보기에 담았어요! 🛒":"이미 장보기에 담겨 있어요");
+ go("shop");
+}
 function heroBusy(msg){
  $('#hero').innerHTML='<span class="tag">고르는 중</span><div class="loadmsg">'+msg+'</div><div class="skel"></div><div class="skel" style="width:70%"></div><div class="skel" style="width:50%"></div>';
 }
@@ -446,10 +466,10 @@ function heroResult(){
  $('#hero').innerHTML='<span class="tag" id="hero-tag">'+person+' 맞춤 · AI가 골랐어요</span>'+
   '<div style="margin:10px 0 4px"><div class="dish">'+(res.emoji||"🍽️")+'</div><strong>'+res.name+'</strong>'+
   '<p class="meta">'+(res.why||"")+'<br>🔥 '+res.kcal+'kcal · 탄'+m.carb+' 단'+m.protein+' 지'+m.fat+'g'+(res.urgent?'<br>⏰ '+res.urgent:'')+'</p></div>'+
-  '<div class="hero-actions"><button id="btn-cook">🍳 만들어 먹기</button><button id="btn-shop">🛒 쿠팡에서 사기</button><button class="alt" id="btn-again">↻ 다른 메뉴</button><button class="alt" id="btn-scrap">'+(scrapped?"♥":"♡")+'</button></div>';
+  '<div class="hero-actions"><button id="btn-cook">🍳 만들어 먹기</button><button id="btn-shop">🛒 장보기에 담기</button><button class="alt" id="btn-again">↻ 다른 메뉴</button><button class="alt" id="btn-scrap">'+(scrapped?"♥":"♡")+'</button></div>';
  $('#btn-again').onclick=decide;
  $('#btn-cook').onclick=()=>pick("cook");
- $('#btn-shop').onclick=()=>pick("shop");
+ $('#btn-shop').onclick=addMissingToShop;
  $('#btn-scrap').onclick=scrap;
  renderExtra();
 }
@@ -472,21 +492,6 @@ function renderExtra(){
  const tc=$('#to-cart');
  if(tc)tc.onclick=()=>{let n=0;miss.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++}});save();renderTop();tc.textContent="✓ "+(n?n+"개 담았어요":"이미 담겨 있어요");tc.disabled=true;toast("장보기 목록에 담았어요")};
  $('#eat-btn').onclick=eat;
- if(mode==="shop")renderShop();
-}
-function coupangURL(q){return "https://www.coupang.com/np/search?q="+encodeURIComponent(q);}
-function renderShop(){
- const miss=(res.missing||[]).filter(x=>x.name);
- let h='<div class="delivbox"><h3 style="margin-bottom:8px">쿠팡에서 바로 찾기</h3>';
- h+='<a class="searchtag" target="_blank" rel="noopener" href="'+coupangURL(res.name+" 밀키트")+'" style="text-decoration:none;display:inline-block">🍱 '+res.name+' 밀키트</a>';
- if(miss.length){
-  h+=miss.map(x=>'<a class="searchtag" target="_blank" rel="noopener" href="'+coupangURL(x.name)+'" style="text-decoration:none;display:inline-block">🔍 '+x.name+'</a>').join("");
- }else{
-  h+=res.tray.filter(t=>t.item).slice(0,3).map(t=>'<a class="searchtag" target="_blank" rel="noopener" href="'+coupangURL(t.item)+'" style="text-decoration:none;display:inline-block">🔍 '+t.item+'</a>').join("");
- }
- h+='<p class="muted" style="margin-top:10px;font-size:12px">누르면 쿠팡 검색 결과가 새 창으로 열려요</p></div>';
- $('#deliv-slot').innerHTML=h;
- $('#deliv-slot').scrollIntoView({behavior:"smooth",block:"center"});
 }
 
 /* ── 추천 ── */
@@ -518,27 +523,22 @@ async function decide(){
  clearInterval(t); busy=false;
 }
 
-/* ── 만들기/쿠팡 장보기 ── */
+/* ── 레시피 만들기 ── */
 async function pick(m){
  mode=m;
- if(m==="shop")toast("검색 링크 준비 중...");
  const menu=res.tray.map(t=>t.item).join(", ");
  const cb=$('#btn-cook'), sb=$('#btn-shop');
  const cookLabel=cb?cb.textContent:"🍳 만들어 먹기";
  try{
-  if(m==="cook"){
-   if(!recipe){
-    if(cb){cb.disabled=true;cb.textContent="🍳 레시피 만드는 중...";}
-    if(sb)sb.disabled=true;
-    recipe=await ask("초보용 요리법: "+menu+" (2인분)\n"+
-     (D.pantry.length?"냉장고에 있음: "+D.pantry.map(p=>p.name).join(", ")+"\n":"")+
-     (D.allergy?"알레르기·비선호(완전 제외): "+D.allergy+"\n":"")+
-     "- 재료 양 표기, 기본 양념은 basics에. step은 실제 순서(기다리는 건 앞에), 분 단위.\n"+
-     'JSON만, 백틱 금지:\n{"total_min":0,"level":"쉬움|보통|손이 감","ingredients":[{"name":"","amt":""}],"basics":[""],"steps":[{"do":"구체적 동작 한 문장","min":0}],"secret":"맛 포인트 한 문장"}',1400);}
-   renderDetail(); go("detail");
-  }else{
-   renderShop();
-  }
+  if(cb){cb.disabled=true;cb.textContent="🍳 레시피 만드는 중...";}
+  if(sb)sb.disabled=true;
+  if(!recipe){
+   recipe=await ask("초보용 요리법: "+menu+" (2인분)\n"+
+    (D.pantry.length?"냉장고에 있음: "+D.pantry.map(p=>p.name).join(", ")+"\n":"")+
+    (D.allergy?"알레르기·비선호(완전 제외): "+D.allergy+"\n":"")+
+    "- 재료 양 표기, 기본 양념은 basics에. step은 실제 순서(기다리는 건 앞에), 분 단위.\n"+
+    'JSON만, 백틱 금지:\n{"total_min":0,"level":"쉬움|보통|손이 감","ingredients":[{"name":"","amt":""}],"basics":[""],"steps":[{"do":"구체적 동작 한 문장","min":0}],"secret":"맛 포인트 한 문장"}',1400);}
+  renderDetail(); go("detail");
  }catch(e){const msg=e&&e.message&&e.message.startsWith("limit:")?e.message.slice(6):"[진단12] "+String(e&&e.message?e.message:e).slice(0,140)+" ← 이 문구를 알려주세요";toast(msg);mode=null;}
  finally{if(cb){cb.disabled=false;cb.textContent=cookLabel;}if(sb)sb.disabled=false;}
 }
