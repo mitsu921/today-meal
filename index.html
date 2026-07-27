@@ -304,13 +304,6 @@ details.fold.sub .body p{font-size:13px!important}
   </div>
 </div>
 
-<div class="article-modal" id="shopflow-modal">
-  <div class="article-sheet">
-    <button class="article-close" id="shopflow-close">✕</button>
-    <div id="shopflow-body"></div>
-  </div>
-</div>
-
 <!-- ══ 탐색 (커뮤니티 피드) ══ -->
   <section class="view" data-view="explore">
     <header class="head"><h1>엄마들의 레시피</h1><p class="muted">서로의 식탁에서 오늘의 아이디어를 얻어요</p></header>
@@ -348,10 +341,10 @@ details.fold.sub .body p{font-size:13px!important}
   <!-- ══ 장보기 ══ -->
   <section class="view" data-view="shop">
     <header class="head"><h1>장보기 🛒</h1><p class="muted">추천 메뉴에서 없는 재료를 담으면 여기 모여요</p></header>
-    <div class="section"><div class="line"><h2>장보기 목록</h2><button class="back" id="clear-done" style="font-size:12px;color:#78877d">산 것 지우기</button></div><div id="shop-list"></div></div>
+    <div class="section"><div class="line"><h2>장보기 목록</h2><div style="display:flex;gap:10px"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">산 것 지우기</button></div></div><div id="shop-list"></div></div>
     <div class="section" style="margin-top:60px">
       <div style="background:#fff;border:1px solid #eef1ee;border-radius:16px;padding:14px 14px 10px;overflow:hidden">
-        <p class="muted" style="font-size:11px;margin:0 0 8px;color:#9aa79b">장보기 목록에 없는 것도 여기서 검색해보세요</p>
+        <p style="font-size:14px;font-weight:800;color:#39774e;margin:0 0 10px;line-height:1.4">🔎 장보기 목록에 없는 것도<br>여기서 검색해보세요!</p>
         <iframe src="https://coupa.ng/col8Vc" width="100%" height="36" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics style="border-radius:10px"></iframe>
         <p class="muted" style="font-size:10.5px;margin:8px 0 0;color:#b7c0b4">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
       </div>
@@ -620,6 +613,8 @@ $('#custom-ing').addEventListener('keydown',e=>{if(e.key==="Enter"){addIng(e.tar
 /* ── 장보기 ── */
 function renderShop(){
  const el=$('#shop-list');
+ const sa=$('#select-all-shop');
+ if(sa)sa.textContent=(D.shop.length&&D.shop.every(s=>s.done))?"전체해제":"전체선택";
  if(!D.shop.length){el.innerHTML='<p class="muted">비어 있어요. 추천 메뉴의 "없는 재료"를 담으면 여기 모여요.</p>';return;}
  el.innerHTML="";
  D.shop.forEach((s,i)=>{
@@ -634,35 +629,13 @@ function renderShop(){
   buy.target="_blank";buy.rel="noopener";buy.textContent="🛒 보기";buy.title="쿠팡에서 "+s.name+" 찾기";
   buy.style.cssText="text-decoration:none;font-size:11.5px;font-weight:800;color:#39774e;background:#eef6ee;border-radius:10px;padding:6px 9px;flex:0 0 auto;white-space:nowrap";
   row.appendChild(cb);row.appendChild(nm);row.appendChild(fr);row.appendChild(buy);el.appendChild(row);});
- if(D.shop.some(s=>!s.done)){
-  const allBtn=document.createElement('button');
-  allBtn.id="shopflow-start";allBtn.textContent="🛒 장보기 목록 전체 쿠팡에서 보기";
-  allBtn.style.cssText="width:100%;margin-top:12px;padding:12px;border-radius:12px;background:#39774e;color:#fff;font-weight:800;font-size:13.5px";
-  allBtn.onclick=startShopFlow;
-  el.appendChild(allBtn);
- }
 }
+$('#select-all-shop').onclick=()=>{
+ const allDone=D.shop.length&&D.shop.every(s=>s.done);
+ D.shop.forEach(s=>s.done=!allDone);
+ save();renderShop();renderTop();
+};
 $('#clear-done').onclick=()=>{D.shop=D.shop.filter(s=>!s.done);save();renderShop();renderTop();};
-
-/* ── 장보기 전체를 하나씩 순서대로 쿠팡에서 보기 ── */
-let shopFlowIdx=0, shopFlowItems=[];
-function startShopFlow(){
- shopFlowItems=D.shop.filter(s=>!s.done);
- if(!shopFlowItems.length){toast("담긴 재료가 없어요");return;}
- shopFlowIdx=0; renderShopFlow();
- $('#shopflow-modal').classList.add('open');
-}
-function renderShopFlow(){
- const it=shopFlowItems[shopFlowIdx];
- const last=shopFlowIdx===shopFlowItems.length-1;
- $('#shopflow-body').innerHTML=
-  '<div style="font-size:12.5px;color:#9aa79b;font-weight:800">'+(shopFlowIdx+1)+' / '+shopFlowItems.length+'</div>'+
-  '<h3 style="margin:8px 0 18px;word-break:keep-all">'+esc(it.name)+'</h3>'+
-  '<a target="_blank" rel="noopener" href="https://www.coupang.com/np/search?q='+encodeURIComponent(it.name)+'" '+
-   'style="display:block;text-align:center;text-decoration:none;background:#39774e;color:#fff;border-radius:13px;padding:14px;font-weight:800">🛒 쿠팡에서 '+esc(it.name)+' 보기</a>'+
-  '<button id="shopflow-next" style="width:100%;margin-top:10px;padding:12px;border-radius:12px;background:#f2f4f0;color:#526158;font-weight:800">'+(last?"완료":"다음 재료 →")+'</button>';
- $('#shopflow-next').onclick=()=>{ if(last){$('#shopflow-modal').classList.remove('open');return;} shopFlowIdx++; renderShopFlow(); };
-}
 
 /* ── 내 주방 ── */
 function renderKitchen(){
@@ -748,8 +721,7 @@ function openArticle(key){
 }
 document.querySelectorAll('[data-article]').forEach(c=>c.onclick=()=>openArticle(c.dataset.article));
 $('#article-close').onclick=()=>$('#article-modal').classList.remove('open');
-$('#shopflow-close').onclick=()=>$('#shopflow-modal').classList.remove('open');
-$('#shopflow-modal').onclick=e=>{if(e.target.id==='shopflow-modal')$('#shopflow-modal').classList.remove('open');};
+
 $('#article-modal').onclick=e=>{if(e.target.id==='article-modal')$('#article-modal').classList.remove('open');};
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
