@@ -7,6 +7,14 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta name="google-adsense-account" content="ca-pub-7169767076437690">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q87J30S9DQ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-Q87J30S9DQ');
+window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }catch(e){} };
+</script>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#36734d">
 <link rel="apple-touch-icon" href="/icon-192.png">
@@ -237,6 +245,7 @@ details.fold.sub .body p{font-size:13px!important}
         <b>광고:</b> Google AdSense 게재 시 제3자 광고 사업자가 쿠키를 사용할 수 있으며
         <a href="https://www.google.com/settings/ads" style="color:#6b5ae0;font-weight:700">Google 광고 설정</a>에서
         맞춤 광고를 해제할 수 있습니다.<br>
+        <b>분석:</b> 서비스 개선을 위해 Google Analytics로 이용 통계를 익명 수집합니다.<br>
         <b>이용 제한:</b> 남용 방지를 위한 IP 기준 횟수 기록은 48시간 후 자동 삭제됩니다.<br>
         <b>이용자 권리:</b> 본인 글은 직접 삭제할 수 있고, 계정 삭제·정보 열람은 하단 문의처로
         요청하면 처리합니다. 부적절한 게시물은 각 글의 신고 버튼으로 알려주세요.<br><br>
@@ -400,6 +409,7 @@ let person="우리 아이",meal="점심",res=null,recipe=null,mode=null,busy=fal
 
 function toast(t){const n=$('#toast');n.textContent=t;n.classList.add('show');const dur=Math.min(6000,Math.max(1800,t.length*55));clearTimeout(n._tt);n._tt=setTimeout(()=>n.classList.remove('show'),dur)}
 function go(v){
+ if(window.gaEvent)gaEvent('tab_view',{tab:v});
  if(v==='upload'&&!me){
   refreshAuth().then(()=>{ if(me){go('upload');} else {toast('레시피를 올리려면 로그인이 필요해요');go('login');} });
   return;
@@ -468,6 +478,7 @@ function addMissingToShop(){
  let n=0;
  items.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++;}});
  save();renderTop();
+ if(window.gaEvent)gaEvent('shop_add',{dish:res.name,count:n});
  toast(n?n+"개를 장보기에 담았어요! 🛒":"이미 장보기에 담겨 있어요");
  go("shop");
 }
@@ -510,6 +521,7 @@ function renderExtra(){
 /* ── 추천 ── */
 async function decide(){
  if(busy)return; busy=true; recipe=null; mode=null; eaten=false; scrapped=false;
+ if(window.gaEvent)gaEvent('decide_click',{person:person,meal:meal});
  let li=0; heroBusy(LOADS[0]);
  const t=setInterval(()=>{li=(li+1)%LOADS.length;const el=$('.loadmsg');if(el)el.textContent=LOADS[li]},900);
  const P=PERSONA[person], isSnack=meal==="간식", slots=isSnack?MEAL_SLOTS.간식:MEAL_SLOTS.기본;
@@ -528,6 +540,7 @@ async function decide(){
    'JSON만, 백틱 금지:\n{"name":"12자 이내","emoji":"🍲","why":"20자 이내","urgent":"","tray":[{"slot":"'+slots[0]+'","item":"","kcal":0},{"slot":"'+slots[1]+'","item":"","kcal":0},{"slot":"'+slots[2]+'","item":"","kcal":0},{"slot":"'+slots[3]+'","item":"","kcal":0}],"kcal":0,"macros":{"carb":0,"protein":0,"fat":0},"nutrition":"한 문장","missing":[{"name":"","amt":""}]}',650);
   res._slots=slots; res._person=person; res._meal=meal;
   seen=[...seen.slice(-5),res.name];
+  if(window.gaEvent)gaEvent('decide_success',{person:person,meal:meal,dish:res.name});
   heroResult();
  }catch(e){
   const msg=e.message&&e.message.startsWith("limit:")?e.message.slice(6):"메뉴를 못 받아왔어요. 다시 눌러주세요!";
@@ -552,6 +565,7 @@ async function pick(m){
     "- 재료 양 표기, 기본 양념은 basics에. step은 실제 순서(기다리는 건 앞에), 분 단위.\n"+
     'JSON만, 백틱 금지:\n{"total_min":0,"level":"쉬움|보통|손이 감","ingredients":[{"name":"","amt":""}],"basics":[""],"steps":[{"do":"구체적 동작 한 문장","min":0}],"secret":"맛 포인트 한 문장"}',1400);}
   renderDetail(); go("detail");
+  if(window.gaEvent)gaEvent('recipe_view',{dish:res.name});
  }catch(e){const msg=e&&e.message&&e.message.startsWith("limit:")?e.message.slice(6):"[진단12] "+String(e&&e.message?e.message:e).slice(0,140)+" ← 이 문구를 알려주세요";toast(msg);mode=null;}
  finally{if(cb){cb.disabled=false;cb.textContent=cookLabel;}if(sb)sb.disabled=false;}
 }
@@ -748,6 +762,9 @@ sb.auth.onAuthStateChange(async(ev,s)=>{
  me=s?s.user:null;
  if(me)await ensureProfile();
  renderAuthUI();
+ if(ev==='SIGNED_IN'){
+  if(window.gaEvent)gaEvent('login_success',{provider:(me&&me.app_metadata&&me.app_metadata.provider)||'email'});
+ }
  if(ev==='SIGNED_IN'&&(location.search.includes('code=')||location.hash.includes('access_token'))){
   history.replaceState(null,'',location.pathname);
  }
@@ -926,6 +943,7 @@ JSON만, 백틱 금지:
   if(error)return toast('등록 실패: '+error.message);
   $('#up-title').value='';$('#up-body').value='';upFile=null;$('#up-photo-btn').textContent='📷 사진 추가하기';
   clearDraft();$('#draft-note').style.display='none';
+  if(window.gaEvent)gaEvent('recipe_submit',{target:upTarget,has_photo:!!image_url,has_nutri:!!(nutri&&nutri.kcal)});
   toast(nutri&&nutri.kcal?'레시피를 올렸어요! AI 영양사가 분석도 마쳤어요 🧑‍⚕️':'레시피를 올렸어요! 🎉');go('explore');
  }finally{$('#up-submit').disabled=false;$('#up-submit').textContent='등록하기';}
 };
@@ -1036,7 +1054,7 @@ $('#feed-list').onclick=async e=>{
   if(!me){toast('추천하려면 로그인이 필요해요');return go('login');}
   const id=Number(like.dataset.like);
   if(myLikes.has(id)){await sb.from('likes').delete().eq('recipe_id',id).eq('user_id',me.id);myLikes.delete(id);}
-  else{await sb.from('likes').insert({recipe_id:id,user_id:me.id});myLikes.add(id);toast('추천했어요 ♥');}
+  else{await sb.from('likes').insert({recipe_id:id,user_id:me.id});myLikes.add(id);toast('추천했어요 ♥');if(window.gaEvent)gaEvent('recipe_like',{recipe_id:id});}
   loadFeed();
  }
  if(del){
@@ -1059,6 +1077,7 @@ $('#feed-list').onclick=async e=>{
   const {error}=await sb.from('comments').insert({recipe_id:Number(id),user_id:me.id,body});
   csend.disabled=false;
   if(error)return toast('등록 실패: '+error.message);
+  if(window.gaEvent)gaEvent('comment_submit',{recipe_id:Number(id)});
   inp.value='';loadComments(id);
   const btn=$('#feed-list').querySelector('[data-cmt="'+id+'"]');
   if(btn){const n=parseInt(btn.textContent.replace(/[^0-9]/g,'')||'0',10)+1;btn.textContent='💬 댓글 '+n;}
@@ -1079,7 +1098,13 @@ $('#feed-list').onclick=async e=>{
  }
 };
 const feedSearchInput=app.querySelector('#feed-search');
-if(feedSearchInput)feedSearchInput.addEventListener('input',e=>{feedQuery=e.target.value;renderFeed();});
+let _searchTimer=null;
+if(feedSearchInput)feedSearchInput.addEventListener('input',e=>{
+ feedQuery=e.target.value;renderFeed();
+ clearTimeout(_searchTimer);
+ const q=e.target.value.trim();
+ if(q)_searchTimer=setTimeout(()=>{ if(window.gaEvent)gaEvent('recipe_search',{q:q}); },1000);
+});
 
 /* ── 시동: 보호막은 여기서만 ── */
 try{
