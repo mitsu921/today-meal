@@ -2,7 +2,7 @@
   "name": "오늘 뭐먹지 — 워킹맘의 식사 비서",
   "short_name": "오늘뭐먹지",
   "description": "가족별 AI 식단 추천, 냉장고 관리, 엄마들의 레시피 커뮤니티",
-  "start_url": "/",
+  "start_url": "/app/",
   "display": "standalone",
   "background_color": "#fffdf8",
   "theme_color": "#36734d",
