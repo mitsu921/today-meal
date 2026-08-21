@@ -27,13 +27,6 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 <style>
 *{box-sizing:border-box}
 button,input,textarea,select{font-family:inherit}
-@font-face{font-family:'Gmarket Sans';font-weight:700;font-style:normal;font-display:swap;
- src:url('https://cdn.jsdelivr.net/gh/fonts-archive/GmarketSans/GmarketSansBold.woff2') format('woff2'),
-     url('https://cdn.jsdelivr.net/gh/fonts-archive/GmarketSans/GmarketSansBold.woff') format('woff')}
-@font-face{font-family:'Gmarket Sans';font-weight:500;font-style:normal;font-display:swap;
- src:url('https://cdn.jsdelivr.net/gh/fonts-archive/GmarketSans/GmarketSansMedium.woff2') format('woff2'),
-     url('https://cdn.jsdelivr.net/gh/fonts-archive/GmarketSans/GmarketSansMedium.woff') format('woff')}
-h1,h2{font-family:'Gmarket Sans',Pretendard,"Apple SD Gothic Neo",sans-serif}
 body{margin:0;background:#fffefc;color:#2b241d;font-family:'Pretendard',"Apple SD Gothic Neo",Arial,sans-serif;line-height:1.6;letter-spacing:-.2px}
 a{color:inherit;text-decoration:none}
 .shell{max-width:1140px;margin:auto;padding:0 24px}
@@ -60,16 +53,42 @@ nav.cat a.active{color:#e8703a}
 .section-head a{font-size:12.5px;font-weight:800;color:#6b6153}
 
 /* 이번 주 추천 (히어로, 실데이터) */
-.featured{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;padding:30px 24px 10px}
-@media(max-width:860px){.featured{grid-template-columns:1fr}}
-.featured-photo{border-radius:20px;overflow:hidden;background:#f7f4ee;height:360px;display:flex;align-items:center;justify-content:center;font-size:56px;cursor:pointer}
+/* 히어로 (사진+문구) */
+.hero{padding:30px 24px 20px;display:grid;grid-template-columns:1.4fr 1fr;gap:26px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.hero-photo{position:relative;border-radius:20px;overflow:hidden;height:340px}
+.hero-photo img{width:100%;height:100%;object-fit:cover}
+.hero-photo span{position:absolute;left:16px;bottom:16px;background:rgba(43,36,29,.72);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px}
+.hero-copy{padding-top:6px}
+.hero-copy .eyebrow{color:#e8703a;font-weight:800;font-size:11px;letter-spacing:2px;margin:0 0 10px}
+.hero-copy h1{font-size:27px;line-height:1.4;margin:0 0 14px;letter-spacing:-.5px}
+.hero-copy .hero-desc{color:#6b6153;font-size:13.5px;display:block;margin-bottom:16px;line-height:1.8}
+.hero-copy a.hero-link{font-weight:800;font-size:13px;color:#2b241d;border-bottom:2px solid #2b241d;padding-bottom:2px}
+
+/* 퀵픽 인라인 박스 */
+.quick-pick{background:#f7f0e8;border-radius:20px;padding:22px}
+.quick-pick .eyebrow{color:#e8703a;font-weight:800;font-size:11px;letter-spacing:2px;margin:0 0 6px}
+.quick-pick h2{font-size:19px;margin:0 0 6px}
+.quick-desc{color:#6b6153;font-size:12.5px;margin:0 0 14px;line-height:1.7}
+.meal-times{display:flex;gap:6px;margin-bottom:14px}
+.meal-times button{flex:1;padding:8px 0;border-radius:10px;background:#fff;border:0;font-weight:800;font-size:12px;color:#6b6153;cursor:pointer}
+.meal-times button.active{background:#e8703a;color:#fff}
+.meal-result{display:flex;gap:10px;background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;align-items:center}
+.meal-result span{font-size:28px}
+.meal-result h4{margin:2px 0;font-size:14.5px}
+.meal-result small{color:#a89b82;font-weight:700;font-size:10.5px}
+.recommend-button{width:100%;padding:12px;border-radius:12px;background:#2b241d;color:#fff;font-weight:800;font-size:13px;border:0;cursor:pointer;display:flex;justify-content:center;gap:8px}
+
+/* 이번 주 추천(실데이터) — 인라인 소형 카드 */
+.featured-inline{display:flex;gap:16px;background:#fff;border:1px solid #f0ece3;border-radius:18px;padding:16px;align-items:center}
+@media(max-width:640px){.featured-inline{flex-direction:column;align-items:stretch}}
+.featured-photo{border-radius:16px;overflow:hidden;background:#f7f4ee;width:180px;height:140px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer}
 .featured-photo img{width:100%;height:100%;object-fit:cover}
-.featured-copy{display:flex;flex-direction:column;justify-content:center}
-.featured-copy .tag{display:inline-block;background:#fdece1;color:#e8703a;font-weight:800;font-size:11.5px;padding:5px 11px;border-radius:8px;margin-bottom:12px;width:fit-content}
-.featured-copy h1{font-size:26px;margin:0 0 12px;line-height:1.4;cursor:pointer}
-.featured-copy .meta{font-size:12.5px;color:#a89b82;margin-bottom:14px}
-.featured-copy p{font-size:14px;color:#5c5346;margin:0 0 16px;line-height:1.8}
-.featured-copy .likes{font-weight:800;color:#e8703a;font-size:13px}
+.featured-copy{flex:1}
+.featured-copy .tag{display:inline-block;background:#fdece1;color:#e8703a;font-weight:800;font-size:11px;padding:4px 10px;border-radius:8px;margin-bottom:8px;width:fit-content}
+.featured-copy .meta{font-size:12px;color:#a89b82;margin-bottom:8px}
+.featured-copy p{font-size:13px;color:#5c5346;margin:0 0 10px;line-height:1.75}
+.featured-copy .likes{font-weight:800;color:#e8703a;font-size:12.5px}
 
 /* 카테고리 카드 (정적, 크롤러 안전) */
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -169,14 +188,54 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
   <a class="header-app-link" href="/app/">📱 앱</a>
 </header>
 
-<section class="featured shell" id="top">
-  <div class="featured-photo" id="featured-photo">🍲</div>
-  <div class="featured-copy">
-    <span class="tag" id="featured-tag">이번 주 추천</span>
-    <h1 id="featured-title">첫 레시피를 기다리고 있어요</h1>
-    <div class="meta" id="featured-meta"></div>
-    <p id="featured-desc">아직 등록된 레시피가 없어요. 앱에서 첫 번째 레시피의 주인공이 되어보세요!</p>
-    <span class="likes" id="featured-likes"></span>
+<section class="hero shell" id="top">
+  <div class="hero-photo">
+    <img src="/family-table.jpg" alt="따뜻한 집밥이 차려진 식탁">
+    <span>오늘의 추천 이야기</span>
+  </div>
+  <div class="hero-copy">
+    <p class="eyebrow">WEEKLY TABLE</p>
+    <h1>매일 저녁,<br>무엇을 먹을지 고민되나요?</h1>
+    <span class="hero-desc">가족이 함께 먹기 좋은 메뉴부터 장보기 정보까지,<br>우리 집 식탁에 필요한 이야기를 모았습니다.</span>
+    <a class="hero-link" href="#recent">오늘 메뉴 골라보기 <b>→</b></a>
+  </div>
+</section>
+
+<section class="shell" style="padding:0 24px 20px">
+  <div class="quick-pick">
+    <p class="eyebrow">QUICK PICK</p>
+    <h2>오늘 뭐 먹지?</h2>
+    <p class="quick-desc">몇 번의 선택만으로<br>오늘의 메뉴를 골라드려요.</p>
+    <div class="meal-times" id="meal-times">
+      <button class="active" data-t="아침">아침</button>
+      <button data-t="점심">점심</button>
+      <button data-t="저녁">저녁</button>
+      <button data-t="야식">야식</button>
+    </div>
+    <div class="meal-result" id="meal-result">
+      <span id="meal-emoji">🍲</span>
+      <div>
+        <small id="meal-type">따뜻한 국물요리 · 30분</small>
+        <h4 id="meal-name">소고기 버섯전골</h4>
+        <p id="meal-desc" style="margin:2px 0 0;font-size:11.5px;color:#8a7d67">온 가족이 둘러앉아 먹기 좋은 저녁 메뉴</p>
+      </div>
+    </div>
+    <button class="recommend-button" id="recommend-btn">다른 메뉴 추천받기 <span>↻</span></button>
+  </div>
+</section>
+
+<section class="section shell" id="recent" style="padding-top:10px">
+  <div class="section-head">
+    <div><p class="eyebrow">THIS WEEK'S PICK</p><h2 id="featured-title">첫 레시피를 기다리고 있어요</h2></div>
+  </div>
+  <div class="featured-inline" id="featured-photo-wrap">
+    <div class="featured-photo" id="featured-photo">🍲</div>
+    <div class="featured-copy">
+      <span class="tag" id="featured-tag">이번 주 추천</span>
+      <div class="meta" id="featured-meta"></div>
+      <p id="featured-desc">아직 등록된 레시피가 없어요. 앱에서 첫 번째 레시피의 주인공이 되어보세요!</p>
+      <span class="likes" id="featured-likes"></span>
+    </div>
   </div>
 </section>
 
@@ -259,28 +318,6 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
   </div>
 </footer>
 
-<button class="fab" id="fab-btn">🍽️ 오늘 뭐 먹지?</button>
-
-<div class="c-modal" id="c-quick-modal">
-  <div class="c-sheet">
-    <button class="c-close" id="c-quick-close">✕</button>
-    <p style="color:#e8703a;font-weight:800;font-size:11px;letter-spacing:1.5px;margin:0 0 4px">QUICK PICK</p>
-    <h3 style="margin:0 0 10px">오늘 뭐 먹지?</h3>
-    <div class="meal-times" id="meal-times">
-      <button class="active" data-t="아침">아침</button>
-      <button data-t="점심">점심</button>
-      <button data-t="저녁">저녁</button>
-      <button data-t="야식">야식</button>
-    </div>
-    <div class="meal-result" id="meal-result">
-      <span id="meal-emoji">🍲</span>
-      <div><small id="meal-type">따뜻한 국물요리 · 30분</small><h4 id="meal-name">소고기 버섯전골</h4></div>
-    </div>
-    <button class="c-btn" id="recommend-btn" style="width:100%;padding:11px;background:#2b241d;color:#fff;margin-bottom:8px">다른 힌트 보기 ↻</button>
-    <a class="c-btn" href="/app/" style="display:block;text-align:center;padding:12px;background:#e8703a;color:#fff">📱 앱에서 진짜 AI 추천받기</a>
-  </div>
-</div>
-
 <div class="c-modal" id="c-login-modal">
   <div class="c-sheet">
     <button class="c-close" id="c-login-close">✕</button>
@@ -331,25 +368,24 @@ function tierFor(n){ for(const t of TIERS) if(n>=t.min) return t; return null; }
 function tierBadge(uid){ const n=authorTotals[uid]||0; const t=tierFor(n); return t?' <span style="font-size:11px">'+t.emoji+'</span>':''; }
 function computeAuthorTotals(){ authorTotals={}; feedData.forEach(r=>{ authorTotals[r.user_id]=(authorTotals[r.user_id]||0)+likeCount(r); }); }
 
-/* ── 우측 고정 퀵픽 버튼 ── */
+/* ── 퀵픽 (인라인 박스) ── */
 const menuPool={
- "아침":[{name:"그릭요거트 과일볼",type:"가볍게 시작",time:"5분",emoji:"🫐"},{name:"계란 듬뿍 토스트",type:"든든한 아침",time:"10분",emoji:"🍞"}],
- "점심":[{name:"새우 야채 덮밥",type:"한 그릇 점심",time:"15분",emoji:"🍤"},{name:"참치 김치볶음밥",type:"간단한 한 그릇",time:"15분",emoji:"🍚"}],
- "저녁":[{name:"소고기 버섯전골",type:"따뜻한 국물요리",time:"30분",emoji:"🍲"},{name:"간장 닭볶음",type:"아이와 함께",time:"25분",emoji:"🍗"},{name:"두부 달걀덮밥",type:"냉장고 파먹기",time:"15분",emoji:"🍳"}],
- "야식":[{name:"과일 요거트 아이스",type:"가벼운 야식",time:"5분",emoji:"🍧"}]
+ "아침":[{name:"그릭요거트 과일볼",type:"가볍게 시작",time:"5분",emoji:"🫐",desc:"단백질 가득 상큼한 아침"},{name:"계란 듬뿍 토스트",type:"든든한 아침",time:"10분",emoji:"🍞",desc:"바쁜 아침 든든하게"}],
+ "점심":[{name:"새우 야채 덮밥",type:"한 그릇 점심",time:"15분",emoji:"🍤",desc:"씹는 재미까지 챙긴 점심"},{name:"참치 김치볶음밥",type:"간단한 한 그릇",time:"15분",emoji:"🍚",desc:"반찬 걱정 없이 완성"}],
+ "저녁":[{name:"소고기 버섯전골",type:"따뜻한 국물요리",time:"30분",emoji:"🍲",desc:"온 가족이 둘러앉아 먹기 좋은 저녁"},{name:"간장 닭볶음",type:"아이와 함께",time:"25분",emoji:"🍗",desc:"맵지 않고 달큰한 한 끼"},{name:"두부 달걀덮밥",type:"냉장고 파먹기",time:"15분",emoji:"🍳",desc:"집에 있는 재료로 빠르게"}],
+ "야식":[{name:"과일 요거트 아이스",type:"가벼운 야식",time:"5분",emoji:"🍧",desc:"부담 없는 시원한 마무리"}]
 };
 let curMeal="아침";
 function pickRandom(){
  const pool=menuPool[curMeal]; const m=pool[Math.floor(Math.random()*pool.length)];
  $('#meal-emoji').textContent=m.emoji; $('#meal-type').textContent=m.type+' · '+m.time; $('#meal-name').textContent=m.name;
+ const d=$('#meal-desc'); if(d)d.textContent=m.desc;
 }
 document.querySelectorAll('#meal-times button').forEach(b=>b.onclick=()=>{
  document.querySelectorAll('#meal-times button').forEach(x=>x.classList.remove('active'));
  b.classList.add('active'); curMeal=b.dataset.t; pickRandom();
 });
 $('#recommend-btn').onclick=()=>{ if(window.gaEvent)gaEvent('quickpick_click',{meal:curMeal}); pickRandom(); };
-$('#fab-btn').onclick=()=>{ pickRandom(); $('#c-quick-modal').classList.add('open'); if(window.gaEvent)gaEvent('fab_open',{}); };
-$('#c-quick-close').onclick=()=>$('#c-quick-modal').classList.remove('open');
 
 /* ── 검색 ── */
 let cQuery="", _sT=null;
