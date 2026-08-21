@@ -54,8 +54,9 @@ nav.cat a.active{color:#e8703a}
 
 /* 이번 주 추천 (히어로, 실데이터) */
 /* 히어로 (사진+문구) */
-.hero{padding:30px 24px 20px;display:grid;grid-template-columns:1.4fr 1fr;gap:26px}
-@media(max-width:720px){.hero{grid-template-columns:1fr}}
+.hero{padding:30px 24px 20px;display:grid;grid-template-columns:1.15fr 0.85fr 1fr;gap:22px;align-items:stretch}
+@media(max-width:1000px){.hero{grid-template-columns:1fr 1fr}.hero .quick-pick{grid-column:1/-1}}
+@media(max-width:640px){.hero{grid-template-columns:1fr}.hero .quick-pick{grid-column:auto}}
 .hero-photo{position:relative;border-radius:20px;overflow:hidden;height:340px}
 .hero-photo img{width:100%;height:100%;object-fit:cover}
 .hero-photo span{position:absolute;left:16px;bottom:16px;background:rgba(43,36,29,.72);color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px}
@@ -66,7 +67,8 @@ nav.cat a.active{color:#e8703a}
 .hero-copy a.hero-link{font-weight:800;font-size:13px;color:#2b241d;border-bottom:2px solid #2b241d;padding-bottom:2px}
 
 /* 퀵픽 인라인 박스 */
-.quick-pick{background:#f7f0e8;border-radius:20px;padding:22px}
+.quick-pick{background:#f7f0e8;border-radius:20px;padding:22px;display:flex;flex-direction:column}
+.quick-pick .meal-result{margin-top:auto}
 .quick-pick .eyebrow{color:#e8703a;font-weight:800;font-size:11px;letter-spacing:2px;margin:0 0 6px}
 .quick-pick h2{font-size:19px;margin:0 0 6px}
 .quick-desc{color:#6b6153;font-size:12.5px;margin:0 0 14px;line-height:1.7}
@@ -199,9 +201,6 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
     <span class="hero-desc">가족이 함께 먹기 좋은 메뉴부터 장보기 정보까지,<br>우리 집 식탁에 필요한 이야기를 모았습니다.</span>
     <a class="hero-link" href="#recent">오늘 메뉴 골라보기 <b>→</b></a>
   </div>
-</section>
-
-<section class="shell" style="padding:0 24px 20px">
   <div class="quick-pick">
     <p class="eyebrow">QUICK PICK</p>
     <h2>오늘 뭐 먹지?</h2>
