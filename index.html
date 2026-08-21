@@ -35,17 +35,21 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 
 /* 헤더 */
-.header{border-bottom:1px solid #f0ece3;padding:16px 24px;display:flex;align-items:center;gap:18px}
+.header{border-bottom:1px solid #f0ece3;padding:0 24px}
+.header-in{display:flex;align-items:center;gap:16px;padding:14px 0}
 .logo{font-size:21.5px;font-weight:900;color:#2b241d;flex:0 0 auto}
 .logo span{color:#e8703a}
-.searchbox{flex:1;max-width:340px;display:flex;align-items:center;background:#f7f4ee;border-radius:11px;padding:9px 14px;gap:8px}
-.searchbox input{border:0;background:none;outline:0;font-size:16.5px;flex:1;font-family:inherit}
-nav.cat{display:flex;gap:18px;margin-left:auto}
-nav.cat a{font-size:15px;font-weight:700;color:#6b6153}
+.searchbox{flex:0 1 300px;display:flex;align-items:center;background:#f7f4ee;border-radius:11px;padding:9px 14px;gap:8px}
+.searchbox input{border:0;background:none;outline:0;font-size:16.5px;flex:1;font-family:inherit;min-width:0}
+nav.cat{display:flex;gap:16px;margin-left:20px}
+nav.cat a{font-size:15px;font-weight:700;color:#6b6153;white-space:nowrap}
 nav.cat a.active{color:#e8703a}
+.header-menu{display:flex;align-items:center;gap:10px;margin-left:auto;flex:0 0 auto}
+.header-btn{font-size:14px;font-weight:800;color:#5c5346;white-space:nowrap;padding:7px 4px}
 .header-app-link{font-size:14px;font-weight:800;color:#e8703a;background:#fdece1;padding:7px 12px;border-radius:9px;white-space:nowrap}
 .header-auth{font-size:14.5px;font-weight:800;color:#6b6153;white-space:nowrap}
-@media(max-width:900px){nav.cat{display:none}.searchbox{max-width:180px}}
+@media(max-width:1050px){nav.cat{display:none}}
+@media(max-width:640px){.header-btn{display:none}.searchbox{flex:1;max-width:none}}
 
 /* 섹션 공통 */
 .section{padding:34px 24px}
@@ -191,6 +195,7 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
 <body>
 
 <header class="header">
+ <div class="header-in shell">
   <a class="logo" href="#top">오늘의<span>식사</span></a>
   <div class="searchbox">
     <span>⌕</span>
@@ -204,8 +209,13 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
     <a data-t="남편" href="#top">남편 밥</a>
     <a data-t="온 가족" href="#top">온 가족</a>
   </nav>
-  <span class="header-auth" id="c-auth-slot"></span>
-  <a class="header-app-link" href="/app/">📱 앱</a>
+  <div class="header-menu">
+    <a class="header-btn" href="#posts">📖 둘러보기</a>
+    <a class="header-btn" href="#" id="write-link">✏️ 글쓰기</a>
+    <span class="header-auth" id="c-auth-slot"></span>
+    <a class="header-app-link" href="/app/">📱 앱</a>
+  </div>
+ </div>
 </header>
 
 <section class="hero shell" id="top">
@@ -295,10 +305,9 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
   <div class="post-grid" id="popular-grid"><p style="color:#a89b82;font-size:15px">불러오는 중...</p></div>
 </section>
 
-<section class="section shell">
+<section class="section shell" id="posts">
   <div class="section-head">
     <div><p class="eyebrow">JUST POSTED</p><h2>최근 등록된 글</h2></div>
-    <a href="#" id="write-link">✏️ 글쓰기</a>
   </div>
   <div class="post-grid" id="recent-grid"><p style="color:#a89b82;font-size:15px">불러오는 중...</p></div>
 </section>
@@ -388,7 +397,7 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
 </div>
 
 <div class="c-modal" id="c-write-modal">
-  <div class="c-sheet" style="max-width:440px">
+  <div class="c-sheet" style="max-width:640px">
     <button class="c-close" id="c-write-close">✕</button>
     <h3 style="margin:4px 0 14px">레시피 올리기</h3>
     <label class="w-label">레시피 이름</label>
@@ -402,7 +411,7 @@ footer{background:#2b241d;color:#b9ac95;padding:30px 0;margin-top:20px}
       <button class="c-chip" data-t="남편">남편</button>
     </div>
     <label class="w-label">재료와 만드는 법</label>
-    <textarea class="c-input" id="w-body" style="width:100%;height:120px;margin-bottom:10px" placeholder="재료: 계란 3개, 두부 반모...&#10;만드는 법:&#10;1) ..."></textarea>
+    <textarea class="c-input" id="w-body" style="width:100%;height:220px;margin-bottom:10px" placeholder="재료: 계란 3개, 두부 반모...&#10;만드는 법:&#10;1) ..."></textarea>
     <input id="w-photo" type="file" accept="image/*" style="display:none">
     <button class="c-btn" id="w-photo-btn" type="button" style="width:100%;margin-bottom:12px">📷 사진 추가하기</button>
     <button class="c-btn" id="w-submit" style="width:100%;padding:13px;background:#e8703a;color:#fff;font-size:15px">등록하기</button>
