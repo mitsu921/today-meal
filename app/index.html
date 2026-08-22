@@ -123,6 +123,7 @@ details.fold.sub .body p{font-size:13px!important}
       <p class="muted" id="today-date"></p>
       <h1 id="greet" style="cursor:pointer" title="탭해서 이름 바꾸기">오늘, <span style="color:#39774e">뭐 먹지?</span></h1>
       <p class="muted">가족 맞춤 식단을 5초 만에 정해드려요</p>
+      <button id="eatout-link" style="margin-top:10px;background:#fff;border:1px solid #e6ebe5;border-radius:13px;padding:10px 14px;font-size:12.5px;font-weight:bold;color:#39774e;display:flex;align-items:center;gap:6px">🍽️ 아니면 오늘은 나가서 먹을까요? <span style="margin-left:auto;color:#a9b5ad">→</span></button>
     </header>
 
     <div id="urgent-slot"></div>
@@ -263,6 +264,12 @@ details.fold.sub .body p{font-size:13px!important}
   <section class="view" data-view="detail">
     <header class="head"><div class="line"><button class="back" data-go="home">‹</button><h2 style="margin:0">레시피</h2><span style="width:22px"></span></div></header>
     <div id="detail-body" class="detail" style="padding:0 20px 20px"></div>
+  </section>
+
+  <!-- ══ 나가서 먹기(주변 맛집) ══ -->
+  <section class="view" data-view="eatout">
+    <header class="head"><div class="line"><button class="back" data-go="home">‹</button><h2 style="margin:0">나가서 먹기</h2><span style="width:22px"></span></div></header>
+    <div id="eatout-body" style="padding:16px 20px"></div>
   </section>
 
   <!-- ══ 냉장고 ══ -->
@@ -554,6 +561,35 @@ async function decide(){
 }
 
 /* ── 레시피 만들기 ── */
+/* ── 나가서 먹기(주변 맛집) ── */
+$('#eatout-link').onclick=()=>{ go('eatout'); loadNearby(); };
+async function loadNearby(){
+ const el=$('#eatout-body');
+ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">📍 내 위치를 확인하고 있어요...</p>';
+ if(!navigator.geolocation){
+  el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">이 브라우저는 위치 확인을 지원하지 않아요</p>';
+  return;
+ }
+ navigator.geolocation.getCurrentPosition(async pos=>{
+  const {latitude,longitude}=pos.coords;
+  try{
+   const r=await fetch('/api/nearby?lat='+latitude+'&lng='+longitude);
+   const d=await r.json();
+   if(!r.ok||!d.places){ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">주변 맛집을 못 찾았어요. 다시 시도해주세요.</p>'; return; }
+   if(!d.places.length){ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">근처 1.5km 안에 결과가 없어요 🥲</p>'; return; }
+   el.innerHTML='<p class="muted" style="margin-bottom:12px">📍 현재 위치 기준 가까운 순</p>'+
+    d.places.map(p=>
+     '<a href="'+esc(p.url)+'" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e7ebe6;border-radius:15px;padding:13px 15px;margin-bottom:10px">'+
+      '<div class="line"><b style="font-size:14.5px">'+esc(p.name)+'</b><span class="tiny" style="color:#39774e;font-weight:bold">'+(p.distance?p.distance+'m':'')+'</span></div>'+
+      '<div class="tiny" style="margin-top:4px">'+esc(p.category||'')+' · '+esc(p.address||'')+'</div>'+
+     '</a>'
+    ).join('');
+  }catch(e){ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">불러오기 실패. 다시 시도해주세요.</p>'; }
+ }, err=>{
+  el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">📍 위치 권한을 허용해주셔야 근처 맛집을 찾을 수 있어요.<br>브라우저 설정에서 위치 권한을 확인해주세요.</p>';
+ }, {timeout:10000});
+}
+
 async function pick(m){
  mode=m;
  const menu=res.tray.map(t=>t.item).join(", ");
