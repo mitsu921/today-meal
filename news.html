@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>식품 뉴스 & 영상 — 오늘의 식사</title>
+<meta name="description" content="최신 식품·건강 트렌드 뉴스와 워킹맘 요리 채널 영상을 모았습니다.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-7169767076437690">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q87J30S9DQ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-Q87J30S9DQ');
+</script>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e8703a">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+h1,h2,.eyebrow{font-family:'Noto Serif KR',Georgia,serif}
+body{margin:0;background:#fffefc;color:#2b241d;font-family:'Pretendard',"Apple SD Gothic Neo",Arial,sans-serif;line-height:1.6;letter-spacing:-.2px}
+a{color:inherit;text-decoration:none}
+.shell{max-width:1140px;margin:auto;padding:0 24px}
+.header{border-bottom:1px solid #f0ece3;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:900}
+.logo span{color:#e8703a}
+.back-home{font-size:13px;font-weight:800;color:#e8703a}
+.page-head{padding:30px 24px 10px}
+.page-head p.eyebrow{color:#e8703a;font-weight:800;font-size:11px;letter-spacing:2px;margin:0 0 6px}
+.page-head h1{font-size:24px;margin:0}
+.section{padding:20px 24px}
+.section h2{font-size:15px;margin:0 0 14px}
+.news-col{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:700px){.news-col{grid-template-columns:1fr}}
+.news-item{display:block;background:#fff;border:1px solid #f0ece3;border-radius:14px;padding:16px}
+.news-src{font-size:11px;font-weight:800;color:#e8703a;background:#fdece1;padding:3px 9px;border-radius:7px}
+.news-item h4{font-size:14.5px;margin:8px 0 5px;line-height:1.4}
+.news-item p{font-size:12.5px;color:#8a7d67;margin:0;line-height:1.7}
+.video-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.video-col{grid-template-columns:1fr}}
+.video-card{background:#fff;border:1px solid #f0ece3;border-radius:14px;overflow:hidden}
+.video-embed{position:relative;padding-top:56.25%}
+.video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-label{margin:0;padding:10px 14px;font-size:12.5px;font-weight:800;color:#5c5346}
+footer{background:#2b241d;color:#b9ac95;padding:26px 0;margin-top:20px}
+.footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;max-width:1140px;margin:auto;padding:0 24px}
+.footer a{margin-right:14px;font-weight:700;color:#cfc6b4}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="/">오늘의<span>식사</span></a>
+  <a class="back-home" href="/">← 홈으로</a>
+</header>
+
+<div class="page-head">
+  <p class="eyebrow">FOOD NEWS &amp; VIDEO</p>
+  <h1>식품 뉴스 &amp; 영상</h1>
+</div>
+
+<section class="section">
+  <h2>📰 최신 식품 트렌드 뉴스</h2>
+  <div class="news-col" id="news-col"></div>
+</section>
+
+<section class="section">
+  <h2>🎬 워킹맘 요리 채널</h2>
+  <div class="video-col" id="video-col"></div>
+</section>
+
+<footer>
+  <div class="footer">
+    <span>ⓒ 2026 오늘의 식사 · 문의 hello@todaymeal.co.kr</span>
+    <div><a href="/privacy.html">개인정보처리방침</a><a href="/app/">앱으로 이동</a></div>
+  </div>
+</footer>
+
+<script>
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const NEWS_POOL=[
+ {src:"식품저널",url:"https://www.foodnews.co.kr/news/articleView.html?idxno=115956",title:"2026 푸드 트렌드, 혼자 먹어도 잘 챙기는 '혼웰식' 뜬다",blurb:"1인 가구 800만 시대, 혼자 먹더라도 건강하게 챙겨 먹는 식문화가 올해 핵심 흐름으로 꼽혔습니다."},
+ {src:"식품음료신문",url:"https://www.thinkfood.co.kr/news/articleView.html?idxno=103743",title:"간편식 대신 신선식재료, 온라인 장보기 트렌드 바뀐다",blurb:"온라인 간편식 구매는 줄고 신선 식재료 구매가 크게 늘며, 직접 요리해 먹는 흐름이 강해지고 있습니다."},
+ {src:"하이닥",url:"https://news.hidoc.co.kr/news/articleView.html?idxno=55314",title:"美 홀푸드마켓 선정, 2026 푸드 트렌드 8가지",blurb:"바쁜 일상 속 영양까지 고려한 고품질 즉석식품 확산 등 소비자 인식 변화를 담은 전망이 발표됐습니다."},
+ {src:"식품저널",url:"http://www.foodnews.co.kr/news/articleView.html?idxno=117781",title:"2026 건강기능식품 트렌드, '나를 위한 건강'으로 전환",blurb:"보편적 면역력을 넘어 수면·눈 건강 등 구체적 기능성으로 관심이 세분화되고 있다는 분석입니다."},
+ {src:"식품외식경제",url:"https://www.foodbank.co.kr/news/articleView.html?idxno=67253",title:"2026 외식 트렌드, '자기만족 건강한 한그릇'이 뜬다",blurb:"칼로리 죄책감을 덜면서도 건강을 챙긴다고 느끼게 하는 메뉴가 배달·외식에서 인기를 끌고 있습니다."},
+ {src:"약사공론",url:"https://www.kpanews.co.kr/news/articleView.html?idxno=528668",title:"2026년 건강식품 키워드는 '회복·두뇌·피부'",blurb:"근육 강화 중심에서 벗어나, 생활 속 회복과 관리를 돕는 건강식품이 주목받고 있다는 분석입니다."}
+];
+const VIDEO_POOL=[
+ {label:"워킹맘의 육아레시피",list:"UUz7XacoNnbOIqehcDTn350g"},
+ {label:"우리집오늘의요리",list:"UUA2Aoj5nHJcBukGWLMccK7Q"},
+ {label:"테이블.현",list:"UUVpVrVhje7qI792OKeUC4qQ"}
+];
+document.getElementById('news-col').innerHTML=NEWS_POOL.map(n=>
+ '<a class="news-item" href="'+esc(n.url)+'" target="_blank" rel="noopener"><span class="news-src">'+esc(n.src)+'</span><h4>'+esc(n.title)+'</h4><p>'+esc(n.blurb)+'</p></a>'
+).join('');
+document.getElementById('video-col').innerHTML=VIDEO_POOL.map(v=>
+ '<div class="video-card"><div class="video-embed"><iframe src="https://www.youtube.com/embed/videoseries?list='+v.list+'" title="'+esc(v.label)+'" frameborder="0" allowfullscreen loading="lazy"></iframe></div><p class="video-label">'+esc(v.label)+'</p></div>'
+).join('');
+</script>
+</body>
+</html>

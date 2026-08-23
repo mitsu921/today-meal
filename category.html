@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>레시피 목록 — 오늘의 식사</title>
+<meta name="description" content="오늘의 식사 커뮤니티의 레시피를 카테고리·인기순으로 둘러보세요.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-7169767076437690">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q87J30S9DQ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-Q87J30S9DQ');
+window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }catch(e){} };
+</script>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e8703a">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>if(!window.supabase)document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>')</script>
+<style>
+*{box-sizing:border-box}
+h1,h2,.eyebrow{font-family:'Noto Serif KR',Georgia,serif}
+body{margin:0;background:#fffefc;color:#2b241d;font-family:'Pretendard',"Apple SD Gothic Neo",Arial,sans-serif;line-height:1.6;letter-spacing:-.2px}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.shell{max-width:1140px;margin:auto;padding:0 24px}
+
+.header{border-bottom:1px solid #f0ece3}
+.header-in{display:flex;align-items:center;gap:16px;padding:14px 0;max-width:1140px;margin:auto;padding-left:24px;padding-right:24px}
+.logo{font-size:20px;font-weight:900;color:#2b241d;flex:0 0 auto}
+.logo span{color:#e8703a}
+.searchbox{flex:0 1 300px;display:flex;align-items:center;background:#f7f4ee;border-radius:11px;padding:9px 14px;gap:8px}
+.searchbox input{border:0;background:none;outline:0;font-size:14px;flex:1;font-family:inherit;min-width:0}
+.back-home{margin-left:auto;font-size:13px;font-weight:800;color:#e8703a}
+
+.page-head{padding:30px 24px 6px}
+.page-head p.eyebrow{color:#e8703a;font-weight:800;font-size:11px;letter-spacing:2px;margin:0 0 6px}
+.page-head h1{font-size:24px;margin:0}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 24px 4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:0 0 auto;padding:9px 15px;border-radius:20px;background:#fff;border:1px solid #f0ece3;font-size:13px;font-weight:700;color:#5c5346;white-space:nowrap}
+.tabs a.active{background:#e8703a;border-color:#e8703a;color:#fff}
+.sort-row{display:flex;gap:8px;padding:10px 24px 0}
+.sort-row button{padding:6px 13px;border-radius:16px;background:#f7f4ee;border:0;font-size:12px;font-weight:700;color:#6b6153}
+.sort-row button.active{background:#2b241d;color:#fff}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px 24px 50px}
+@media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.post-card{cursor:pointer}
+.post-photo{border-radius:14px;overflow:hidden;background:#f7f4ee;height:150px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.post-photo img{width:100%;height:100%;object-fit:cover}
+.post-tag{font-size:10.5px;font-weight:800;color:#e8703a;background:#fdece1;padding:3px 8px;border-radius:7px}
+.post-card h4{font-size:14px;margin:8px 0 5px;line-height:1.4}
+.post-card .meta{font-size:11.5px;color:#a89b82}
+.empty{padding:60px 24px;text-align:center;color:#a89b82;font-size:14px}
+
+.c-detail-wrap{display:none;padding:24px}
+.c-detail img{width:100%;max-height:320px;object-fit:cover;border-radius:16px;margin-bottom:14px}
+.c-detail-body{white-space:pre-wrap;font-size:14.5px;color:#4a4133;line-height:1.85}
+.c-back{font-size:13px;font-weight:800;color:#e8703a;margin-bottom:14px;display:inline-block;cursor:pointer}
+.c-nutri{margin-top:10px;padding:11px 13px;background:#f7f4ee;border-radius:11px;font-size:12px}
+.c-macrobar{display:flex;height:9px;border-radius:6px;overflow:hidden;background:#f0ece3;margin:7px 0}
+.c-btn{padding:9px 14px;border-radius:10px;font-weight:800;font-size:12.5px;cursor:pointer;border:0;background:#f7f4ee;color:#e8703a;font-family:inherit}
+.c-btn.warn{background:#fbe4d4;color:#b0563e}
+.c-cmt-item{padding:9px 0;border-bottom:1px solid #f0ece3;font-size:13.5px}
+.c-cmt-item b{color:#e8703a}
+.c-input{padding:10px 12px;border:1px solid #f0ece3;border-radius:10px;font-size:13.5px;font-family:inherit}
+
+.c-modal{display:none;position:fixed;inset:0;background:rgba(43,36,29,.5);z-index:80;align-items:center;justify-content:center;padding:20px}
+.c-modal.open{display:flex}
+.c-sheet{background:#fffefc;width:100%;max-width:400px;border-radius:20px;padding:24px;position:relative;max-height:86vh;overflow-y:auto}
+.c-close{position:absolute;top:14px;right:16px;background:#f7f4ee;border-radius:50%;width:30px;height:30px;font-size:14px;border:0;cursor:pointer}
+.c-chip{padding:8px 14px;border-radius:18px;background:#f7f4ee;color:#6b6153;font-size:12.5px;font-weight:700;border:0;cursor:pointer;font-family:inherit}
+.c-chip.active{background:#e8703a;color:#fff}
+.kakao-btn{width:100%;padding:13px;border-radius:13px;background:#FEE500;color:#191919;font-size:14px;font-weight:800;border:0;cursor:pointer;font-family:inherit}
+.c-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2b241d;color:#fff;padding:11px 18px;border-radius:14px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:100}
+.c-toast.show{opacity:1}
+footer{background:#2b241d;color:#b9ac95;padding:26px 0;margin-top:10px}
+.footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;max-width:1140px;margin:auto;padding:0 24px}
+.footer a{margin-right:14px;font-weight:700;color:#cfc6b4}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-in">
+    <a class="logo" href="/">오늘의<span>식사</span></a>
+    <div class="searchbox"><span>⌕</span><input id="c-search" placeholder="레시피 검색"></div>
+    <span id="c-auth-slot" style="font-size:13px;font-weight:800;color:#6b6153"></span>
+    <a class="back-home" href="/">← 홈으로</a>
+  </div>
+</header>
+
+<div class="page-head">
+  <p class="eyebrow">RECIPES</p>
+  <h1 id="page-title">전체 레시피</h1>
+</div>
+
+<div class="tabs" id="tabs">
+  <a data-t="">전체</a>
+  <a data-t="아이">아이 반찬</a>
+  <a data-t="아이 간식">아이 간식</a>
+  <a data-t="다이어트">다이어트</a>
+  <a data-t="남편">남편 밥</a>
+  <a data-t="온 가족">온 가족</a>
+</div>
+<div class="sort-row">
+  <button data-sort="recent" class="active">최신순</button>
+  <button data-sort="popular">인기순</button>
+</div>
+
+<div class="grid" id="grid"><p style="color:#a89b82;font-size:13px;padding:20px 0">불러오는 중...</p></div>
+
+<div class="c-detail-wrap shell" id="c-detail-wrap" style="background:#fff;border:1px solid #f0ece3;border-radius:18px;margin-bottom:30px">
+  <div class="c-detail" id="c-detail" style="padding:24px"></div>
+</div>
+
+<footer>
+  <div class="footer">
+    <span>ⓒ 2026 오늘의 식사 · 문의 hello@todaymeal.co.kr</span>
+    <div><a href="/privacy.html">개인정보처리방침</a><a href="/app/">앱으로 이동</a></div>
+  </div>
+</footer>
+
+<div class="c-modal" id="c-login-modal">
+  <div class="c-sheet">
+    <button class="c-close" id="c-login-close">✕</button>
+    <button class="kakao-btn" id="c-kakao-btn">💬 카카오로 3초 만에 시작하기</button>
+    <div style="display:flex;align-items:center;gap:10px;margin:16px 0 2px;color:#a89b82;font-size:11.5px;font-weight:700"><div style="flex:1;height:1px;background:#f0ece3"></div>또는 이메일로<div style="flex:1;height:1px;background:#f0ece3"></div></div>
+    <div style="display:flex;gap:6px;margin:12px 0">
+      <button class="c-chip active" id="c-tab-login">로그인</button>
+      <button class="c-chip" id="c-tab-signup">회원가입</button>
+    </div>
+    <div id="c-nick-wrap" style="display:none;margin-bottom:8px"><input class="c-input" id="c-f-nick" placeholder="닉네임" style="width:100%"></div>
+    <input class="c-input" id="c-f-email" type="email" placeholder="이메일" style="width:100%;margin-bottom:8px">
+    <input class="c-input" id="c-f-pw" type="password" placeholder="비밀번호(6자 이상)" style="width:100%;margin-bottom:12px">
+    <button class="c-btn" id="c-auth-go" style="width:100%;padding:12px;background:#e8703a;color:#fff">로그인</button>
+    <p id="c-auth-msg" style="font-size:12.5px;color:#b0563e;margin-top:8px"></p>
+  </div>
+</div>
+
+<div class="c-toast" id="c-toast"></div>
+
+<script>
+const SB_URL="https://jnwlaevfvhxpmmnkmyrw.supabase.co";
+const SB_KEY="sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35";
+const $=s=>document.querySelector(s);
+let sb=null, me=null, myNick="", myLikes=new Set(), feedData=[], authorTotals={}, authMode="login";
+const params=new URLSearchParams(location.search);
+let curTarget=params.get('t')||"", curSort=params.get('sort')||"recent", cQuery="";
+
+function toast(t){const n=$('#c-toast');n.textContent=t;n.classList.add('show');clearTimeout(n._t);n._t=setTimeout(()=>n.classList.remove('show'),2200);}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function likeCount(r){return r.likes&&r.likes[0]?r.likes[0].count:0}
+function cmtCount(r){return r.comments&&r.comments[0]?r.comments[0].count:0}
+
+const TIERS=[
+ {min:30,emoji:"👑",label:"전설의 맘셰프"},
+ {min:10,emoji:"🏅",label:"베스트 맘셰프"},
+ {min:3, emoji:"👍",label:"인기 맘셰프"},
+ {min:0, emoji:"🌱",label:"새싹 맘셰프"}
+];
+function tierFor(n){ for(const t of TIERS) if(n>=t.min) return t; return null; }
+function tierBadge(uid){ const n=authorTotals[uid]||0; const t=tierFor(n); return t?' <span style="font-size:11px">'+t.emoji+'</span>':''; }
+function computeAuthorTotals(){ authorTotals={}; feedData.forEach(r=>{ authorTotals[r.user_id]=(authorTotals[r.user_id]||0)+likeCount(r); }); }
+
+/* ── 탭/정렬 UI 초기화 ── */
+function syncTabsUI(){
+ document.querySelectorAll('#tabs a').forEach(a=>a.classList.toggle('active', (a.dataset.t||"")===curTarget));
+ document.querySelectorAll('.sort-row button').forEach(b=>b.classList.toggle('active', b.dataset.sort===curSort));
+ const names={"":"전체 레시피","아이":"아이 반찬","아이 간식":"아이 간식","다이어트":"다이어트","남편":"남편 밥","온 가족":"온 가족"};
+ $('#page-title').textContent=(curSort==='popular'&&!curTarget)?"인기 레시피":(names[curTarget]||"레시피");
+}
+document.querySelectorAll('#tabs a').forEach(a=>a.onclick=(e)=>{
+ e.preventDefault(); curTarget=a.dataset.t||"";
+ const u=new URL(location); u.searchParams.set('t',curTarget); if(!curTarget)u.searchParams.delete('t'); history.replaceState(null,'',u);
+ syncTabsUI(); renderGrid();
+});
+document.querySelectorAll('.sort-row button').forEach(b=>b.onclick=()=>{
+ curSort=b.dataset.sort;
+ const u=new URL(location); u.searchParams.set('sort',curSort); history.replaceState(null,'',u);
+ syncTabsUI(); renderGrid();
+});
+$('#c-search').addEventListener('input',e=>{
+ cQuery=e.target.value.trim().toLowerCase(); renderGrid();
+});
+
+/* ── 인증 ── */
+async function ensureProfile(){
+ if(!me||!sb)return;
+ const {data}=await sb.from('profiles').select('nickname').eq('id',me.id).maybeSingle();
+ if(data){myNick=data.nickname;}
+ else{const meta=me.user_metadata||{}; myNick=meta.name||meta.preferred_username||(me.email||'').split('@')[0]||'맘셰프'; await sb.from('profiles').upsert({id:me.id,nickname:myNick});}
+}
+function renderAuthSlot(){
+ const el=$('#c-auth-slot');
+ if(me){ el.innerHTML='<a href="#" id="c-logout">'+esc(myNick)+'님</a>'; $('#c-logout').onclick=async(e)=>{e.preventDefault();await sb.auth.signOut();toast('로그아웃했어요');}; }
+ else{ el.innerHTML='<a href="#" id="c-login-open">로그인</a>'; $('#c-login-open').onclick=(e)=>{e.preventDefault();$('#c-login-modal').classList.add('open');}; }
+}
+async function refreshAuth(){
+ if(!sb){renderAuthSlot();return;}
+ const {data:{session}}=await sb.auth.getSession();
+ me=session?session.user:null;
+ if(me)await ensureProfile();
+ renderAuthSlot();
+}
+function watchAuth(){
+ sb.auth.onAuthStateChange(async(ev,s)=>{
+  me=s?s.user:null;
+  if(me)await ensureProfile();
+  renderAuthSlot();
+  if(ev==='SIGNED_IN'){
+   if(window.gaEvent)gaEvent('login_success',{provider:(me&&me.app_metadata&&me.app_metadata.provider)||'email',surface:'category'});
+   if(location.search.includes('code=')||location.hash.includes('access_token'))history.replaceState(null,'',location.pathname+location.search.split('&code=')[0]);
+  }
+ });
+}
+function setAuthMode(m){
+ authMode=m;
+ $('#c-tab-login').classList.toggle('active',m==='login');
+ $('#c-tab-signup').classList.toggle('active',m==='signup');
+ $('#c-nick-wrap').style.display=m==='signup'?'block':'none';
+ $('#c-auth-go').textContent=m==='login'?'로그인':'가입하기';
+ $('#c-auth-msg').textContent='';
+}
+$('#c-tab-login').onclick=()=>setAuthMode('login');
+$('#c-tab-signup').onclick=()=>setAuthMode('signup');
+$('#c-login-close').onclick=()=>$('#c-login-modal').classList.remove('open');
+$('#c-kakao-btn').onclick=async()=>{ const {error}=await sb.auth.signInWithOAuth({provider:'kakao',options:{redirectTo:location.href,scopes:'profile_nickname'}}); if(error)toast('카카오 연결 실패: '+error.message); };
+$('#c-auth-go').onclick=async()=>{
+ const email=$('#c-f-email').value.trim(), pw=$('#c-f-pw').value, msg=t=>$('#c-auth-msg').textContent=t;
+ if(!email||!pw)return msg('이메일과 비밀번호를 입력해주세요');
+ $('#c-auth-go').disabled=true;
+ try{
+  if(authMode==='signup'){
+   const nick=$('#c-f-nick').value.trim()||email.split('@')[0];
+   const {data,error}=await sb.auth.signUp({email,password:pw});
+   if(error)return msg('가입 실패: '+error.message);
+   if(!data.session)return msg('확인 메일을 보냈어요! 메일함에서 인증 후 로그인해주세요 📮');
+   toast('환영해요, '+nick+'님!');$('#c-login-modal').classList.remove('open');
+  }else{
+   const {error}=await sb.auth.signInWithPassword({email,password:pw});
+   if(error)return msg('로그인 실패: 이메일 또는 비밀번호를 확인해주세요');
+   toast('어서오세요!');$('#c-login-modal').classList.remove('open');
+  }
+ }finally{$('#c-auth-go').disabled=false;}
+};
+
+/* ── 목록 ── */
+function cardHtml(r){
+ return '<article class="post-card" data-open="'+r.id+'">'+
+  '<div class="post-photo">'+(r.image_url?'<img src="'+esc(r.image_url)+'">':esc(r.emoji||'🍽️'))+'</div>'+
+  '<span class="post-tag">'+esc(r.target||'전체')+'</span>'+
+  '<h4>'+esc(r.title)+'</h4>'+
+  '<div class="meta">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+' · ♥'+likeCount(r)+'</div>'+
+  '</article>';
+}
+function filteredList(){
+ let list=feedData;
+ if(curTarget)list=list.filter(r=>(r.target||'')===curTarget || (curTarget==='아이' && r.target==='아이 간식'));
+ if(cQuery)list=list.filter(r=>(r.title||"").toLowerCase().includes(cQuery)||(r.body||"").toLowerCase().includes(cQuery));
+ list=[...list].sort((a,b)=> curSort==='popular' ? likeCount(b)-likeCount(a) : new Date(b.created_at)-new Date(a.created_at));
+ return list;
+}
+function renderGrid(){
+ const el=$('#grid'); const list=filteredList();
+ if(!feedData.length){ el.innerHTML='<p class="empty" style="grid-column:1/-1">아직 등록된 레시피가 없어요.</p>'; return; }
+ if(!list.length){ el.innerHTML='<p class="empty" style="grid-column:1/-1">해당하는 레시피가 없어요</p>'; return; }
+ el.innerHTML=list.map(cardHtml).join('');
+ el.querySelectorAll('[data-open]').forEach(a=>a.onclick=()=>openDetail(Number(a.dataset.open)));
+}
+
+function nutriHtml(r){
+ if(!r.kcal)return'';
+ const tot=(r.carb||0)+(r.protein||0)+(r.fat||0)||1, w=x=>Math.round(x/tot*100);
+ return '<div class="c-nutri"><div style="display:flex;justify-content:space-between;font-weight:800;color:#e8703a"><span>🧑‍⚕️ AI 영양사</span><span>'+r.kcal+' kcal</span></div>'+
+  '<div class="c-macrobar"><div style="width:'+w(r.carb)+'%;background:#f3cf8f"></div><div style="width:'+w(r.protein)+'%;background:#9fcf9f"></div><div style="width:'+w(r.fat)+'%;background:#eda98d"></div></div>'+
+  '<div style="color:#6b6153;font-weight:700">탄 '+(r.carb||0)+'g · 단 '+(r.protein||0)+'g · 지 '+(r.fat||0)+'g</div>'+
+  (r.nutri_note?'<div style="color:#e8703a;margin-top:4px">'+esc(r.nutri_note)+'</div>':'')+'</div>';
+}
+function openDetail(id){
+ const r=feedData.find(x=>x.id===id); if(!r)return;
+ document.querySelectorAll('.page-head,.tabs,.sort-row,.grid').forEach(s=>s.style.display='none');
+ $('#c-detail-wrap').style.display='block';
+ const liked=myLikes.has(r.id);
+ $('#c-detail').innerHTML=
+  '<span class="c-back" id="c-back">‹ 목록으로</span>'+
+  (r.image_url?'<img src="'+esc(r.image_url)+'">':'')+
+  '<h2 style="font-size:20px;margin:0 0 8px">'+esc(r.title)+'</h2>'+
+  '<div style="font-size:12.5px;color:#a89b82;margin-bottom:10px">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+' · '+new Date(r.created_at).toLocaleDateString('ko-KR')+'</div>'+
+  nutriHtml(r)+
+  '<div class="c-detail-body">'+esc(r.body)+'</div>'+
+  '<div style="display:flex;gap:8px;margin-top:16px">'+
+   '<button class="c-btn" id="c-like-btn" style="background:'+(liked?'#b0563e':'#f7f4ee')+';color:'+(liked?'#fff':'#e8703a')+'">♥ '+likeCount(r)+'</button>'+
+   (me&&me.id===r.user_id?'<button class="c-btn warn" id="c-del-btn">삭제</button>':'<button class="c-btn warn" id="c-report-btn">🚨 신고</button>')+
+  '</div>'+
+  '<h3 style="margin:22px 0 10px;font-size:14.5px">💬 댓글 '+cmtCount(r)+'</h3>'+
+  '<div id="c-cmt-list" style="font-size:13px;color:#8a7d67">불러오는 중...</div>'+
+  '<div style="display:flex;gap:6px;margin-top:10px"><input class="c-input" id="c-cmt-in" placeholder="따뜻한 댓글을 남겨주세요" style="flex:1"><button class="c-btn" id="c-cmt-send" style="background:#e8703a;color:#fff">등록</button></div>';
+ $('#c-back').onclick=()=>{ $('#c-detail-wrap').style.display='none'; document.querySelectorAll('.page-head,.tabs,.sort-row,.grid').forEach(s=>s.style.display=''); window.scrollTo({top:0,behavior:'smooth'}); };
+ $('#c-like-btn').onclick=async()=>{
+  if(!me){toast('추천하려면 로그인이 필요해요');$('#c-login-modal').classList.add('open');return;}
+  if(myLikes.has(r.id)){await sb.from('likes').delete().eq('recipe_id',r.id).eq('user_id',me.id);myLikes.delete(r.id);}
+  else{await sb.from('likes').insert({recipe_id:r.id,user_id:me.id});myLikes.add(r.id);toast('추천했어요 ♥');if(window.gaEvent)gaEvent('recipe_like',{recipe_id:r.id,surface:'category'});}
+  await loadFeed(); openDetail(id);
+ };
+ const delBtn=$('#c-del-btn');
+ if(delBtn)delBtn.onclick=async()=>{ if(!confirm('이 레시피를 삭제할까요?'))return; await sb.from('recipes').delete().eq('id',r.id); toast('삭제했어요'); $('#c-back').click(); loadFeed(); };
+ const repBtn=$('#c-report-btn');
+ if(repBtn)repBtn.onclick=async()=>{
+  if(!me){toast('신고하려면 로그인이 필요해요');$('#c-login-modal').classList.add('open');return;}
+  const reason=prompt('신고 사유를 알려주세요'); if(reason===null)return;
+  const {error}=await sb.from('reports').insert({kind:'recipe',target_id:r.id,reporter:me.id,reason:(reason||'').slice(0,200)});
+  toast(error?'접수 실패: '+error.message:'신고가 접수됐어요 🙏');
+ };
+ $('#c-cmt-send').onclick=async()=>{
+  if(!me){toast('댓글을 쓰려면 로그인이 필요해요');$('#c-login-modal').classList.add('open');return;}
+  const inp=$('#c-cmt-in'), body=(inp.value||'').trim(); if(!body)return toast('댓글 내용을 적어주세요');
+  const {error}=await sb.from('comments').insert({recipe_id:r.id,user_id:me.id,body});
+  if(error)return toast('등록 실패: '+error.message);
+  if(window.gaEvent)gaEvent('comment_submit',{recipe_id:r.id,surface:'category'});
+  inp.value=''; loadCmts(r.id);
+ };
+ loadCmts(r.id);
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+async function loadCmts(id){
+ const box=$('#c-cmt-list'); if(!box)return;
+ const {data,error}=await sb.from('comments').select('id,body,created_at,user_id,profiles(nickname)').eq('recipe_id',id).order('created_at',{ascending:true}).limit(100);
+ if(error){box.textContent='댓글을 불러오지 못했어요';return;}
+ if(!data.length){box.innerHTML='첫 댓글을 남겨보세요!';return;}
+ box.innerHTML=data.map(c=>'<div class="c-cmt-item"><b>'+esc(c.profiles?c.profiles.nickname:'맘셰프')+'</b>'+tierBadge(c.user_id)+' '+esc(c.body)+'</div>').join('');
+}
+
+async function loadFeed(){
+ if(!sb)return;
+ const {data,error}=await sb.from('recipes')
+  .select('id,title,body,target,emoji,image_url,kcal,carb,protein,fat,nutri_note,created_at,user_id,profiles(nickname),likes(count),comments(count)')
+  .order('created_at',{ascending:false}).limit(200);
+ if(error){ $('#grid').innerHTML='<p class="empty" style="grid-column:1/-1">불러오지 못했어요. 새로고침해 주세요.</p>'; return; }
+ feedData=data||[];
+ computeAuthorTotals();
+ if(me){ const {data:lk}=await sb.from('likes').select('recipe_id').eq('user_id',me.id); myLikes=new Set((lk||[]).map(x=>x.recipe_id)); }
+ renderGrid();
+}
+
+syncTabsUI();
+try{
+ if(!window.supabase) throw new Error("연결 프로그램을 못 불러왔어요");
+ sb=window.supabase.createClient(SB_URL,SB_KEY);
+ watchAuth();
+ refreshAuth();
+ loadFeed();
+}catch(e){ console.error(e); }
+</script>
+</body>
+</html>
