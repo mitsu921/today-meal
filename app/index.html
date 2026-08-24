@@ -54,6 +54,18 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 #family-meal-app .featured-meal small{color:#f45f25;font-size:12px;font-weight:720}
 #family-meal-app .featured-ph{flex:none;width:72px;height:72px;border-radius:16px;background:#fff0e7;display:flex;align-items:center;justify-content:center;font-size:28px;color:#f45f25}
 .nav span{display:inline-block;border-radius:12px;padding:2px 9px;margin-bottom:2px;transition:.15s;font-size:20px;line-height:1.3}
+#family-meal-app .wheel-outer{position:relative;width:240px;height:240px;margin:18px auto 4px}
+#family-meal-app .wheel-pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:22px;color:#e8460f;z-index:5;text-shadow:0 2px 3px rgba(0,0,0,.2)}
+#family-meal-app .wheel{width:240px;height:240px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(216,77,24,.3),0 0 0 6px #fff,0 0 0 8px #f1e5dc;transition:transform 3.2s cubic-bezier(.17,.67,.13,1);display:flex;align-items:center;justify-content:center}
+#family-meal-app .wheel-hint{color:#fff;font-size:13px;font-weight:700;position:absolute}
+#family-meal-app .wheel-seg-label{position:absolute;top:50%;left:50%;width:96px;text-align:right;padding-right:14px;font-size:11.5px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform-origin:0 0}
+#family-meal-app .wheel-center{position:absolute;top:50%;left:50%;width:26px;height:26px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.15);z-index:3}
+#family-meal-app .roulette-sub{color:rgba(255,255,255,.85);font-size:12.5px;margin-top:6px}
+#family-meal-app .c-btn-outline{width:100%;padding:12px;border-radius:13px;background:#fff;border:1px solid #f1e5dc;color:#5c5346;font-size:13px;font-weight:700}
+#family-meal-app .roulette-result{margin-top:14px;padding:15px 16px;background:#fff;border:1px solid #f1e5dc;border-radius:15px}
+#family-meal-app .roulette-result .rname{font-size:15px;font-weight:800}
+#family-meal-app .roulette-result .rmeta{font-size:12px;color:#8f8781;margin-top:4px}
+#family-meal-app .roulette-result a.rlink{display:block;margin-top:10px;text-align:center;padding:10px;background:#fff0e7;color:#d84d18;border-radius:11px;font-size:12.5px;font-weight:800}
 #family-meal-app .pref-summary{display:flex;align-items:center;justify-content:space-between;width:calc(100% - 40px);margin:14px 20px 0;padding:13px 15px;background:#fff;border:1px solid #f1e5dc;border-radius:13px;text-align:left}
 #family-meal-app .pref-summary span{font-size:13px;font-weight:700;color:#211914}
 #family-meal-app .pref-summary i{font-style:normal;font-size:11.5px;color:#f45f25;font-weight:700}
@@ -316,7 +328,26 @@ details.fold.sub .body p{font-size:13px!important}
   <!-- ══ 나가서 먹기(주변 맛집) ══ -->
   <section class="view" data-view="eatout">
     <header class="head"><div class="line"><button class="back" data-go="home">‹</button><h2 style="margin:0">나가서 먹기</h2><span style="width:22px"></span></div></header>
-    <div id="eatout-body" style="padding:16px 20px"></div>
+    <div style="padding:0 20px">
+      <p class="muted" style="margin:0 0 12px;font-size:13px">뭐가 당기세요? 골라서 룰렛을 돌려보세요</p>
+      <div class="preference-chips" id="eatout-cat">
+        <button class="chip active" data-cat="전체">전체</button>
+        <button class="chip" data-cat="밥">밥</button>
+        <button class="chip" data-cat="면">면</button>
+        <button class="chip" data-cat="고기">고기</button>
+        <button class="chip" data-cat="카페">카페</button>
+        <button class="chip" data-cat="야식">야식</button>
+      </div>
+      <div class="wheel-outer">
+        <div class="wheel-pointer">▼</div>
+        <div class="wheel" id="wheel"><span class="wheel-hint">룰렛을 돌려보세요</span></div>
+      </div>
+      <p class="roulette-sub" id="roulette-sub" style="text-align:center;color:#8f8781">근처 '<span id="cat-label">전체</span>' 맛집 중에서 골라드려요</p>
+      <button class="idle-cta" id="roulette-spin" style="margin-top:6px"><span>↻</span> 룰렛 돌리기</button>
+      <div id="roulette-result"></div>
+      <button class="c-btn-outline" id="eatout-list-toggle" style="margin-top:16px">📍 근처 목록으로 보기</button>
+      <div id="eatout-body" style="margin-top:10px"></div>
+    </div>
   </section>
 
   <!-- ══ 일주일 식단표 ══ -->
@@ -643,7 +674,7 @@ async function decide(){
 
 /* ── 레시피 만들기 ── */
 /* ── 나가서 먹기(주변 맛집) ── */
-$('#eatout-link').onclick=()=>{ go('eatout'); loadNearby(); };
+$('#eatout-link').onclick=()=>{ go('eatout'); };
 
 /* ── 일주일 식단표 ── */
 $('#weekplan-link').onclick=()=>{ go('weekplan'); renderWeekplan(); };
@@ -685,31 +716,98 @@ async function makeWeekplan(){
   $('#wp-retry').onclick=makeWeekplan;
  }
 }
+/* ── 나가서 먹기: 카테고리+룰렛 ── */
+const EATOUT_QUERY={"전체":"맛집","밥":"한식 밥집","면":"국수 면요리","고기":"고기집","카페":"카페 디저트","야식":"야식"};
+let eatoutCat="전체", eatoutPlaces=[], eatoutSpinning=false;
+document.querySelectorAll('#eatout-cat .chip').forEach(x=>x.onclick=()=>{
+ document.querySelectorAll('#eatout-cat .chip').forEach(y=>y.classList.remove('active'));
+ x.classList.add('active'); eatoutCat=x.dataset.cat;
+ eatoutPlaces=[];
+ $('#cat-label').textContent=eatoutCat;
+ $('#roulette-result').innerHTML="";
+ const w=$('#wheel'); w.style.transition='none'; w.style.transform='rotate(0deg)'; w.style.background=''; w.innerHTML='<span class="wheel-hint">룰렛을 돌려보세요</span>';
+});
+async function fetchNearbyFor(cat){
+ return new Promise((resolve,reject)=>{
+  if(!navigator.geolocation){reject("이 브라우저는 위치 확인을 지원하지 않아요");return;}
+  navigator.geolocation.getCurrentPosition(async pos=>{
+   try{
+    const {latitude,longitude}=pos.coords;
+    const q=encodeURIComponent(EATOUT_QUERY[cat]||"맛집");
+    const r=await fetch('/api/nearby?lat='+latitude+'&lng='+longitude+'&query='+q);
+    const d=await r.json();
+    if(!r.ok||!d.places||!d.places.length){reject("근처에서 결과를 못 찾았어요");return;}
+    resolve(d.places);
+   }catch(e){reject("불러오기 실패");}
+  }, ()=>reject("📍 위치 권한을 허용해주셔야 룰렛을 돌릴 수 있어요"), {timeout:10000});
+ });
+}
+const WHEEL_COLORS=['#ff8451','#e8460f','#ffab6e','#d84d18','#ff9d68','#c93f10'];
+function buildWheel(list){
+ const wheel=$('#wheel');
+ const n=list.length;
+ const seg=360/n;
+ const stops=list.map((p,i)=>WHEEL_COLORS[i%WHEEL_COLORS.length]+' '+(i*seg)+'deg '+((i+1)*seg)+'deg').join(',');
+ wheel.style.background='conic-gradient('+stops+')';
+ wheel.innerHTML='<div class="wheel-center"></div>'+list.map((p,i)=>{
+  const mid=i*seg+seg/2;
+  const short=p.name.length>7?p.name.slice(0,7)+'…':p.name;
+  return '<span class="wheel-seg-label" style="transform:rotate('+mid+'deg)">'+esc(short)+'</span>';
+ }).join('');
+ wheel.style.transition='none';
+ wheel.style.transform='rotate(0deg)';
+ wheel.offsetHeight; // 강제 리플로우로 회전 초기화 반영
+ wheel.style.transition='';
+}
+$('#roulette-spin').onclick=async()=>{
+ if(eatoutSpinning)return;
+ eatoutSpinning=true;
+ const btn=$('#roulette-spin'), subEl=$('#roulette-sub'), wheel=$('#wheel');
+ btn.disabled=true; $('#roulette-result').innerHTML="";
+ subEl.textContent="근처를 찾는 중...";
+ try{
+  if(!eatoutPlaces.length) eatoutPlaces=await fetchNearbyFor(eatoutCat);
+ }catch(msg){
+  subEl.textContent=String(msg); btn.disabled=false; eatoutSpinning=false; return;
+ }
+ const list=eatoutPlaces.slice(0,6);
+ buildWheel(list);
+ subEl.textContent="룰렛을 돌리는 중...";
+ const n=list.length, seg=360/n;
+ const winnerIdx=Math.floor(Math.random()*n);
+ const rounds=6;
+ const target=rounds*360 - (winnerIdx*seg+seg/2);
+ requestAnimationFrame(()=>{ wheel.style.transform='rotate('+target+'deg)'; });
+ wheel.addEventListener('transitionend', function onEnd(){
+  wheel.removeEventListener('transitionend', onEnd);
+  const winner=list[winnerIdx];
+  subEl.textContent=(winner.category||'')+' · '+(winner.distance?winner.distance+'m':'');
+  $('#roulette-result').innerHTML=
+   '<div class="roulette-result"><div class="rname">'+esc(winner.name)+'</div>'+
+   '<div class="rmeta">'+esc(winner.category||'')+' · '+esc(winner.address||'')+(winner.distance?' · '+winner.distance+'m':'')+'</div>'+
+   '<a class="rlink" href="'+esc(winner.url)+'" target="_blank" rel="noopener">🗺️ 카카오맵에서 길찾기 →</a></div>';
+  btn.disabled=false; eatoutSpinning=false;
+  if(window.gaEvent)gaEvent('eatout_roulette',{cat:eatoutCat});
+ }, {once:true});
+};
+let eatoutListOpen=false;
+$('#eatout-list-toggle').onclick=()=>{
+ eatoutListOpen=!eatoutListOpen;
+ $('#eatout-list-toggle').textContent=eatoutListOpen?"룰렛으로 돌아가기":"📍 근처 목록으로 보기";
+ if(eatoutListOpen){ loadNearby(); } else { $('#eatout-body').innerHTML=""; }
+};
 async function loadNearby(){
  const el=$('#eatout-body');
- el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">📍 내 위치를 확인하고 있어요...</p>';
- if(!navigator.geolocation){
-  el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">이 브라우저는 위치 확인을 지원하지 않아요</p>';
-  return;
- }
- navigator.geolocation.getCurrentPosition(async pos=>{
-  const {latitude,longitude}=pos.coords;
-  try{
-   const r=await fetch('/api/nearby?lat='+latitude+'&lng='+longitude);
-   const d=await r.json();
-   if(!r.ok||!d.places){ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">주변 맛집을 못 찾았어요. 다시 시도해주세요.</p>'; return; }
-   if(!d.places.length){ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">근처 1.5km 안에 결과가 없어요 🥲</p>'; return; }
-   el.innerHTML='<p class="muted" style="margin-bottom:12px">📍 현재 위치 기준 가까운 순</p>'+
-    d.places.map(p=>
-     '<a href="'+esc(p.url)+'" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e7ebe6;border-radius:15px;padding:13px 15px;margin-bottom:10px">'+
-      '<div class="line"><b style="font-size:14.5px">'+esc(p.name)+'</b><span class="tiny" style="color:#39774e;font-weight:bold">'+(p.distance?p.distance+'m':'')+'</span></div>'+
-      '<div class="tiny" style="margin-top:4px">'+esc(p.category||'')+' · '+esc(p.address||'')+'</div>'+
-     '</a>'
-    ).join('');
-  }catch(e){ el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">불러오기 실패. 다시 시도해주세요.</p>'; }
- }, err=>{
-  el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">📍 위치 권한을 허용해주셔야 근처 맛집을 찾을 수 있어요.<br>브라우저 설정에서 위치 권한을 확인해주세요.</p>';
- }, {timeout:10000});
+ el.innerHTML='<p class="muted" style="text-align:center;padding:24px 0">📍 내 위치를 확인하고 있어요...</p>';
+ try{
+  const places=await fetchNearbyFor(eatoutCat);
+  el.innerHTML=places.map(p=>
+   '<a href="'+esc(p.url)+'" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #f1e5dc;border-radius:14px;padding:13px 15px;margin-bottom:9px">'+
+    '<div class="line"><b style="font-size:14px">'+esc(p.name)+'</b><span class="tiny" style="color:#f45f25;font-weight:bold">'+(p.distance?p.distance+'m':'')+'</span></div>'+
+    '<div class="tiny" style="margin-top:4px;color:#8f8781">'+esc(p.category||'')+' · '+esc(p.address||'')+'</div>'+
+   '</a>'
+  ).join('');
+ }catch(msg){ el.innerHTML='<p class="muted" style="text-align:center;padding:24px 0">'+esc(String(msg))+'</p>'; }
 }
 
 async function pick(m){
