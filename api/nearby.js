@@ -20,16 +20,26 @@ export default async function handler(req, res) {
   const allowedCats = ["FD6", "CE7"];
   const categoryGroup = allowedCats.includes(cat) ? cat : "FD6";
 
-  // 검색어가 있으면 키워드 검색(예: "김치찌개"), 없으면 음식점 카테고리 전체
-  const q = (query || "맛집").toString().slice(0, 30);
-  const url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json");
-  url.searchParams.set("query", q);
-  url.searchParams.set("y", y);
-  url.searchParams.set("x", x);
-  url.searchParams.set("radius", "2500"); // 반경 2.5km (결과가 너무 적지 않도록 확대)
-  url.searchParams.set("category_group_code", categoryGroup);
-  url.searchParams.set("sort", "distance");
-  url.searchParams.set("size", "15");
+  // 검색어는 쉼표로 여러 개를 받을 수 있음(예: "냉면,짜장면,국수") — 각각 따로 검색해 합침
+  const terms = (query || "맛집")
+    .toString()
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 6); // 과도한 호출 방지
+  if (!terms.length) terms.push("맛집");
+
+  const buildUrl = (term, radius) => {
+    const u = new URL("https://dapi.kakao.com/v2/local/search/keyword.json");
+    u.searchParams.set("query", term.slice(0, 30));
+    u.searchParams.set("y", y);
+    u.searchParams.set("x", x);
+    u.searchParams.set("radius", radius);
+    u.searchParams.set("category_group_code", categoryGroup);
+    u.searchParams.set("sort", "distance");
+    u.searchParams.set("size", "15");
+    return u;
+  };
 
   const callKakao = async (u) => {
     const r = await fetch(u.toString(), {
@@ -40,22 +50,32 @@ export default async function handler(req, res) {
     return data.documents || [];
   };
 
-  try {
-    let docs = await callKakao(url);
-
-    // 결과가 5개 미만이면, 반경을 더 넓혀서(6km) 한 번 더 찾아 보충
-    if (docs.length < 5) {
-      const url2 = new URL(url.toString());
-      url2.searchParams.set("radius", "6000");
-      url2.searchParams.set("size", "15");
-      try {
-        const more = await callKakao(url2);
-        const seen = new Set(docs.map((d) => d.id));
-        for (const d of more) {
-          if (!seen.has(d.id)) { docs.push(d); seen.add(d.id); }
-        }
-      } catch (_) { /* 보충 실패해도 원래 결과는 그대로 반환 */ }
+  const mergeUnique = (target, incoming) => {
+    const seen = new Set(target.map((d) => d.id));
+    for (const d of incoming) {
+      if (!seen.has(d.id)) { target.push(d); seen.add(d.id); }
     }
+  };
+
+  try {
+    // 1단계: 검색어마다 반경 2.5km로 동시 조회 후 합침
+    const firstPass = await Promise.all(
+      terms.map((t) => callKakao(buildUrl(t, 2500)).catch(() => []))
+    );
+    let docs = [];
+    for (const list of firstPass) mergeUnique(docs, list);
+
+    // 2단계: 그래도 5개 미만이면 반경을 6km로 넓혀 재조회 후 보충
+    if (docs.length < 5) {
+      const secondPass = await Promise.all(
+        terms.map((t) => callKakao(buildUrl(t, 6000)).catch(() => []))
+      );
+      for (const list of secondPass) mergeUnique(docs, list);
+    }
+
+    // 거리순 정렬 후 상위 20개만
+    docs.sort((a, b) => (parseInt(a.distance) || 0) - (parseInt(b.distance) || 0));
+    docs = docs.slice(0, 20);
 
     const places = docs.map((p) => ({
       name: p.place_name,
