@@ -59,7 +59,11 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 #family-meal-app .wheel{width:240px;height:240px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(216,77,24,.3),0 0 0 6px #fff,0 0 0 8px #f1e5dc;transition:transform 3.2s cubic-bezier(.17,.67,.13,1);display:flex;align-items:center;justify-content:center}
 #family-meal-app .wheel-hint{color:#fff;font-size:13px;font-weight:700;position:absolute}
 #family-meal-app .wheel-seg-label{position:absolute;top:50%;left:50%;width:96px;text-align:right;padding-right:14px;font-size:11.5px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform-origin:0 0}
-#family-meal-app .wheel-center{position:absolute;top:50%;left:50%;width:26px;height:26px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.15);z-index:3}
+#family-meal-app .wheel-center{position:absolute;top:50%;left:50%;width:14px;height:14px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);z-index:2}
+#family-meal-app .wheel-spin-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid #f45f25;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:12px;font-weight:800;color:#d84d18;box-shadow:0 6px 16px rgba(0,0,0,.18);z-index:6}
+#family-meal-app .wheel-spin-btn span{font-size:17px;line-height:1}
+#family-meal-app .wheel-spin-btn:disabled{opacity:.65}
+#family-meal-app .wheel-spin-btn:active:not(:disabled){transform:translate(-50%,-50%) scale(.94)}
 #family-meal-app .roulette-sub{color:rgba(255,255,255,.85);font-size:12.5px;margin-top:6px}
 #family-meal-app .c-btn-outline{width:100%;padding:12px;border-radius:13px;background:#fff;border:1px solid #f1e5dc;color:#5c5346;font-size:13px;font-weight:700}
 #family-meal-app .roulette-result{margin-top:14px;padding:15px 16px;background:#fff;border:1px solid #f1e5dc;border-radius:15px}
@@ -341,9 +345,9 @@ details.fold.sub .body p{font-size:13px!important}
       <div class="wheel-outer">
         <div class="wheel-pointer">▼</div>
         <div class="wheel" id="wheel"><span class="wheel-hint">룰렛을 돌려보세요</span></div>
+        <button class="wheel-spin-btn" id="roulette-spin"><span>↻</span>돌리기</button>
       </div>
-      <p class="roulette-sub" id="roulette-sub" style="text-align:center;color:#8f8781">근처 '<span id="cat-label">전체</span>' 맛집 중에서 골라드려요</p>
-      <button class="idle-cta" id="roulette-spin" style="margin-top:6px"><span>↻</span> 룰렛 돌리기</button>
+      <p class="roulette-sub" id="roulette-sub" style="text-align:center;color:#8f8781;margin-top:10px">근처 '<span id="cat-label">전체</span>' 맛집 중에서 골라드려요</p>
       <div id="roulette-result"></div>
       <button class="c-btn-outline" id="eatout-list-toggle" style="margin-top:16px">📍 근처 목록으로 보기</button>
       <div id="eatout-body" style="margin-top:10px"></div>
@@ -718,6 +722,7 @@ async function makeWeekplan(){
 }
 /* ── 나가서 먹기: 카테고리+룰렛 ── */
 const EATOUT_QUERY={"전체":"맛집","밥":"한식 밥집","면":"국수 면요리","고기":"고기집","카페":"카페 디저트","야식":"야식"};
+const EATOUT_CATCODE={"카페":"CE7"}; // 나머지는 서버 기본값(FD6 음식점) 사용
 let eatoutCat="전체", eatoutPlaces=[], eatoutSpinning=false;
 document.querySelectorAll('#eatout-cat .chip').forEach(x=>x.onclick=()=>{
  document.querySelectorAll('#eatout-cat .chip').forEach(y=>y.classList.remove('active'));
@@ -734,7 +739,8 @@ async function fetchNearbyFor(cat){
    try{
     const {latitude,longitude}=pos.coords;
     const q=encodeURIComponent(EATOUT_QUERY[cat]||"맛집");
-    const r=await fetch('/api/nearby?lat='+latitude+'&lng='+longitude+'&query='+q);
+    const catCode=EATOUT_CATCODE[cat]||"FD6";
+    const r=await fetch('/api/nearby?lat='+latitude+'&lng='+longitude+'&query='+q+'&cat='+catCode);
     const d=await r.json();
     if(!r.ok||!d.places||!d.places.length){reject("근처에서 결과를 못 찾았어요");return;}
     resolve(d.places);
