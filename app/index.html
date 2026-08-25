@@ -70,6 +70,14 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 #family-meal-app .hero .primary-cta{width:100%;border:0;border-radius:15px;background:#fff;color:#d84d18;font-size:16px;font-weight:850;padding:15px;margin-top:8px;box-shadow:0 6px 16px rgba(0,0,0,.12)}
 #family-meal-app .hero .primary-cta b{font-size:12.5px;margin-left:6px;border:1px solid rgba(216,77,24,.35);border-radius:999px;padding:3px 8px}
 
+#family-meal-app .mk-stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+#family-meal-app .mk-stats3 .mk-stat{padding:0 6px}
+#family-meal-app .mk-stats3 .mk-stat+.mk-stat{border-left:1px solid #eee;border-top:0}
+#family-meal-app .mk-stats3 .mk-statRow{display:block;text-align:center}
+#family-meal-app .mk-stats3 .mk-statEmoji{font-size:24px;display:block;margin-bottom:4px}
+#family-meal-app .mk-stats3 .mk-stat strong{font-size:16px}
+#family-meal-app .mk-stats3 .mk-stat label{font-size:10.5px}
+#family-meal-app .mk-stats3 .mk-stat p{font-size:9.5px}
 /* 오늘의 미션 */
 #family-meal-app .mission-box{margin:16px 20px 0;background:linear-gradient(135deg,#fff7d8,#fff5e8);border:1px solid #ffd08d;border-radius:18px;padding:16px}
 #family-meal-app .mtask{background:#fff;border:1px solid #f2d9b8;border-radius:13px;padding:11px 12px;display:flex;align-items:center;gap:9px;margin-bottom:8px;font-size:13.5px}
@@ -302,6 +310,17 @@ details.fold.sub .body p{font-size:13px!important}
       <button id="weekplan-link"><div>📅</div><span>식단표 만들기</span></button>
       <button data-go="fridge"><div>🧊</div><span>냉장고 털기</span></button>
     </div>
+
+    <section class="mk-section">
+      <div class="mk-sectionHead"><div>이번 달 밥테크 현황</div></div>
+      <div class="mk-stats3">
+        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji">🐷</div><div><label>절약한 식비</label><strong>187,400원</strong><p>배달 대신 집밥으로!</p></div></div></div>
+        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji">🧺</div><div><label>받은 혜택</label><strong>12,400원</strong><p>포인트·쿠폰 합계</p></div></div></div>
+        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji">🗑️</div><div><label>버리지 않은 식재료</label><strong>7개</strong><p>약 37,500원 아꼈어요!</p></div></div></div>
+      </div>
+      <div class="mk-progress"><i style="width:30%"></i></div>
+      <div class="mk-streak"><span id="streak-text">🔥 집밥 계산 중...</span></div>
+    </section>
 
     <section class="mk-section mk-mission">
       <div class="mk-sectionHead"><div>오늘의 미션</div></div>
@@ -660,7 +679,7 @@ function go(v){
   return;
  }
  if(v==='kitchen'){refreshAuth();renderTierProgress();renderPoints();}
- if(v==='home'){renderPoints();refreshMissionButtons();}
+ if(v==='home'){renderPoints();refreshMissionButtons();renderStreak();}
  if(v==='explore'){if(feedData&&feedData.length)renderFeed();loadFeed();}app.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.dataset.view===v));app.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.go===v));window.scrollTo(0,0);
  if(v==='fridge')renderPantry(); if(v==='shop')renderShop(); if(v==='kitchen')renderKitchen();}
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
@@ -1215,7 +1234,7 @@ updatePrefSummary();
 const h=new Date().getHours();meal=h<10?"아침":h<16?"점심":"저녁";
 app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.toggle('active',y.dataset.meal===meal));
 updatePrefSummary();
-renderTop();heroIdle();
+renderTop();heroIdle();renderStreak();
 
 /* ═══════════ 커뮤니티 (Supabase) ═══════════ */
 const SB_URL="https://jnwlaevfvhxpmmnkmyrw.supabase.co";
@@ -1295,6 +1314,18 @@ function renderTierProgress(){
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 /* ── 포인트 UI ── */
+function renderStreak(){
+ const el=$('#streak-text'); if(!el)return;
+ const days=new Set(D.history.map(h=>h.date.slice(0,10)));
+ let streak=0;
+ let d=new Date();
+ while(true){
+  const key=d.toISOString().slice(0,10);
+  if(days.has(key)){ streak++; d.setDate(d.getDate()-1); }
+  else break;
+ }
+ el.textContent = streak>0 ? '🔥 집밥 '+streak+'일 연속! 🔥👏' : '오늘부터 집밥 기록을 시작해보세요!';
+}
 async function renderPoints(){
  if(!me)return;
  const total=await fetchMyPoints();
