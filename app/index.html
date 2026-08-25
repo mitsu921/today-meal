@@ -970,6 +970,34 @@ function rmIng(n){D.pantry=D.pantry.filter(p=>p.name!==n);save();renderPantry();
 $('#add-ing').onclick=()=>{addIng($('#custom-ing').value);$('#custom-ing').value="";};
 $('#custom-ing').addEventListener('keydown',e=>{if(e.key==="Enter"){addIng(e.target.value);e.target.value=""}});
 
+/* ── 실시간 식재료 가격(KAMIS 공공데이터, 검증된 품목코드만) ── */
+const KAMIS_ITEM_CD={
+ "쌀":"111","콩":"141","고구마":"151","감자":"152",
+ "배추":"211","오이":"223","호박":"224","무":"231","당근":"232","열무":"233",
+ "건고추":"241","양파":"245","대파":"246","파":"246","생강":"247","고춧가루":"248",
+ "가지":"251","깻잎":"253","부추":"254","마늘":"258","깐마늘":"258","콩나물":"265",
+ "참깨":"312","들깨":"313","느타리버섯":"315","표고버섯":"322",
+ "사과":"411","배":"412",
+ "소고기":"512","쇠고기":"512","돼지고기":"514","닭고기":"515","계란":"516","달걀":"516","우유":"535",
+ "고등어":"611","오징어":"619","김":"641","굴":"644","새우젓":"650","멸치액젓":"651","천일염":"652","소금":"652","새우":"654","꽃게":"656","바지락":"661"
+};
+function findKamisCode(ingName){
+ const n=(ingName||"").trim();
+ if(KAMIS_ITEM_CD[n])return KAMIS_ITEM_CD[n];
+ for(const k in KAMIS_ITEM_CD){ if(n.includes(k))return KAMIS_ITEM_CD[k]; }
+ return null;
+}
+const priceCache={};
+async function fetchPrice(itemCd){
+ if(priceCache[itemCd]!==undefined)return priceCache[itemCd];
+ try{
+  const r=await fetch('/api/price?item_cd='+itemCd);
+  const d=await r.json();
+  priceCache[itemCd]=d.found?d:null;
+ }catch(e){ priceCache[itemCd]=null; }
+ return priceCache[itemCd];
+}
+
 /* ── 장보기 ── */
 function renderShop(){
  const el=$('#shop-list');
@@ -983,12 +1011,24 @@ function renderShop(){
   cb.onclick=()=>{s.done=!s.done;save();renderShop();renderTop()};
   const nm=document.createElement('span');nm.style.flex="1";nm.style.fontWeight="700";
   nm.style.textDecoration=s.done?"line-through":"none";nm.style.color=s.done?"#9aa79b":"#26392d";
-  nm.innerHTML=s.name+' <small class="muted">'+(s.amt||"")+'</small>';
+  const priceId='price-'+i;
+  nm.innerHTML=s.name+' <small class="muted">'+(s.amt||"")+'</small><br><small class="muted" id="'+priceId+'" style="color:#f45f25"></small>';
   const fr=document.createElement('small');fr.className="muted";fr.textContent=s.from||"";
   const buy=document.createElement('a');buy.href="https://www.coupang.com/np/search?q="+encodeURIComponent(s.name);
   buy.target="_blank";buy.rel="noopener";buy.textContent="🛒 보기";buy.title="쿠팡에서 "+s.name+" 찾기";
   buy.style.cssText="text-decoration:none;font-size:11.5px;font-weight:800;color:#39774e;background:#eef6ee;border-radius:10px;padding:6px 9px;flex:0 0 auto;white-space:nowrap";
-  row.appendChild(cb);row.appendChild(nm);row.appendChild(fr);row.appendChild(buy);el.appendChild(row);});
+  row.appendChild(cb);row.appendChild(nm);row.appendChild(fr);row.appendChild(buy);el.appendChild(row);
+  const code=findKamisCode(s.name);
+  if(code){
+   fetchPrice(code).then(p=>{
+    const target=document.getElementById(priceId); if(!target)return;
+    if(p&&p.price){
+     const diff=p.priceWeekAgo?p.price-p.priceWeekAgo:null;
+     target.textContent='시세 '+p.unitSize+' 약 '+p.price.toLocaleString()+'원'+(diff?(diff>0?' (▲'+diff.toLocaleString()+')':diff<0?' (▼'+Math.abs(diff).toLocaleString()+')':''):'');
+    }
+   });
+  }
+ });
 }
 $('#select-all-shop').onclick=()=>{
  const allDone=D.shop.length&&D.shop.every(s=>s.done);
