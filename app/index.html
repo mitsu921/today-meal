@@ -198,6 +198,71 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .kakao-btn{width:100%;padding:13px;border-radius:13px;background:#FEE500;color:#191919;font-size:14px;font-weight:800;margin-top:6px}
 #family-meal-app .or-line{display:flex;align-items:center;gap:10px;margin:18px 0 2px;color:#ece8e5;font-size:11.5px;font-weight:700}
 #family-meal-app .or-line::before,#family-meal-app .or-line::after{content:"";flex:1;height:1px;background:#fffaf6}
+
+/* ── 시안 이식 CSS ── */
+#family-meal-app{--orange:#ff6817;--orange2:#ff7a1a;--ink:#252525;--muted:#777;--line:#f3dfcc;--cream:#fff9f1;--card:#fff;--shadow:0 8px 24px rgba(109,66,27,.10)}
+#family-meal-app .mk-top{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 0}
+#family-meal-app .mk-brand{font-size:24px;font-weight:850;letter-spacing:-1.3px;color:var(--orange)}
+#family-meal-app .mk-brand small{font-size:13px;vertical-align:top}
+#family-meal-app .mk-bell{font-size:22px;position:relative;margin-top:1px}
+#family-meal-app .mk-badge{position:absolute;right:-9px;top:-7px;background:var(--orange);color:#fff;border-radius:999px;font-size:11px;font-weight:800;min-width:19px;height:19px;display:grid;place-items:center}
+#family-meal-app .mk-welcomeRow{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:0 16px;gap:10px}
+#family-meal-app .mk-welcome{font-weight:800;font-size:18px;line-height:1.35;letter-spacing:-.5px}
+#family-meal-app .mk-points{display:flex;align-items:center;gap:7px;background:white;border:1px solid #f3dec7;border-radius:16px;padding:9px 12px;box-shadow:var(--shadow);font-weight:850;color:var(--orange);font-size:14px;flex:none}
+#family-meal-app .mk-coin{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#ffb000;color:#fff;border:2px solid #ffd36d;font-weight:900;font-size:13px}
+#family-meal-app .mk-hero{display:flex;flex-direction:column;margin:16px;border:1.5px solid #ff9b5d;border-radius:19px;overflow:hidden;min-height:0;background:linear-gradient(110deg,#fffaf0 0,#fff7e8 60%,#f3d7b7 100%);box-shadow:0 2px 9px rgba(141,85,36,.03)}
+#family-meal-app .mk-heroImage{background-image:url('/main-dish.jpg');background-size:cover;background-position:center;height:190px;position:relative;order:-1}
+#family-meal-app .mk-heroImage::after{content:"♡";position:absolute;right:16px;top:12px;color:#fff;font-size:28px;text-shadow:0 2px 8px rgba(0,0,0,.22)}
+#family-meal-app .mk-heroText{padding:18px 18px 20px}
+#family-meal-app .mk-rank{color:var(--orange);font-weight:850;font-size:13px;display:flex;align-items:center}
+#family-meal-app .mk-rank span{display:inline-grid;place-items:center;width:24px;height:24px;background:#fff;border-radius:8px;margin-right:6px;font-size:14px}
+#family-meal-app .mk-dishTitle{font-size:24px;line-height:1.2;margin:12px 0 8px;font-weight:900;letter-spacing:-1px;display:block}
+#family-meal-app .mk-taste{font-size:13px;margin-bottom:14px;color:#4d4d4d}
+#family-meal-app .mk-chips{display:flex;gap:6px;flex-wrap:wrap}
+#family-meal-app .mk-chip{background:#fff;border:1px solid #e7d7ca;border-radius:999px;padding:6px 10px;font-size:12px;box-shadow:0 2px 4px rgba(0,0,0,.02)}
+#family-meal-app .mk-primary{margin-top:16px;width:100%;height:52px;border:0;border-radius:15px;background:linear-gradient(90deg,#ff5d0a,#ff7819);color:#fff;font-size:15.5px;font-weight:850;cursor:pointer;box-shadow:0 8px 18px rgba(255,103,22,.18)}
+#family-meal-app .mk-primary b{font-size:11.5px;margin-left:6px;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:3px 8px}
+#family-meal-app .mk-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 16px 0}
+#family-meal-app .mk-quick button{height:70px;border-radius:15px;background:#fff;border:1px solid #f0e3d5;box-shadow:var(--shadow);font-size:20px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+#family-meal-app .mk-quick button span{display:block;font-size:10.5px;font-weight:500;color:#777;margin-top:4px}
+#family-meal-app .mk-section{margin:16px;border-radius:19px;background:#fff;border:1px solid #f1e2d2;box-shadow:var(--shadow);padding:16px 17px}
+#family-meal-app .mk-sectionHead{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:900;margin-bottom:14px}
+#family-meal-app .mk-sectionHead small{font-size:11.5px;color:#666;font-weight:600}
+#family-meal-app .mk-stats{display:grid;grid-template-columns:1fr;gap:0}
+#family-meal-app .mk-stat{padding:10px 0}
+#family-meal-app .mk-stat+.mk-stat{border-left:0;border-top:1px solid #eee}
+#family-meal-app .mk-statRow{display:flex;gap:11px;align-items:flex-start}
+#family-meal-app .mk-statEmoji{font-size:26px}
+#family-meal-app .mk-stat label{font-size:12.5px;font-weight:800}
+#family-meal-app .mk-stat strong{display:block;font-size:20px;margin-top:2px;letter-spacing:-.5px}
+#family-meal-app .mk-stat p{margin:3px 0 0;color:#7a7a7a;font-size:11px}
+#family-meal-app .mk-progress{height:4px;background:#f5e8dc;margin:12px 0 10px;border-radius:99px;overflow:hidden}
+#family-meal-app .mk-progress i{display:block;height:100%;background:var(--orange)}
+#family-meal-app .mk-streak{border:1px solid #f2dcc2;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+#family-meal-app .mk-mission{background:linear-gradient(135deg,#fff7d8,#fff5e8);border-color:#ffd08d}
+#family-meal-app .mk-missionBody{display:grid;grid-template-columns:1fr;gap:12px}
+#family-meal-app .mk-challenge{background:#fffaf2;border:1px solid #f2d7b0;border-radius:15px;padding:15px;position:relative;min-height:120px;overflow:hidden}
+#family-meal-app .mk-challenge h3{font-size:16px;margin:0 0 7px}
+#family-meal-app .mk-challenge p{font-size:12px;line-height:1.4;color:#606060;margin:0;max-width:60%}
+#family-meal-app .mk-reward{position:absolute;left:12px;bottom:12px;background:white;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800}
+#family-meal-app .mk-missionArt{position:absolute;right:-6px;bottom:-8px;width:44%;height:70%;background-image:url('/mission-pot.png');background-size:cover;background-position:center;border-radius:12px}
+#family-meal-app .mk-missionList{border-left:0;border-top:1px dashed #efb35c;padding:12px 0 0}
+#family-meal-app .mk-missionList h4{color:var(--orange);margin:0 0 8px;font-size:13px}
+#family-meal-app .mk-task{background:#fff;border:1px solid #f2d9b8;border-radius:12px;padding:10px 11px;display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}
+#family-meal-app .mk-task .grow{flex:1}
+#family-meal-app .mk-task b{color:var(--orange)}
+#family-meal-app .mk-task button{border:1px solid #ff9b53;background:#fff;color:var(--orange);border-radius:8px;padding:6px 10px;font-weight:800;font-size:12px}
+#family-meal-app .mk-task button.done{background:var(--orange);color:#fff}
+#family-meal-app .mk-community{margin:16px}
+#family-meal-app .mk-community .mk-titleRow{display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:900;margin-bottom:11px}
+#family-meal-app .mk-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+#family-meal-app .mk-foodCard{border-radius:11px;background:#fff;border:1px solid #eee;box-shadow:0 5px 16px rgba(0,0,0,.07);overflow:hidden;min-width:0}
+#family-meal-app .mk-photo{aspect-ratio:1.35/1;background-size:cover;background-position:center;position:relative}
+#family-meal-app .mk-foodtag{position:absolute;left:7px;top:7px;background:var(--orange);color:#fff;border-radius:6px;padding:4px 7px;font-size:11px;font-weight:900}
+#family-meal-app .mk-foodBody{padding:9px 9px 10px}
+#family-meal-app .mk-foodName{font-size:13.5px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#family-meal-app .mk-foodmeta{font-size:11px;color:#888;margin-top:6px;display:flex;justify-content:space-between}
+#family-meal-app .mk-by{border-top:1px solid #eee;margin-top:8px;padding-top:7px;font-size:10.5px;color:#777}
 </style>
 </head>
 <body style="margin:0;background:#efe9df">
@@ -206,49 +271,61 @@ details.fold.sub .body p{font-size:13px!important}
 
   <!-- ══ 홈 ══ -->
   <section class="view active" data-view="home">
-    <header class="topbar">
-      <span class="brand-title"><i>오</i><b>오늘 뭐먹지</b></span>
-      <span></span>
-      <button class="points-badge" id="points-badge-home" data-go="kitchen"><b>P</b><span id="points-home-num">0</span>P</button>
+    <header class="mk-top">
+      <div class="mk-brand">TodayMeal<small>♧</small></div>
+      <div class="mk-bell" data-go="kitchen">♧<span class="mk-badge" id="points-home-num">0</span></div>
     </header>
 
-    <section class="personal-head">
-      <h1 id="greet" style="cursor:pointer" title="탭해서 이름 바꾸기">오늘 저녁은<br>이렇게 골라볼까요?</h1>
-      <button data-go="fridge">▣ 냉장고 재료 <span id="pantry-count-home">0</span>개 반영</button>
-    </section>
+    <div class="mk-welcomeRow">
+      <div class="mk-welcome" id="greet" style="cursor:pointer" title="탭해서 이름 바꾸기">오늘 저녁은<br>이렇게 골라볼까요?</div>
+      <button class="mk-points" data-go="kitchen"><span class="mk-coin">P</span> <span id="points-home-num2">0</span>P</button>
+    </div>
+
+    <div style="padding:0 16px">
+      <button data-go="fridge" style="margin-top:12px;background:#fff0e7;color:#d84d18;border:0;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700">▣ 냉장고 재료 <span id="pantry-count-home">0</span>개 반영</button>
+    </div>
 
     <div id="urgent-slot"></div>
     <div id="warn-slot"></div>
 
-    <button id="pref-summary" class="pref-summary">
-      <span id="pref-summary-text">아이와 함께 · 점심밥</span><i>변경 ›</i>
-    </button>
+    <div style="padding:10px 16px 0">
+      <button id="pref-summary" class="pref-summary" style="margin:0">
+        <span id="pref-summary-text">아이와 함께 · 점심밥</span><i>변경 ›</i>
+      </button>
+    </div>
 
-    <div class="hero" id="hero"></div>
-    <div id="result-extra"></div>
+    <section class="mk-hero" id="hero"></section>
+    <div id="result-extra" style="padding:0 16px"></div>
 
-    <button id="eatout-link" class="eatout-secondary"><span>⌖</span><b>오늘은 요리 말고 외식할래요</b><em>내 주변 맛집 찾기 →</em></button>
+    <div class="mk-quick">
+      <button id="eatout-link"><div>🍽️</div><span>외식할래요</span></button>
+      <button id="weekplan-link"><div>📅</div><span>식단표 만들기</span></button>
+      <button data-go="fridge"><div>🧊</div><span>냉장고 털기</span></button>
+    </div>
 
-    <button id="weekplan-link" class="featured-meal">
-      <div><h2 id="weekplan-teaser-title">일주일 식단표 만들기</h2><p id="weekplan-teaser-desc">AI가 5일치 저녁을 한번에 짜드려요</p><small>✨ 무료</small></div>
-      <span class="featured-ph">▤</span>
-    </button>
-
-    <div class="mission-box">
-      <div class="section-title" style="margin:0 0 10px"><h2>오늘의 미션</h2><img src="/mission-pot.png" alt="" style="width:34px;height:auto;border-radius:8px"></div>
-      <div class="mtask">
-        <span>📅</span><span class="grow">출석체크 하기</span><b>+5P</b>
-        <button id="mission-checkin">하기</button>
+    <section class="mk-section mk-mission">
+      <div class="mk-sectionHead"><div>오늘의 미션</div></div>
+      <div class="mk-missionBody">
+        <div class="mk-challenge">
+          <h3>15분 집밥 챌린지</h3>
+          <p>조리시간 15분 이하로<br>저녁 만들고 인증해보세요!</p>
+          <div class="mk-reward">🟠 성공 시 <b style="color:var(--orange)">30P</b></div>
+          <div class="mk-missionArt"></div>
+        </div>
+        <div class="mk-missionList">
+          <h4>추가 미션</h4>
+          <div class="mk-task"><span>📅</span><span class="grow">출석체크 하기</span><b>+5P</b><button id="mission-checkin">하기</button></div>
+          <div class="mk-task"><span>🔖</span><span class="grow">레시피 저장하기</span><b>+10P</b><button id="mission-save-hint" data-go="home">하기</button></div>
+          <div class="mk-task"><span>📷</span><span class="grow">오늘 밥 인증하기</span><b>+30P</b><button id="mission-photo">하기</button>
+            <input id="meal-photo-input" type="file" accept="image/*" capture="environment" style="display:none">
+          </div>
+        </div>
       </div>
-      <div class="mtask">
-        <span>🔖</span><span class="grow">레시피 저장하기</span><b>+10P</b>
-        <button id="mission-save-hint" data-go="home">하기</button>
-      </div>
-      <div class="mtask">
-        <span>📷</span><span class="grow">오늘 만든 밥 인증하기</span><b>+30P</b>
-        <button id="mission-photo">하기</button>
-        <input id="meal-photo-input" type="file" accept="image/*" capture="environment" style="display:none">
-      </div>
+    </section>
+
+    <div class="mk-community">
+      <div class="mk-titleRow"><div>엄마들의 진짜집밥</div><button class="textbtn" data-go="explore" style="font-size:13px;color:#777;font-weight:500">더보기 ›</button></div>
+      <div class="mk-cards" id="home-feed"></div>
     </div>
 
     <div class="section-title"><h2>다른 메뉴 둘러보기</h2><button class="textbtn" data-go="explore">더보기 ›</button></div>
@@ -256,12 +333,6 @@ details.fold.sub .body p{font-size:13px!important}
       <button data-go="explore"><span class="thumb-ph" style="background-image:url('/thumb-popular.jpg')"></span><small>인기 레시피</small></button>
       <button data-go="explore"><span class="thumb-ph" style="background-image:url('/thumb-recent.jpg')"></span><small>최신 레시피</small></button>
       <button data-go="fridge"><span class="thumb-ph" style="background-image:url('/thumb-fridge.jpg')"></span><small>냉장고 파먹기</small></button>
-    </div>
-
-    <div class="section">
-      <div class="line"><h2>엄마들이 추천한 레시피</h2><button class="textbtn" data-go="explore">더보기 ›</button></div>
-      <p class="muted" style="margin:-6px 0 10px" id="home-feed-hint">방금 올라온 우리 이웃의 식탁이에요.</p>
-      <div class="recipe-row" id="home-feed"></div>
     </div>
 
     <div class="section">
@@ -704,8 +775,9 @@ function renderTop(){
  }
 }
 function heroIdle(){
- $('#hero').classList.add('idle-photo');
- $('#hero').innerHTML='<button class="idle-cta" id="decide-btn"><span>✦</span> 오늘 메뉴 추천받기</button>';
+ $('#hero').innerHTML=
+  '<div class="mk-heroImage"></div>'+
+  '<div class="mk-heroText"><button class="mk-primary" id="decide-btn"><span>✦</span> 오늘 메뉴 추천받기</button></div>';
  $('#decide-btn').onclick=decide;
  $('#result-extra').innerHTML="";
 }
@@ -730,20 +802,22 @@ function heroBusy(msg){
  $('#hero').innerHTML='<span class="tag">고르는 중</span><div class="loadmsg">'+msg+'</div><div class="skel"></div><div class="skel" style="width:70%"></div><div class="skel" style="width:50%"></div>';
 }
 function heroResult(){
- $('#hero').classList.remove('idle-photo');
  const m=res.macros;
  const missCount=(res.missing||[]).filter(x=>x.name).length;
  const trayCount=(res.tray||[]).length||4;
  const haveCount=Math.max(0,trayCount-missCount);
- const matchNote=missCount===0?'냉장고 재료로 다 돼요':'재료 '+haveCount+'/'+trayCount+'가지는 냉장고에 있어요';
- $('#hero').innerHTML='<span class="tag" id="hero-tag">'+person+' 맞춤 · AI가 골랐어요</span>'+
-  '<div class="dish-emoji">'+(res.emoji||"🍽️")+'</div>'+
-  '<strong class="dish-title">'+esc(res.name)+'</strong>'+
-  '<p class="dish-why">'+esc(res.why||"")+'</p>'+
-  '<div class="dish-chips">'+(res.time?'<span class="dchip">⏱ '+esc(res.time)+'</span>':'')+'<span class="dchip">🔥 '+res.kcal+'kcal</span><span class="dchip">🧊 '+esc(matchNote)+'</span></div>'+
-  (res.urgent?'<p class="dish-urgent">⏰ '+esc(res.urgent)+'</p>':'')+
-  '<button class="primary-cta" id="eat-btn-main">'+(eaten?'✓ 오늘 이거 먹었어요':'오늘 이거 먹을래! <b>+15P</b>')+'</button>'+
-  '<div class="hero-actions"><button id="btn-cook">🍳 레시피 보기</button><button id="btn-shop">🛒 장보기에 담기</button><button class="alt" id="btn-again">↻ 다른 메뉴</button><button class="alt" id="btn-scrap">'+(scrapped?"♥":"♡")+'</button></div>';
+ const matchNote=missCount===0?'냉장고 재료로 다 돼요':'냉장고 재료 '+haveCount+'/'+trayCount+'가지 활용';
+ $('#hero').innerHTML=
+  '<div class="mk-heroImage"></div>'+
+  '<div class="mk-heroText">'+
+   '<div class="mk-rank"><span>'+(res.emoji||"🍽️")+'</span>'+person+' 맞춤 추천</div>'+
+   '<strong class="mk-dishTitle">'+esc(res.name)+'</strong>'+
+   '<div class="mk-taste">'+esc(res.why||"")+'</div>'+
+   '<div class="mk-chips">'+(res.time?'<div class="mk-chip">⏱ '+esc(res.time)+'</div>':'')+'<div class="mk-chip">🔥 '+res.kcal+'kcal</div><div class="mk-chip">🧊 '+esc(matchNote)+'</div></div>'+
+   (res.urgent?'<div class="mk-chip" style="margin-top:8px;background:#fff0e7;color:#d84d18">⏰ '+esc(res.urgent)+'</div>':'')+
+   '<button class="mk-primary" id="eat-btn-main">'+(eaten?'✓ 오늘 이거 먹었어요':'오늘 이거 먹을래! <b>+15P</b>')+'</button>'+
+   '<div class="hero-actions" style="margin-top:10px"><button id="btn-cook">🍳 레시피 보기</button><button id="btn-shop">🛒 장보기에 담기</button><button class="alt" id="btn-again">↻ 다른 메뉴</button><button class="alt" id="btn-scrap">'+(scrapped?"♥":"♡")+'</button></div>'+
+  '</div>';
  $('#btn-again').onclick=decide;
  $('#btn-cook').onclick=()=>pick("cook");
  $('#btn-shop').onclick=addMissingToShop;
@@ -1226,6 +1300,7 @@ async function renderPoints(){
  const total=await fetchMyPoints();
  const el=$('#points-total'); if(el)el.textContent=total;
  const homeEl=$('#points-home-num'); if(homeEl)homeEl.textContent=total;
+ const homeEl2=$('#points-home-num2'); if(homeEl2)homeEl2.textContent=total;
 }
 
 /* ── 오늘의 미션 ── */
@@ -1599,16 +1674,29 @@ function renderFeed(){
    '</div></div></article>';
  }).join('');
 }
+const DEMO_CARDS=[
+ {img:'/thumb-popular.jpg',name:'지혜맘',title:'숙주팽이버섯볶음',meta:'15분 · 쉬움',like:'328',tag:'BEST'},
+ {img:'/thumb-recent.jpg',name:'요리하는민정',title:'김치참치찌개',meta:'20분 · 보통',like:'217',tag:'인기'},
+ {img:'/thumb-fridge.jpg',name:'하하맘',title:'계란말이 샌드위치',meta:'10분 · 쉬움',like:'191',tag:'인기'},
+ {img:'/thumb-demo4.jpg',name:'서연맘',title:'참치마요덮밥',meta:'15분 · 쉬움',like:'143',tag:''}
+];
+function demoCardHtml(d){
+ return '<article class="mk-foodCard">'+
+  '<div class="mk-photo" style="background-image:url(\''+d.img+'\')">'+(d.tag?'<span class="mk-foodtag">'+d.tag+'</span>':'')+'</div>'+
+  '<div class="mk-foodBody"><div class="mk-foodName">'+esc(d.title)+'</div>'+
+  '<div class="mk-foodmeta"><span>'+esc(d.meta)+'</span><span>♡ '+d.like+'</span></div>'+
+  '<div class="mk-by">👩🏻 by '+esc(d.name)+' · 예시</div></div></article>';
+}
 function renderHomeFeed(){
  const el=$('#home-feed'); if(!el)return;
  const top=[...feedData].sort((a,b)=>likeCount(b)-likeCount(a)).slice(0,5);
- if(!top.length){
-  el.innerHTML='<article class="recipe-card"><div class="picture">🌱</div><div><span class="tiny">아직 비어있어요</span><p class="recipe-title">첫 레시피의 주인공이 되어보세요</p><span class="like">➕ 올리기에서 시작</span></div></article>';
-  return;
- }
- el.innerHTML=top.map(r=>'<article class="recipe-card" data-goexp="1">'+
-  (r.image_url?'<div class="picture" style="background:url('+esc(r.image_url)+') center/cover"></div>':'<div class="picture green">'+esc(r.emoji||'🍽️')+'</div>')+
-  '<div><span class="tiny">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+'</span><p class="recipe-title">'+esc(r.title)+'</p><span class="like">♥ '+likeCount(r)+' 추천'+(r.kcal?' · '+r.kcal+'kcal':'')+'</span></div></article>').join('');
+ let html=top.map((r,i)=>'<article class="mk-foodCard" data-goexp="1">'+
+  '<div class="mk-photo" style="'+(r.image_url?'background-image:url('+esc(r.image_url)+')':'background:#fff0e7;display:flex;align-items:center;justify-content:center;font-size:30px')+'">'+(r.image_url?'':esc(r.emoji||'🍽️'))+(i===0?'<span class="mk-foodtag">BEST</span>':'')+'</div>'+
+  '<div class="mk-foodBody"><div class="mk-foodName">'+esc(r.title)+'</div>'+
+  '<div class="mk-foodmeta"><span>'+(r.kcal?r.kcal+'kcal':'')+'</span><span>♡ '+likeCount(r)+'</span></div>'+
+  '<div class="mk-by">👩🏻 by '+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+'</div></div></article>').join('');
+ if(top.length<4){ html+=DEMO_CARDS.slice(0,4-top.length).map(demoCardHtml).join(''); }
+ el.innerHTML=html;
  el.querySelectorAll('[data-goexp]').forEach(c=>c.onclick=()=>go('explore'));
 }
 $('#feed-list').onclick=async e=>{
