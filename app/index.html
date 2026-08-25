@@ -471,6 +471,16 @@ details.fold.sub .body p{font-size:13px!important}
       <button class="b-green" id="allergy-save" style="border-radius:11px;padding:10px 16px;font-weight:800;margin-top:8px">저장</button>
     </div>
     <div class="section" style="padding-bottom:20px">
+      <h2>💰 내 포인트</h2>
+      <div class="roulette-result" style="margin-top:8px">
+        <div class="rname"><span id="points-total">0</span>P</div>
+        <div class="rmeta">레시피가 추천(♥)받거나 영수증을 인증하면 쌓여요. 나중에 상품권으로 교환할 수 있게 준비 중이에요!</div>
+      </div>
+      <input id="receipt-input" type="file" accept="image/*" capture="environment" style="display:none">
+      <button class="c-btn-outline" id="receipt-btn" style="margin-top:10px">🧾 영수증 인증하고 20P 받기</button>
+      <p class="muted" style="font-size:11.5px;margin-top:6px">하루 최대 3장까지 인증할 수 있어요</p>
+    </div>
+    <div class="section" style="padding-bottom:20px">
       <h2>맘셰프 등급</h2>
       <p class="muted" style="margin:-2px 0 10px">받은 추천(♥) 수에 따라 등급이 올라가요. 레시피를 올리고 추천을 받아보세요!</p>
       <div id="tier-progress"></div>
@@ -535,7 +545,7 @@ function go(v){
   refreshAuth().then(()=>{ if(me){go('upload');} else {toast('레시피를 올리려면 로그인이 필요해요');go('login');} });
   return;
  }
- if(v==='kitchen'){refreshAuth();renderTierProgress();}
+ if(v==='kitchen'){refreshAuth();renderTierProgress();renderPoints();}
  if(v==='explore'){if(feedData&&feedData.length)renderFeed();loadFeed();}app.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.dataset.view===v));app.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.go===v));window.scrollTo(0,0);
  if(v==='fridge')renderPantry(); if(v==='shop')renderShop(); if(v==='kitchen')renderKitchen();}
 app.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
@@ -557,6 +567,66 @@ async function ask(prompt,maxTokens){
  const txt=(d.content||[]).map(i=>i.type==="text"?i.text:"").filter(Boolean).join("\n");
  return JSON.parse(txt.replace(/```json|```/g,"").trim());
 }
+async function askVision(prompt,base64,mediaType,maxTokens){
+ const ctrl=new AbortController();
+ const timer=setTimeout(()=>ctrl.abort(),25000);
+ let r;
+ try{
+  r=await fetch(PROXY_URL,{method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:maxTokens||400,messages:[{role:"user",content:[
+    {type:"image",source:{type:"base64",media_type:mediaType,data:base64}},
+    {type:"text",text:prompt}
+   ]}]}),
+   signal:ctrl.signal});
+ }catch(e){ throw new Error("연결에 실패했어요. 네트워크를 확인하고 다시 시도해주세요."); }
+ finally{clearTimeout(timer);}
+ if(!r.ok)throw new Error("분석에 실패했어요");
+ const d=await r.json();
+ const txt=(d.content||[]).map(i=>i.type==="text"?i.text:"").filter(Boolean).join("\n");
+ return JSON.parse(txt.replace(/```json|```/g,"").trim());
+}
+
+/* ── 포인트 시스템 ── */
+async function awardLikePoint(recipeId){
+ if(!sb)return;
+ const {data:rec}=await sb.from('recipes').select('user_id').eq('id',recipeId).maybeSingle();
+ if(!rec||!rec.user_id||rec.user_id===me.id)return; // 본인 글 제외
+ await sb.from('points_ledger').insert({user_id:rec.user_id,amount:5,reason:'좋아요 받음',ref_id:String(recipeId)});
+}
+async function fetchMyPoints(){
+ if(!sb||!me)return 0;
+ const {data}=await sb.from('points_ledger').select('amount').eq('user_id',me.id);
+ return (data||[]).reduce((s,r)=>s+r.amount,0);
+}
+async function sha256Hex(buf){
+ const digest=await crypto.subtle.digest('SHA-256',buf);
+ return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function verifyReceipt(file){
+ const arrBuf=await file.arrayBuffer();
+ const hash=await sha256Hex(arrBuf);
+ // 중복(이미 인증한 사진) 체크
+ const {data:dupe}=await sb.from('receipt_hashes').select('hash').eq('hash',hash).maybeSingle();
+ if(dupe) throw new Error('이미 인증한 영수증이에요');
+ // 오늘 인증 횟수 확인(최대 3장/일)
+ const todayStart=new Date(); todayStart.setHours(0,0,0,0);
+ const {data:todayList}=await sb.from('points_ledger').select('id').eq('user_id',me.id).eq('reason','영수증 인증').gte('created_at',todayStart.toISOString());
+ if((todayList||[]).length>=3) throw new Error('오늘은 이미 3장을 인증하셨어요. 내일 다시 시도해주세요!');
+ // base64 변환(자동 압축)
+ const shrunk=await shrinkImage(file);
+ const b64=await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(shrunk); });
+ const result=await askVision(
+  '이 사진이 실제 마트·식당·카페 등에서 발급된 영수증(종이 또는 모바일)처럼 보이는지 판단해줘. '+
+  '음식·식료품과 무관하거나, 영수증이 아니거나, 오래되어 보이거나, 조작된 것처럼 보이면 거부해줘. '+
+  'JSON만, 백틱 금지: {"is_valid":true/false,"store":"가게이름 또는 빈문자열","reason":"짧은 이유"}',
+  b64, shrunk.type||'image/jpeg', 300
+ );
+ if(!result.is_valid) throw new Error(result.reason||'영수증으로 확인되지 않았어요');
+ await sb.from('receipt_hashes').insert({hash,user_id:me.id});
+ await sb.from('points_ledger').insert({user_id:me.id,amount:20,reason:'영수증 인증',ref_id:hash.slice(0,16)});
+ return result;
+}
+
 
 function analyze(){
  const w=[],rc=D.history.slice(-9);
@@ -1051,6 +1121,32 @@ function renderTierProgress(){
 }
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
+/* ── 포인트 UI ── */
+async function renderPoints(){
+ const el=$('#points-total'); if(!el||!me)return;
+ el.textContent=await fetchMyPoints();
+}
+$('#receipt-btn').onclick=()=>{
+ if(!me){toast('로그인이 필요해요');go('login');return;}
+ $('#receipt-input').click();
+};
+$('#receipt-input').onchange=async e=>{
+ const file=e.target.files[0]; e.target.value='';
+ if(!file)return;
+ const btn=$('#receipt-btn');
+ btn.disabled=true; btn.textContent='영수증 확인 중...';
+ try{
+  const result=await verifyReceipt(file);
+  toast('영수증 인증 완료! +20P 🎉'+(result.store?' ('+result.store+')':''));
+  if(window.gaEvent)gaEvent('receipt_verified',{});
+  renderPoints();
+ }catch(err){
+  toast(String(err.message||err).slice(0,80));
+ }finally{
+  btn.disabled=false; btn.textContent='🧾 영수증 인증하고 20P 받기';
+ }
+};
+
 async function ensureProfile(){
  if(!me||!sb) return;
  const {data}=await sb.from('profiles').select('nickname').eq('id',me.id).maybeSingle();
@@ -1367,7 +1463,10 @@ $('#feed-list').onclick=async e=>{
   if(!me){toast('추천하려면 로그인이 필요해요');return go('login');}
   const id=Number(like.dataset.like);
   if(myLikes.has(id)){await sb.from('likes').delete().eq('recipe_id',id).eq('user_id',me.id);myLikes.delete(id);}
-  else{await sb.from('likes').insert({recipe_id:id,user_id:me.id});myLikes.add(id);toast('추천했어요 ♥');if(window.gaEvent)gaEvent('recipe_like',{recipe_id:id});}
+  else{
+   await sb.from('likes').insert({recipe_id:id,user_id:me.id});myLikes.add(id);toast('추천했어요 ♥');if(window.gaEvent)gaEvent('recipe_like',{recipe_id:id});
+   awardLikePoint(id).catch(()=>{});
+  }
   loadFeed();
  }
  if(del){
