@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.todaymeal.app",
+      "sha256_cert_fingerprints": [
+        "9C:D0:C1:4B:71:BB:F3:7E:03:BC:54:95:DA:48:DA:54:4C:99:45:BE:BE:85:34:A6:51:42:A9:8B:53:66:3D:3E"
+      ]
+    }
+  }
+]
