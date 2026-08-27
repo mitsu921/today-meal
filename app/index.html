@@ -88,6 +88,8 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 #family-meal-app .mtask button.done{background:#d84d18;color:#fff;border-color:#d84d18}
 #family-meal-app .mtask button:disabled{opacity:.55}
 .nav span{display:inline-block;border-radius:12px;padding:2px 9px;margin-bottom:2px;transition:.15s;font-size:20px;line-height:1.3}
+.ico{width:1.05em;height:1.05em;vertical-align:-0.18em;object-fit:contain}
+.nav span img.ico{width:22px;height:22px;vertical-align:middle}
 #family-meal-app .wheel-outer{position:relative;width:240px;height:240px;margin:18px auto 4px}
 #family-meal-app .wheel-pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:22px;color:#e8460f;z-index:5;text-shadow:0 2px 3px rgba(0,0,0,.2)}
 #family-meal-app .wheel{width:240px;height:240px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(216,77,24,.3),0 0 0 6px #fff,0 0 0 8px #f1e5dc;transition:transform 3.2s cubic-bezier(.17,.67,.13,1);display:flex;align-items:center;justify-content:center}
@@ -293,7 +295,7 @@ details.fold.sub .body p{font-size:13px!important}
     <div id="warn-slot"></div>
 
     <div style="display:flex;gap:8px;padding:12px 16px 0">
-      <button data-go="fridge" style="flex:none;background:#fff0e7;color:#d84d18;border:0;border-radius:10px;padding:13px 12px;font-size:12px;font-weight:700;white-space:nowrap">▣ <span id="pantry-count-home">0</span>개</button>
+      <button data-go="fridge" style="flex:none;background:#fff0e7;color:#d84d18;border:0;border-radius:10px;padding:13px 12px;font-size:12px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:4px"><img class="ico" src="/icons/fridge.png"> <span id="pantry-count-home">0</span>개</button>
       <button id="pref-summary" class="pref-summary" style="margin:0;flex:1;min-width:0">
         <span id="pref-summary-text">아이와 함께 · 점심밥</span><i>변경 ›</i>
       </button>
@@ -330,9 +332,9 @@ details.fold.sub .body p{font-size:13px!important}
         </div>
         <div class="mk-missionList">
           <h4>추가 미션</h4>
-          <div class="mk-task"><span>📅</span><span class="grow">출석체크 하기</span><b>+5P</b><button id="mission-checkin">하기</button></div>
-          <div class="mk-task"><span>🔖</span><span class="grow">레시피 저장하기</span><b>+10P</b><button id="mission-save-hint" data-go="home">하기</button></div>
-          <div class="mk-task"><span>📷</span><span class="grow">오늘 밥 인증하기</span><b>+30P</b><button id="mission-photo">하기</button>
+          <div class="mk-task"><span><img class="ico" src="/icons/calendar.png"></span><span class="grow">출석체크 하기</span><b>+5P</b><button id="mission-checkin">하기</button></div>
+          <div class="mk-task"><span><img class="ico" src="/icons/pencil.png"></span><span class="grow">레시피 저장하기</span><b>+10P</b><button id="mission-save-hint" data-go="home">하기</button></div>
+          <div class="mk-task"><span><img class="ico" src="/icons/camera.png"></span><span class="grow">오늘 밥 인증하기</span><b>+30P</b><button id="mission-photo">하기</button>
             <input id="meal-photo-input" type="file" accept="image/*" capture="environment" style="display:none">
           </div>
         </div>
@@ -638,12 +640,12 @@ details.fold.sub .body p{font-size:13px!important}
   </div>
 
   <nav class="tabbar">
-    <button class="nav on" data-go="home"><span>⌂</span>홈</button>
-    <button class="nav" data-go="explore"><span>◎</span>탐색</button>
-    <button class="nav" data-go="fridge"><span>▥</span>냉장고</button>
-    <button class="nav" data-go="upload"><span>✎</span>올리기</button>
-    <button class="nav" data-go="shop"><span>▱</span>장보기<b id="shop-badge"></b></button>
-    <button class="nav" data-go="kitchen"><span>◉</span>내 주방</button>
+    <button class="nav on" data-go="home"><span><img class="ico" src="/icons/home.png"></span>홈</button>
+    <button class="nav" data-go="explore"><span><img class="ico" src="/icons/search.png"></span>탐색</button>
+    <button class="nav" data-go="fridge"><span><img class="ico" src="/icons/fridge.png"></span>냉장고</button>
+    <button class="nav" data-go="upload"><span><img class="ico" src="/icons/pencil.png"></span>올리기</button>
+    <button class="nav" data-go="shop"><span><img class="ico" src="/icons/cart.png"></span>장보기<b id="shop-badge"></b></button>
+    <button class="nav" data-go="kitchen"><span><img class="ico" src="/icons/chefhat.png"></span>내 주방</button>
   </nav>
 
   <div id="toast" class="toast"></div>
@@ -1712,8 +1714,8 @@ function demoCardHtml(d){
  return '<article class="mk-foodCard">'+
   '<div class="mk-photo" style="background-image:url(\''+d.img+'\')">'+(d.tag?'<span class="mk-foodtag">'+d.tag+'</span>':'')+'</div>'+
   '<div class="mk-foodBody"><div class="mk-foodName">'+esc(d.title)+'</div>'+
-  '<div class="mk-foodmeta"><span>'+esc(d.meta)+'</span><span>♡ '+d.like+'</span></div>'+
-  '<div class="mk-by">👩🏻 by '+esc(d.name)+' · 예시</div></div></article>';
+  '<div class="mk-foodmeta"><span>'+esc(d.meta)+'</span><span><img class="ico" src="/icons/heart-outline.png"> '+d.like+'</span></div>'+
+  '<div class="mk-by"><img class="ico" src="/icons/person.png"> by '+esc(d.name)+' · 예시</div></div></article>';
 }
 function renderHomeFeed(){
  const el=$('#home-feed'); if(!el)return;
@@ -1721,8 +1723,8 @@ function renderHomeFeed(){
  let html=top.map((r,i)=>'<article class="mk-foodCard" data-goexp="1">'+
   '<div class="mk-photo" style="'+(r.image_url?'background-image:url('+esc(r.image_url)+')':'background:#fff0e7;display:flex;align-items:center;justify-content:center;font-size:30px')+'">'+(r.image_url?'':esc(r.emoji||'🍽️'))+(i===0?'<span class="mk-foodtag">BEST</span>':'')+'</div>'+
   '<div class="mk-foodBody"><div class="mk-foodName">'+esc(r.title)+'</div>'+
-  '<div class="mk-foodmeta"><span>'+(r.kcal?r.kcal+'kcal':'')+'</span><span>♡ '+likeCount(r)+'</span></div>'+
-  '<div class="mk-by">👩🏻 by '+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+'</div></div></article>').join('');
+  '<div class="mk-foodmeta"><span>'+(r.kcal?r.kcal+'kcal':'')+'</span><span><img class="ico" src="/icons/heart-outline.png"> '+likeCount(r)+'</span></div>'+
+  '<div class="mk-by"><img class="ico" src="/icons/person.png"> by '+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+'</div></div></article>').join('');
  if(top.length<4){ html+=DEMO_CARDS.slice(0,4-top.length).map(demoCardHtml).join(''); }
  el.innerHTML=html;
  el.querySelectorAll('[data-goexp]').forEach(c=>c.onclick=()=>go('explore'));
