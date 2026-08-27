@@ -305,20 +305,20 @@ details.fold.sub .body p{font-size:13px!important}
     <div id="result-extra" style="padding:0 16px"></div>
 
     <div class="mk-quick">
-      <button id="eatout-link"><div>🍽️</div><span>외식할래요</span></button>
+      <button id="eatout-link"><div><img class="ico" style="width:22px;height:22px" src="/icons/dish_stew.png"></div><span>외식할래요</span></button>
       <button id="weekplan-link"><div>📅</div><span>식단표 만들기</span></button>
-      <button data-go="fridge"><div>🧊</div><span>냉장고 털기</span></button>
+      <button data-go="fridge"><div><img class="ico" style="width:22px;height:22px" src="/icons/fridge.png"></div><span>냉장고 털기</span></button>
     </div>
 
     <section class="mk-section">
       <div class="mk-sectionHead"><div>이번 달 밥테크 현황</div></div>
       <div class="mk-stats3">
-        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji">🐷</div><div><label>절약한 식비</label><strong>187,400원</strong><p>배달 대신 집밥으로!</p></div></div></div>
-        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji">🧺</div><div><label>받은 혜택</label><strong>12,400원</strong><p>포인트·쿠폰 합계</p></div></div></div>
-        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji">🗑️</div><div><label>버리지 않은 식재료</label><strong>7개</strong><p>약 37,500원 아꼈어요!</p></div></div></div>
+        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji"><img class="ico" style="width:26px;height:26px" src="/icons/piggybank.png"></div><div><label>절약한 식비</label><strong>187,400원</strong><p>배달 대신 집밥으로!</p></div></div></div>
+        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji"><img class="ico" style="width:26px;height:26px" src="/icons/basket.png"></div><div><label>받은 혜택</label><strong>12,400원</strong><p>포인트·쿠폰 합계</p></div></div></div>
+        <div class="mk-stat"><div class="mk-statRow"><div class="mk-statEmoji"><img class="ico" style="width:26px;height:26px" src="/icons/trash.png"></div><div><label>버리지 않은 식재료</label><strong>7개</strong><p>약 37,500원 아꼈어요!</p></div></div></div>
       </div>
       <div class="mk-progress"><i style="width:30%"></i></div>
-      <div class="mk-streak"><span id="streak-text">🔥 집밥 계산 중...</span></div>
+      <div class="mk-streak"><span id="streak-text"><img class="ico" src="/icons/fire.png"> 집밥 계산 중...</span></div>
     </section>
 
     <section class="mk-section mk-mission">
@@ -496,7 +496,7 @@ details.fold.sub .body p{font-size:13px!important}
 
   <!-- ══ 냉장고 ══ -->
   <section class="view" data-view="fridge">
-    <header class="head"><h1>냉장고 🧊</h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
+    <header class="head"><h1>냉장고 <img class="ico" style="width:26px;height:26px" src="/icons/fridge.png"></h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
     <div class="section">
       <h2>자주 쓰는 재료 — 눌러서 담기</h2>
       <div class="chips" id="quick-chips" style="flex-wrap:wrap"></div>
@@ -831,7 +831,7 @@ function heroResult(){
    '<div class="mk-rank"><span>'+(res.emoji||"🍽️")+'</span>'+person+' 맞춤 추천</div>'+
    '<strong class="mk-dishTitle">'+esc(res.name)+'</strong>'+
    '<div class="mk-taste">'+esc(res.why||"")+'</div>'+
-   '<div class="mk-chips">'+(res.time?'<div class="mk-chip">⏱ '+esc(res.time)+'</div>':'')+'<div class="mk-chip">🔥 '+res.kcal+'kcal</div><div class="mk-chip">🧊 '+esc(matchNote)+'</div></div>'+
+   '<div class="mk-chips">'+(res.time?'<div class="mk-chip"><img class="ico" src="/icons/cat-timer.png"> '+esc(res.time)+'</div>':'')+'<div class="mk-chip"><img class="ico" src="/icons/fire.png"> '+res.kcal+'kcal</div><div class="mk-chip"><img class="ico" src="/icons/fridge.png"> '+esc(matchNote)+'</div></div>'+
    (res.urgent?'<div class="mk-chip" style="margin-top:8px;background:#fff0e7;color:#d84d18">⏰ '+esc(res.urgent)+'</div>':'')+
    '<button class="mk-primary" id="eat-btn-main">'+(eaten?'✓ 오늘 이거 먹었어요':'오늘 이거 먹을래! <b>+15P</b>')+'</button>'+
    '<div class="hero-actions" style="margin-top:10px"><button id="btn-cook">🍳 레시피 보기</button><button id="btn-shop">🛒 장보기에 담기</button><button class="alt" id="btn-again">↻ 다른 메뉴</button><button class="alt" id="btn-scrap">'+(scrapped?"♥":"♡")+'</button></div>'+
@@ -1063,7 +1063,7 @@ function renderDetail(){
  $('#detail-body').innerHTML=
   '<div class="detail-cover">'+(res.emoji||"🍳")+'</div>'+
   '<h1 class="detail-title">'+res.name+'</h1>'+
-  '<p class="stats">⏱ '+recipe.total_min+'분　·　'+recipe.level+'　·　🍽 2인분</p>'+
+  '<p class="stats"><img class="ico" src="/icons/cat-timer.png"> '+recipe.total_min+'분　·　'+recipe.level+'　·　<img class="ico" src="/icons/forkknife.png"> 2인분</p>'+
   '<h3 style="margin-top:16px">재료</h3>'+
   recipe.ingredients.map(g=>{const have=D.pantry.some(p=>g.name.includes(p.name)||p.name.includes(g.name));
    return '<div class="ingredient">'+(have?'<span class="have">있음</span>':"")+g.name+' <span>'+(g.amt||"")+'</span></div>'}).join("")+
@@ -1323,7 +1323,7 @@ function renderStreak(){
   if(days.has(key)){ streak++; d.setDate(d.getDate()-1); }
   else break;
  }
- el.textContent = streak>0 ? '🔥 집밥 '+streak+'일 연속! 🔥👏' : '오늘부터 집밥 기록을 시작해보세요!';
+ el.innerHTML = streak>0 ? '<img class="ico" src="/icons/fire.png"> 집밥 '+streak+'일 연속! <img class="ico" src="/icons/confetti.png">' : '오늘부터 집밥 기록을 시작해보세요!';
 }
 async function renderPoints(){
  if(!me)return;
@@ -1693,7 +1693,8 @@ function renderFeed(){
    nutriHtml(r)+
    '<p class="muted post-body" id="body-'+r.id+'" style="display:none;white-space:pre-wrap;margin-top:8px;font-size:13px">'+esc(r.body)+'</p>'+
    '<div class="line" style="margin-top:7px"><span><button class="textbtn" data-open="'+r.id+'">자세히 보기</button>'+
-   ' &nbsp; <button class="textbtn" data-cmt="'+r.id+'">💬 댓글 '+cmtCount(r)+'</button></span>'+
+   ' &nbsp; <button class="textbtn" data-cmt="'+r.id+'">💬 댓글 '+cmtCount(r)+'</button>'+
+   ' &nbsp; <a class="textbtn" href="/r/'+r.id+'" target="_blank" rel="noopener">🔗 공유</a></span>'+
    (me&&me.id===r.user_id?'<button class="textbtn warnc" data-del="'+r.id+'">삭제</button>':'<button class="textbtn warnc" data-report="recipe:'+r.id+'" style="opacity:.75">🚨 신고</button>')+
    '</div>'+
    '<div id="cmt-'+r.id+'" style="display:none;margin-top:9px;border-top:1px dashed #e2e8e1;padding-top:9px">'+
