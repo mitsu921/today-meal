@@ -42,7 +42,7 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 <section class="hero" id="today">
   <div>
     <div class="heroBox">
-      <img class="heroPhoto" src="/home-hero.jpg">
+      <img class="heroPhoto" id="feat-photo" src="/home-hero.jpg">
       <div class="heroText">
         <div class="eyebrow"><img class="ico" src="/icons/dish_stew.png"> 오늘의 인기 메뉴</div>
         <h1>오늘 저녁은<br>이렇게 골라보세요 😊</h1>
@@ -176,6 +176,8 @@ function renderFeatured(){
  $('#feat-dish').textContent=top.title;
  $('#feat-sub').textContent=likeCount(top)+'명 추천 · 지금 가장 인기있는 레시피예요';
  $('#feat-stats').innerHTML='<span class="pill"><img class="ico" src="/icons/heart-fill.png"> '+likeCount(top)+'</span><span class="pill"><img class="ico" src="/icons/comment.png"> '+cmtCount(top)+'</span>';
+ const photo=$('#feat-photo');
+ if(photo&&top.image_url) photo.src=top.image_url;
 }
 
 /* ── 인증 ── */
