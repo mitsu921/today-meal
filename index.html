@@ -18,6 +18,24 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 <script>if(!window.supabase)document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>')</script>
 <style>
 :root{--o:#ff6900;--ink:#191512;--muted:#756b63;--line:#eee6de;--cream:#fff8f0;--soft:#fff1e4}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Arial,"Noto Sans KR",sans-serif}button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}.ico{width:1.1em;height:1.1em;vertical-align:-0.18em;object-fit:contain}.wrap{max-width:1180px;margin:auto;padding:0 26px}.top{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:46px}.logo{font-size:28px;font-weight:900;color:var(--o);letter-spacing:-1.5px}.nav{display:flex;gap:30px;font-size:15px;font-weight:800}.nav a:hover{color:var(--o)}.right{margin-left:auto;display:flex;gap:10px;align-items:center}.point,.cert{border-radius:11px;padding:11px 16px;font-weight:900;border:0}.point{background:#fff;border:1px solid #ffd8bd;color:var(--o)}.cert{background:var(--o);color:#fff}
+.write-view{padding-top:28px;padding-bottom:60px}
+.write-back{background:none;border:0;color:var(--o);font-weight:800;font-size:14px;margin-bottom:20px;padding:0}
+.write-layout{display:grid;grid-template-columns:1fr 320px;gap:28px}
+.write-title{width:100%;border:0;border-bottom:2px solid var(--line);font-size:32px;font-weight:900;padding:10px 0;margin-bottom:24px;letter-spacing:-1px;font-family:inherit}
+.write-title:focus{outline:0;border-color:var(--o)}
+.write-target-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.write-label{font-size:13px;font-weight:800;color:var(--muted)}
+.w-chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:800;font-size:13.5px;color:var(--muted)}
+.w-chip.active{background:var(--o);border-color:var(--o);color:#fff}
+.write-body{width:100%;min-height:480px;border:1px solid var(--line);border-radius:14px;padding:22px;font-size:16px;line-height:1.8;font-family:inherit;resize:vertical}
+.write-body:focus{outline:0;border-color:var(--o)}
+.write-side{position:sticky;top:20px;align-self:start}
+.write-photo-box{width:100%;aspect-ratio:1;border:2px dashed var(--line);border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;overflow:hidden;background:var(--cream);margin-bottom:12px}
+.write-photo-box img{width:100%;height:100%;object-fit:cover}
+.write-photo-box span{color:var(--muted);font-size:13px;font-weight:700;line-height:1.6}
+.write-tip{font-size:12.5px;color:var(--muted);background:var(--soft);border-radius:10px;padding:12px;margin-bottom:16px;line-height:1.6}
+.write-submit{width:100%;background:var(--o);color:#fff;border:0;border-radius:12px;padding:16px;font-weight:900;font-size:16px;box-shadow:0 8px 18px #ff690033}
+@media(max-width:800px){.write-layout{grid-template-columns:1fr}.write-side{position:static}.write-title{font-size:24px}.write-body{min-height:300px}}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;margin-top:28px}.heroBox{height:450px;border:1px solid #ffd4b5;border-radius:23px;overflow:hidden;position:relative;background:#fff5ea}.heroPhoto{position:absolute;right:0;top:0;width:57%;height:100%;object-fit:cover}.heroText{position:relative;z-index:2;width:56%;height:100%;padding:42px 28px;background:linear-gradient(90deg,#fff8f0 0%,#fff8f0e8 70%,transparent)}.eyebrow{display:inline-block;color:var(--o);font-size:14px;font-weight:900;background:#fff0e3;border-radius:999px;padding:7px 11px}.hero h1{font-size:34px;line-height:1.25;letter-spacing:-2px;margin:18px 0 12px}.dish{font-size:27px;font-weight:900;margin-bottom:10px}.taste{color:#514941}.stats{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.pill{background:#fff;border:1px solid #e6d8cb;border-radius:999px;padding:8px 11px;font-size:13px;font-weight:800}.cta{background:var(--o);color:#fff;border:0;border-radius:12px;padding:15px 23px;font-weight:900;font-size:18px;box-shadow:0 8px 18px #ff690033;margin-top:22px;display:inline-block}.side{border:1px solid var(--line);border-radius:20px;padding:20px;background:#fff}.side h2{font-size:19px;margin:0 0 12px}.save{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}.save:last-of-type{border:0}.emoji{font-size:29px}.save b{display:block;font-size:20px;margin:3px 0}.save small{color:var(--muted)}.quick{display:flex;gap:10px;margin-top:14px}.quick button{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 15px;font-weight:800}.section{margin-top:28px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.head h2{font-size:22px;margin:0;letter-spacing:-1px}.more{font-size:13px;color:#777;background:none;border:0;cursor:pointer;font-weight:700}.mission{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:#fff7ec;border:1px solid #f5ddc5;border-radius:20px;padding:17px}.challenge{background:#fff;border-radius:15px;padding:22px;min-height:190px;position:relative;overflow:hidden}.challenge h3{font-size:22px;margin:0 0 9px}.challenge p{color:var(--muted);line-height:1.5}.challenge .art{position:absolute;right:18px;bottom:8px;font-size:65px}.reward{display:inline-block;margin-top:18px;background:#fff3e5;border-radius:999px;padding:8px 12px;color:var(--o);font-weight:900}.tasks{padding:2px 0}.task{display:flex;align-items:center;gap:9px;background:#fff;border-radius:12px;padding:12px;margin-bottom:8px;border:1px solid #f0e3d7}.task span:nth-child(2){flex:1}.task b{color:var(--o)}.task button{border:1px solid #ffb47e;background:#fff;color:var(--o);border-radius:8px;padding:6px 11px;font-weight:900}.task button.done{background:var(--o);color:#fff;border-color:var(--o)}.task button:disabled{opacity:.6}
 .community{margin-top:30px}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;cursor:pointer;text-align:left}.card img,.card .ph{width:100%;height:155px;object-fit:cover;display:block;background:#fff1e4;font-size:34px;align-items:center;justify-content:center}.card .ph{display:flex}.cbody{padding:10px}.tag{display:inline-block;background:var(--o);color:#fff;border-radius:6px;padding:4px 7px;font-size:10px;font-weight:900}.name{font-weight:900;margin:8px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:12px;color:#777;display:flex;justify-content:space-between}.meta b{color:var(--o)}
 .write{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:20px}.chips{display:flex;gap:10px;flex-wrap:wrap}.chip{flex:1;border:0;background:#fff;border-radius:13px;padding:14px 5px;font-weight:800;min-width:80px}.chip span{display:block;font-size:25px;margin-bottom:5px}.writeBox{text-align:center}.writeBox button{width:100%;background:var(--o);color:#fff;border:0;border-radius:10px;padding:12px;font-weight:900}
@@ -38,7 +56,7 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
   </div>
 </div></header>
 
-<main class="wrap">
+<main class="wrap" id="home-view">
 <section class="hero" id="today">
   <div>
     <div class="heroBox">
@@ -99,6 +117,41 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 <div class="shop"><div class="shopIcon"><img class="ico" style="width:34px;height:34px" src="/icons/gift.png"></div><div><b>포인트로 다양한 혜택을 받아보세요!</b><small>준비 중이에요 — 곧 상품권·쿠폰으로 교환할 수 있게 열릴 예정입니다.</small></div><button onclick="toast('포인트몰은 곧 열립니다')">›</button></div>
 </main>
 
+<main class="wrap write-view" id="write-view" style="display:none">
+  <button class="write-back" id="write-back-btn">‹ 홈으로 돌아가기</button>
+  <div class="write-layout">
+    <div class="write-main">
+      <input class="write-title" id="w-title" placeholder="레시피 제목을 적어주세요 (예: 제육볶음)">
+      <div class="write-target-row">
+        <span class="write-label">누구에게 좋은가요?</span>
+        <div id="w-target">
+          <button class="w-chip active" data-t="온 가족">온 가족</button>
+          <button class="w-chip" data-t="아이">아이</button>
+          <button class="w-chip" data-t="아이 간식">아이 간식</button>
+          <button class="w-chip" data-t="다이어트">다이어트</button>
+          <button class="w-chip" data-t="남편">남편</button>
+        </div>
+      </div>
+      <textarea class="write-body" id="w-body" placeholder="재료와 만드는 법을 자유롭게 적어주세요.
+
+재료: 돼지고기 300g, 양파 1개, 대파 1대 ...
+
+만드는 법:
+1) ...
+2) ..."></textarea>
+    </div>
+    <aside class="write-side">
+      <div class="write-photo-box" id="w-photo-box">
+        <img id="w-photo-preview" style="display:none">
+        <span id="w-photo-hint"><img class="ico" style="width:34px;height:34px" src="/icons/camera.png"><br>대표 사진 추가하기</span>
+      </div>
+      <input id="w-photo" type="file" accept="image/*" style="display:none">
+      <div class="write-tip">📸 사진이 있으면 커뮤니티 목록에서 훨씬 눈에 잘 띄어요!</div>
+      <button class="write-submit" id="w-submit">등록하고 +50P 받기</button>
+    </aside>
+  </div>
+</main>
+
 <footer><div class="wrap foot"><b>오늘의식사 APP 다운받고 더 많은 혜택 받기!</b><div class="apps"><a href="/app/"><span class="app"><img class="ico" style="filter:brightness(0) invert(1)" src="/icons/home.png"> 앱으로 열기</span></a></div></div></footer>
 
 <div class="c-modal" id="c-login-modal"><div class="c-sheet">
@@ -111,22 +164,6 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
   <input class="c-input" id="c-f-pw" type="password" placeholder="비밀번호(6자 이상)" style="width:100%;margin-bottom:12px">
   <button class="cert" id="c-auth-go" style="width:100%;padding:12px">로그인</button>
   <p id="c-auth-msg" style="font-size:12.5px;color:#c0654a;margin-top:8px"></p>
-</div></div>
-
-<div class="c-modal" id="c-write-modal"><div class="c-sheet" style="max-width:520px">
-  <button class="c-close" id="c-write-close">✕</button>
-  <h3 style="margin:4px 0 14px">레시피 올리기 <span style="font-size:12px;color:var(--o)">+50P</span></h3>
-  <label style="display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:6px">레시피 이름</label>
-  <input class="c-input" id="w-title" placeholder="예: 제육볶음" style="width:100%;margin-bottom:12px">
-  <label style="display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:6px">누구에게 좋은가요?</label>
-  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="w-target">
-    <button class="c-chip active" data-t="온 가족">온 가족</button><button class="c-chip" data-t="아이">아이</button><button class="c-chip" data-t="아이 간식">아이 간식</button><button class="c-chip" data-t="다이어트">다이어트</button><button class="c-chip" data-t="남편">남편</button>
-  </div>
-  <label style="display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:6px">재료와 만드는 법</label>
-  <textarea class="c-input" id="w-body" style="width:100%;height:150px;margin-bottom:10px" placeholder="재료: ...&#10;만드는 법:&#10;1) ..."></textarea>
-  <input id="w-photo" type="file" accept="image/*" style="display:none">
-  <button class="c-chip" id="w-photo-btn" type="button" style="width:100%;margin-bottom:12px">📷 사진 추가하기</button>
-  <button class="cert" id="w-submit" style="width:100%;padding:13px;font-size:15px">등록하기</button>
 </div></div>
 
 <div class="toast" id="toast"></div>
@@ -329,19 +366,38 @@ $('#meal-photo-input').onchange=async e=>{
  }
 };
 
-/* ── 글쓰기 ── */
-$('#write-open-btn').onclick=()=>{ if(!me){$('#c-login-modal').classList.add('open');return;} $('#c-write-modal').classList.add('open'); };
-$('#c-write-close').onclick=()=>$('#c-write-modal').classList.remove('open');
-document.querySelectorAll('#w-target .c-chip').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#w-target .c-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); wTarget=c.dataset.t; });
-$('#w-photo-btn').onclick=()=>$('#w-photo').click();
+/* ── 글쓰기 (전체화면 전환) ── */
+function openWriteView(){
+ if(!me){$('#c-login-modal').classList.add('open');return;}
+ $('#home-view').style.display='none';
+ $('#write-view').style.display='block';
+ window.scrollTo(0,0);
+ if(window.gaEvent)gaEvent('write_open',{surface:'homepage'});
+}
+function closeWriteView(){
+ $('#write-view').style.display='none';
+ $('#home-view').style.display='block';
+ window.scrollTo(0,0);
+}
+$('#write-open-btn').onclick=openWriteView;
+$('#write-back-btn').onclick=()=>{
+ if(($('#w-title').value.trim()||$('#w-body').value.trim())&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
+ closeWriteView();
+};
+document.querySelectorAll('#w-target .w-chip').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#w-target .w-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); wTarget=c.dataset.t; });
+$('#w-photo-box').onclick=()=>$('#w-photo').click();
 $('#w-photo').onchange=async e=>{
  let file=e.target.files[0]||null;
- if(file){$('#w-photo-btn').textContent='사진 최적화 중...';file=await shrinkImage(file);}
+ if(!file)return;
+ $('#w-photo-hint').innerHTML='사진 최적화 중...';
+ file=await shrinkImage(file);
  wFile=file;
- $('#w-photo-btn').textContent=wFile?'✓ 준비됨 ('+Math.round(wFile.size/1024)+'KB)':'📷 사진 추가하기';
+ const url=URL.createObjectURL(file);
+ $('#w-photo-preview').src=url; $('#w-photo-preview').style.display='block';
+ $('#w-photo-hint').style.display='none';
 };
 $('#w-submit').onclick=async()=>{
- if(!me){toast('로그인이 필요해요');$('#c-write-modal').classList.remove('open');$('#c-login-modal').classList.add('open');return;}
+ if(!me){toast('로그인이 필요해요');closeWriteView();$('#c-login-modal').classList.add('open');return;}
  const title=$('#w-title').value.trim(), body=$('#w-body').value.trim();
  if(!title)return toast('레시피 이름을 적어주세요');
  if(!body)return toast('재료와 만드는 법을 적어주세요');
@@ -356,12 +412,13 @@ $('#w-submit').onclick=async()=>{
   const {error}=await sb.from('recipes').insert({user_id:me.id,title,body,target:wTarget,image_url});
   if(error){toast('등록 실패: '+error.message);return;}
   await sb.from('points_ledger').insert({user_id:me.id,amount:50,reason:'레시피 작성',ref_id:title});
-  $('#w-title').value='';$('#w-body').value='';wFile=null;$('#w-photo-btn').textContent='📷 사진 추가하기';
-  $('#c-write-modal').classList.remove('open');
+  $('#w-title').value='';$('#w-body').value='';wFile=null;
+  $('#w-photo-preview').style.display='none'; $('#w-photo-hint').style.display='block'; $('#w-photo-hint').innerHTML='<img class="ico" style="width:34px;height:34px" src="/icons/camera.png"><br>대표 사진 추가하기';
+  closeWriteView();
   toast('레시피를 올렸어요! +50P 🎉');
   renderPoints(); loadFeed();
  }catch(e){ toast('오류: '+String(e).slice(0,100)); }
- finally{ btn.disabled=false; btn.textContent='등록하기'; }
+ finally{ btn.disabled=false; btn.textContent='등록하고 +50P 받기'; }
 };
 
 try{
