@@ -233,7 +233,8 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .wheel-outer2{position:relative;width:270px;height:270px;margin:18px auto 6px}
 #family-meal-app .wheel-pointer2{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:26px;z-index:5;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2))}
 #family-meal-app .wheel2{width:270px;height:270px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(216,77,24,.18),0 0 0 7px #fff,0 0 0 9px #f1e5dc;transition:transform 3.2s cubic-bezier(.17,.67,.13,1)}
-#family-meal-app .wheel2-seg-label{position:absolute;top:50%;left:50%;width:118px;text-align:right;padding-right:16px;font-size:11.5px;font-weight:800;color:#3a332c;transform-origin:0 0}
+#family-meal-app .wheel2-seg-label{position:absolute;top:50%;left:50%;width:118px;text-align:right;padding-right:16px;transform-origin:0 0}
+#family-meal-app .wheel2-seg-inner{display:inline-block;font-size:11.5px;font-weight:800;color:#3a332c}
 #family-meal-app .wheel2-seg-label span{display:block;font-size:26px;margin-bottom:2px}
 #family-meal-app .wheel-center-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:118px;height:118px;border-radius:50%;background:#fff;border:5px solid #ffd9c2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 6px 18px rgba(0,0,0,.14);z-index:6}
 #family-meal-app .wheel-center-btn:active{transform:translate(-50%,-50%) scale(.95)}
@@ -241,8 +242,8 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .wheel-center-btn b{font-size:13px;line-height:1.3;color:#211914}
 #family-meal-app .wheel-center-btn em{color:#f45f25;font-style:normal;font-size:15px}
 #family-meal-app .wheel-center-btn small{font-size:9.5px;color:#a99b8d;margin-top:2px}
-#family-meal-app .wheel-quickcard{display:flex;gap:8px;margin:10px 20px 0}
-#family-meal-app .qc-item{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:1px solid #f1e5dc;border-radius:12px;padding:11px 8px;font-size:12px;font-weight:700;color:#3a332c}
+#family-meal-app .wheel-quickcard{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 20px 0}
+#family-meal-app .qc-item{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:1px solid #f1e5dc;border-radius:12px;padding:12px 8px;font-size:12.5px;font-weight:700;color:#3a332c}
 #family-meal-app .wheel-main-cta{width:calc(100% - 40px);margin:14px 20px 4px;background:linear-gradient(110deg,#ff651f,#f55116);color:#fff;border:0;border-radius:15px;padding:16px;font-size:16px;font-weight:900;box-shadow:0 8px 18px rgba(255,91,25,.25);display:flex;align-items:center;justify-content:center;gap:8px}
 #family-meal-app .mk-points{display:flex;align-items:center;gap:7px;background:white;border:1px solid #f3dec7;border-radius:16px;padding:9px 12px;box-shadow:var(--shadow);font-weight:850;color:var(--orange);font-size:14px;flex:none}
 #family-meal-app .mk-coin{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#ffb000;color:#fff;border:2px solid #ffd36d;font-weight:900;font-size:13px}
@@ -338,7 +339,13 @@ details.fold.sub .body p{font-size:13px!important}
         <img class="ico" src="/icons/cat-family.png"><span id="pref-summary-text">아이와 함께</span>
       </button>
       <button class="qc-item" data-go="fridge">
-        <img class="ico" src="/icons/fridge.png"><span>냉장고 <span id="pantry-count-home">0</span>개 반영</span>
+        <img class="ico" src="/icons/fridge.png"><span>냉장고 <span id="pantry-count-home">0</span>개</span>
+      </button>
+      <button class="qc-item" id="eatout-link">
+        <img class="ico" src="/icons/dish_stew.png"><span>외식할래요</span>
+      </button>
+      <button class="qc-item" id="weekplan-link">
+        <img class="ico" src="/icons/calendar.png"><span>식단표</span>
       </button>
     </div>
 
@@ -348,12 +355,6 @@ details.fold.sub .body p{font-size:13px!important}
 
     <section class="mk-hero" id="hero"></section>
     <div id="result-extra" style="padding:0 16px"></div>
-
-    <div class="mk-quick">
-      <button id="eatout-link"><div><img class="ico" style="width:22px;height:22px" src="/icons/dish_stew.png"></div><span>외식할래요</span></button>
-      <button id="weekplan-link"><div>📅</div><span>식단표 만들기</span></button>
-      <button data-go="fridge"><div><img class="ico" style="width:22px;height:22px" src="/icons/fridge.png"></div><span>냉장고 털기</span></button>
-    </div>
 
     <button class="bapz-summary" data-go="kitchen">
       <img class="ico" style="width:22px;height:22px" src="/icons/piggybank.png">
@@ -844,7 +845,11 @@ function buildWheel2(){
  wheel.style.background='conic-gradient('+stops+')';
  wheel.innerHTML=WHEEL2_CATS.map((c,i)=>{
   const mid=i*seg+seg/2;
-  return '<span class="wheel2-seg-label" style="transform:rotate('+(mid-90)+'deg)">'+(c.icon?'<img class="ico" style="width:26px;height:26px" src="'+c.icon+'">':'<span>❓</span>')+c.name+'</span>';
+  const placeAngle=mid-90;
+  return '<span class="wheel2-seg-label" style="transform:rotate('+placeAngle+'deg)">'+
+   '<span class="wheel2-seg-inner" style="transform:rotate('+(-placeAngle)+'deg)">'+
+   (c.icon?'<img class="ico" style="width:26px;height:26px" src="'+c.icon+'">':'<span>❓</span>')+c.name+
+   '</span></span>';
  }).join('');
 }
 buildWheel2();
