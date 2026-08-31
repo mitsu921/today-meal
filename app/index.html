@@ -233,7 +233,7 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .wheel-outer2{position:relative;width:270px;height:270px;margin:18px auto 6px}
 #family-meal-app .wheel-pointer2{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:26px;z-index:5;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2))}
 #family-meal-app .wheel2{width:270px;height:270px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(216,77,24,.18),0 0 0 7px #fff,0 0 0 9px #f1e5dc;transition:transform 3.2s cubic-bezier(.17,.67,.13,1)}
-#family-meal-app .wheel2-seg-label{position:absolute;top:50%;left:50%;width:118px;text-align:right;padding-right:16px;transform-origin:0 0}
+#family-meal-app .wheel2-seg-label{position:absolute;top:50%;left:50%;width:100px;text-align:right;padding-right:14px;transform-origin:0 0}
 #family-meal-app .wheel2-seg-inner{display:inline-flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:800;color:#3a332c;line-height:1.2}
 #family-meal-app .wheel-center-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:118px;height:118px;border-radius:50%;background:#fff;border:5px solid #ffd9c2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 6px 18px rgba(0,0,0,.14);z-index:6}
 #family-meal-app .wheel-center-btn:active{transform:translate(-50%,-50%) scale(.95)}
@@ -312,7 +312,7 @@ details.fold.sub .body p{font-size:13px!important}
     <header class="wheel-top">
       <button class="wheel-hamburger" id="quick-menu-btn">☰</button>
       <div class="wheel-brand" data-go="home">TodayMeal</div>
-      <button class="wheel-bell" data-go="kitchen">🔔<span class="mk-badge" id="points-home-num" style="position:absolute;top:-6px;right:-6px">0</span></button>
+      <button class="wheel-bell" data-go="kitchen"><img class="ico" style="width:22px;height:22px" src="/icons/bell.png"><span class="mk-badge" id="points-home-num" style="position:absolute;top:-6px;right:-6px">0</span></button>
     </header>
 
     <div class="wheel-hero-text">
@@ -324,10 +324,10 @@ details.fold.sub .body p{font-size:13px!important}
     <div id="warn-slot"></div>
 
     <div class="wheel-outer2">
-      <div class="wheel-pointer2">📍</div>
+      <div class="wheel-pointer2">▼</div>
       <div class="wheel2" id="wheel2"></div>
       <button class="wheel-center-btn" id="wheel-spin-btn">
-        <span class="wheel-dice">🎲</span>
+        <span class="wheel-dice">↻</span>
         <b>오늘 메뉴<br><em id="wheel-cat-label">골라줘!</em></b>
         <small>터치해서 돌리기</small>
       </button>
@@ -845,9 +845,9 @@ function buildWheel2(){
  wheel.innerHTML=WHEEL2_CATS.map((c,i)=>{
   const mid=i*seg+seg/2;
   const placeAngle=mid-90;
-  return '<span class="wheel2-seg-label" style="transform:rotate('+placeAngle+'deg)">'+
+  return '<span class="wheel2-seg-label" style="transform:translateY(-50%) rotate('+placeAngle+'deg)">'+
    '<span class="wheel2-seg-inner" style="transform:rotate('+(-placeAngle)+'deg)">'+
-   (c.icon?'<img class="ico" style="width:26px;height:26px" src="'+c.icon+'">':'<span style="font-size:22px">❓</span>')+c.name+
+   (c.icon?'<img class="ico" style="width:26px;height:26px" src="'+c.icon+'">':'<span style="font-size:24px;font-weight:900;color:#f45f25">?</span>')+c.name+
    '</span></span>';
  }).join('');
 }
