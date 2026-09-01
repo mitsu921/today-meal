@@ -1,1 +1,390 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fffaf5">
+<title>TodayMeal</title>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
+<div class="app-shell">
+
+  <!-- 상단바 -->
+  <header class="topbar">
+    <button class="icon-button" type="button" aria-label="메뉴 열기">
+      <span class="hamburger"><i></i><i></i><i></i></span>
+    </button>
+
+    <div class="brand">
+      <svg class="brand-hat" viewBox="0 0 44 22" aria-hidden="true">
+        <path d="M10.4 14.6a5.3 5.3 0 0 1 1.7-10.2 8 8 0 0 1 14.6.3 5.3 5.3 0 0 1 6.9 9.9"/>
+        <path d="M10.8 14.8h22.4"/>
+      </svg>
+      <span class="brand-text">TodayMeal</span>
+    </div>
+
+    <button class="icon-button bell-button" type="button" aria-label="알림 3개">
+      <svg class="bell" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 3.6c-4 0-6.5 2.7-6.5 6.6 0 4.6-1.3 5.9-2.1 6.8-.4.5-.1 1.3.6 1.3h16c.7 0 1-.8.6-1.3-.8-.9-2.1-2.2-2.1-6.8 0-3.9-2.5-6.6-6.5-6.6Z"/>
+        <path d="M10.7 21.2a2.5 2.5 0 0 0 4.6 0"/>
+        <path d="M13 3.6V2"/>
+      </svg>
+      <span class="badge">3</span>
+    </button>
+  </header>
+
+  <main>
+
+    <!-- 히어로 -->
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">홍은님, 좋은 저녁이에요! 👋</p>
+        <h1>오늘 저녁,<br><strong>제가 정해드릴게요</strong></h1>
+      </div>
+
+      <img class="hero-woman" src="assets/hero_woman.png" alt="" width="264" height="395">
+
+      <svg class="deco deco-heart" viewBox="0 0 24 22" aria-hidden="true">
+        <path d="M12 20.5S1.8 14.4 1.8 7.9A5.6 5.6 0 0 1 12 4.7 5.6 5.6 0 0 1 22.2 7.9C22.2 14.4 12 20.5 12 20.5Z"/>
+      </svg>
+      <svg class="deco deco-leaf-a" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 3C10.5 3.6 3 7.8 3 15.6c0 2.2.9 4.2 2.2 5.4C7.9 13.8 13.4 8.4 21 3Z"/>
+      </svg>
+      <svg class="deco deco-leaf-b" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 3C10.5 3.6 3 7.8 3 15.6c0 2.2.9 4.2 2.2 5.4C7.9 13.8 13.4 8.4 21 3Z"/>
+      </svg>
+      <svg class="deco deco-spark" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 1.5c.9 6 3.6 8.7 9.6 9.6-6 .9-8.7 3.6-9.6 9.6-.9-6-3.6-8.7-9.6-9.6 6-.9 8.7-3.6 9.6-9.6Z"/>
+      </svg>
+      <svg class="deco deco-sprig" viewBox="0 0 30 34" aria-hidden="true">
+        <path class="stem" d="M4 33C7 22 13 12 26 3"/>
+        <path d="M9.5 22.6c-2.6-1.4-5.4-.6-7.4 1 2 1.9 4.9 2.5 7.4 1.2Z"/>
+        <path d="M13.5 16.2c-1.6-2.5-.9-5.3.6-7.4 2 1.9 2.7 4.7 1.5 7.2Z"/>
+        <path d="M18.6 11c-.9-2.8.4-5.4 2.3-7 1.5 2.3 1.5 5.2-.2 7.3Z"/>
+      </svg>
+    </section>
+
+    <!-- 필터 칩 -->
+    <section class="filter-row" aria-label="추천 조건">
+      <button class="filter-chip" type="button">
+        <svg class="chip-icon" viewBox="0 0 28 24" aria-hidden="true">
+          <circle cx="7.2" cy="7.4" r="3.4" fill="#8d6046"/>
+          <path d="M1.9 20c0-3.2 2.4-5.5 5.3-5.5S12.5 16.8 12.5 20Z" fill="#ffb347"/>
+          <circle cx="20.6" cy="6.6" r="3.9" fill="#5c4232"/>
+          <path d="M14.6 20c0-3.6 2.7-6.1 6-6.1s6 2.5 6 6.1Z" fill="#7fc4e8"/>
+          <circle cx="14" cy="12.8" r="3" fill="#c98b5e"/>
+          <path d="M9.5 21c0-2.6 2-4.5 4.5-4.5s4.5 1.9 4.5 4.5Z" fill="#ff8a4c"/>
+        </svg>
+        <b>온 가족</b>
+      </button>
+      <button class="filter-chip" type="button">
+        <svg class="chip-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.3" fill="#fff" stroke="#3b2c22" stroke-width="1.9"/>
+          <path d="M12 6.7V12l3.7 2.3" fill="none" stroke="#3b2c22" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+        <b>20분 이내</b>
+      </button>
+      <button class="filter-chip" type="button">
+        <svg class="chip-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="5.4" y="2" width="13.2" height="20" rx="3" fill="#d6e4ec" stroke="#93aab7" stroke-width="1.3"/>
+          <path d="M5.4 9.6h13.2" stroke="#93aab7" stroke-width="1.3"/>
+          <path d="M8.5 5.2v2.6M8.5 12.6v3" stroke="#c7d84a" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <b>냉장고 재료 활용</b>
+      </button>
+      <button class="filter-chip" type="button">
+        <svg class="chip-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.4" fill="#ffcf4d" stroke="#e79a17" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="6.5" fill="none" stroke="#f6b93b" stroke-width="1.1"/>
+          <text x="12" y="15.9" text-anchor="middle" font-size="9.2" font-weight="800" fill="#c2691a">₩</text>
+        </svg>
+        <b>1만원 이하</b>
+      </button>
+    </section>
+
+    <!-- 오늘 추천 메뉴: 좌우 스와이프 캐러셀 -->
+    <section class="recommend" aria-roledescription="캐러셀" aria-label="오늘 추천 메뉴">
+      <div class="carousel" id="mealCarousel" tabindex="0"
+           aria-label="추천 메뉴 목록. 좌우로 스와이프하거나 방향키를 사용하세요.">
+        <ul class="carousel-track" id="mealTrack">
+
+          <li class="carousel-slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+            <article class="recommend-card card">
+              <div class="meal-copy">
+                <span class="pill">오늘 추천 메뉴</span>
+                <h2 class="meal-title">두부계란덮밥 <small>BEST</small></h2>
+                <ul class="meal-meta">
+                  <li>
+                    <svg class="meta-icon" viewBox="0 0 20 20" aria-hidden="true">
+                      <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 5.7V10l3 1.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>17분 완성</span>
+                  </li>
+                  <li>
+                    <svg class="meta-icon" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M17.4 2.6C8.6 3.1 2.4 6.6 2.4 13.1c0 1.9.7 3.5 1.9 4.5C6.6 11.4 11.1 7 17.4 2.6Z" fill="currentColor"/>
+                    </svg>
+                    <span>집에 있는 재료 <strong>80%</strong></span>
+                  </li>
+                  <li>
+                    <svg class="meta-icon meta-heart" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M10 17.4S1.9 12.4 1.9 7.2A4.6 4.6 0 0 1 10 4.6 4.6 4.6 0 0 1 18.1 7.2C18.1 12.4 10 17.4 10 17.4Z" fill="currentColor"/>
+                    </svg>
+                    <span>우리 가족 취향 <strong>92%</strong></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="meal-image-wrap">
+                <svg class="meal-spark" viewBox="0 0 34 30" aria-hidden="true">
+                  <path d="M3.4 15.6 1.4 21.4M13.6 5.4 12.8 11.8M22.4 8.4 26.6 3.8"/>
+                </svg>
+                <img class="meal-image" src="assets/meal_bowl.png" alt="두부계란덮밥">
+              </div>
+
+              <div class="meal-actions">
+                <button class="primary-button" type="button" data-action="pick">오늘 저녁 정해줘! ✨</button>
+                <button class="secondary-button" type="button" data-action="next">다른 메뉴 볼래요</button>
+              </div>
+            </article>
+          </li>
+
+          <li class="carousel-slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+            <article class="recommend-card card">
+              <div class="meal-copy">
+                <span class="pill">오늘 추천 메뉴</span>
+                <h2 class="meal-title">차돌박이 숙주볶음</h2>
+                <ul class="meal-meta">
+                  <li>
+                    <svg class="meta-icon" viewBox="0 0 20 20" aria-hidden="true">
+                      <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 5.7V10l3 1.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>15분 완성</span>
+                  </li>
+                  <li>
+                    <svg class="meta-icon" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M17.4 2.6C8.6 3.1 2.4 6.6 2.4 13.1c0 1.9.7 3.5 1.9 4.5C6.6 11.4 11.1 7 17.4 2.6Z" fill="currentColor"/>
+                    </svg>
+                    <span>집에 있는 재료 <strong>70%</strong></span>
+                  </li>
+                  <li>
+                    <svg class="meta-icon meta-heart" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M10 17.4S1.9 12.4 1.9 7.2A4.6 4.6 0 0 1 10 4.6 4.6 4.6 0 0 1 18.1 7.2C18.1 12.4 10 17.4 10 17.4Z" fill="currentColor"/>
+                    </svg>
+                    <span>우리 가족 취향 <strong>89%</strong></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="meal-image-wrap">
+                <svg class="meal-spark" viewBox="0 0 34 30" aria-hidden="true">
+                  <path d="M3.4 15.6 1.4 21.4M13.6 5.4 12.8 11.8M22.4 8.4 26.6 3.8"/>
+                </svg>
+                <img class="meal-image" src="assets/meal_bowl.png" alt="차돌박이 숙주볶음">
+              </div>
+
+              <div class="meal-actions">
+                <button class="primary-button" type="button" data-action="pick">오늘 저녁 정해줘! ✨</button>
+                <button class="secondary-button" type="button" data-action="next">다른 메뉴 볼래요</button>
+              </div>
+            </article>
+          </li>
+
+          <li class="carousel-slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+            <article class="recommend-card card">
+              <div class="meal-copy">
+                <span class="pill">오늘 추천 메뉴</span>
+                <h2 class="meal-title">참치김치볶음밥</h2>
+                <ul class="meal-meta">
+                  <li>
+                    <svg class="meta-icon" viewBox="0 0 20 20" aria-hidden="true">
+                      <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 5.7V10l3 1.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>12분 완성</span>
+                  </li>
+                  <li>
+                    <svg class="meta-icon" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M17.4 2.6C8.6 3.1 2.4 6.6 2.4 13.1c0 1.9.7 3.5 1.9 4.5C6.6 11.4 11.1 7 17.4 2.6Z" fill="currentColor"/>
+                    </svg>
+                    <span>집에 있는 재료 <strong>85%</strong></span>
+                  </li>
+                  <li>
+                    <svg class="meta-icon meta-heart" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M10 17.4S1.9 12.4 1.9 7.2A4.6 4.6 0 0 1 10 4.6 4.6 4.6 0 0 1 18.1 7.2C18.1 12.4 10 17.4 10 17.4Z" fill="currentColor"/>
+                    </svg>
+                    <span>우리 가족 취향 <strong>94%</strong></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="meal-image-wrap">
+                <svg class="meal-spark" viewBox="0 0 34 30" aria-hidden="true">
+                  <path d="M3.4 15.6 1.4 21.4M13.6 5.4 12.8 11.8M22.4 8.4 26.6 3.8"/>
+                </svg>
+                <img class="meal-image" src="assets/meal_bowl.png" alt="참치김치볶음밥">
+              </div>
+
+              <div class="meal-actions">
+                <button class="primary-button" type="button" data-action="pick">오늘 저녁 정해줘! ✨</button>
+                <button class="secondary-button" type="button" data-action="next">다른 메뉴 볼래요</button>
+              </div>
+            </article>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="carousel-dots" id="mealDots" role="tablist" aria-label="추천 메뉴 선택">
+        <button class="dot active" type="button" role="tab" aria-selected="true"  aria-label="1번째 메뉴"></button>
+        <button class="dot"        type="button" role="tab" aria-selected="false" aria-label="2번째 메뉴"></button>
+        <button class="dot"        type="button" role="tab" aria-selected="false" aria-label="3번째 메뉴"></button>
+      </div>
+    </section>
+
+    <!-- 바로가기 -->
+    <section class="quick-grid" aria-label="바로가기">
+      <button class="quick-card" type="button" data-action="fridge">
+        <svg class="quick-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="7.4" y="2.6" width="17.2" height="26.8" rx="3.4" fill="#dbe8ef" stroke="#9db3c0" stroke-width="1.5"/>
+          <path d="M7.4 13.2h17.2" stroke="#9db3c0" stroke-width="1.5"/>
+          <path d="M11.6 6.8v3.2M11.6 16.8v4.4" stroke="#cfd94a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24.6 15h1.7a1.6 1.6 0 0 1 0 3.2h-1.7" fill="none" stroke="#9db3c0" stroke-width="1.5"/>
+        </svg>
+        <strong>냉장고 털어줘</strong>
+        <small>사진 한 장으로<br>메뉴 추천</small>
+      </button>
+
+      <button class="quick-card" type="button" data-action="shopping">
+        <svg class="quick-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M11 12.4V9.6a5 5 0 0 1 10 0v2.8" fill="none" stroke="#f5a623" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M4.8 12.8h22.4l-2.1 12.6a2.4 2.4 0 0 1-2.4 2H9.3a2.4 2.4 0 0 1-2.4-2Z" fill="#ffc94a" stroke="#f0a01c" stroke-width="1.4"/>
+          <g fill="#fff8e6">
+            <circle cx="11.6" cy="18.4" r="1.45"/><circle cx="16" cy="18.4" r="1.45"/><circle cx="20.4" cy="18.4" r="1.45"/>
+            <circle cx="13.8" cy="22.8" r="1.45"/><circle cx="18.2" cy="22.8" r="1.45"/>
+          </g>
+        </svg>
+        <strong>장보기 리스트</strong>
+        <small>부족한 재료<br>한 번에 보기</small>
+      </button>
+
+      <button class="quick-card" type="button" data-action="recipe">
+        <svg class="quick-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 8C13.1 5.9 8.8 5.5 5.2 6.1v18.4c3.6-.6 7.9-.2 10.8 1.9Z" fill="#ffe3d2" stroke="#f2a17c" stroke-width="1.5"/>
+          <path d="M16 8c2.9-2.1 7.2-2.5 10.8-1.9v18.4c-3.6-.6-7.9-.2-10.8 1.9Z" fill="#fff2e9" stroke="#f2a17c" stroke-width="1.5"/>
+          <g stroke="#f4ab8a" stroke-width="1.4" stroke-linecap="round">
+            <path d="M8.4 11.2h4.8M8.4 15h4.8M8.4 18.8h4.8M18.8 11.2h4.8M18.8 15h4.8M18.8 18.8h4.8"/>
+          </g>
+        </svg>
+        <strong>레시피 모아보기</strong>
+        <small>저장한 레시피<br>한 곳에</small>
+      </button>
+
+      <button class="quick-card" type="button" data-action="verify">
+        <svg class="quick-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M12.4 6.8h7.2l1.6 2.9h4.2a2.4 2.4 0 0 1 2.4 2.4v11a2.4 2.4 0 0 1-2.4 2.4H6.6a2.4 2.4 0 0 1-2.4-2.4v-11a2.4 2.4 0 0 1 2.4-2.4h4.2Z" fill="#54b5a4" stroke="#3d9b8b" stroke-width="1.4"/>
+          <circle cx="16" cy="17.8" r="5.4" fill="#fff"/>
+          <circle cx="16" cy="17.8" r="2.7" fill="#3d9b8b"/>
+          <circle cx="23.8" cy="13.2" r="1.25" fill="#bdeade"/>
+        </svg>
+        <strong>집밥 인증하기</strong>
+        <small>맛있게 먹고<br>포인트 받기</small>
+      </button>
+    </section>
+
+    <!-- 절약 리포트 -->
+    <section class="saving-card card">
+      <div class="saving-main">
+        <p>이번 달 집밥으로</p>
+        <strong class="saving-number">187,400<span>원</span></strong>
+        <h3>절약했어요!</h3>
+        <button class="text-button" type="button">자세히 보기 <span aria-hidden="true">›</span></button>
+      </div>
+
+      <div class="saving-stats">
+        <div class="stat-row">
+          <span class="stat-emoji" aria-hidden="true">🔥</span>
+          <div class="stat-text"><b>집밥 6일째!</b><span>연속 기록 중</span></div>
+          <button class="round-arrow" type="button" aria-label="연속 기록 보기"><span aria-hidden="true">›</span></button>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-row is-point">
+          <span class="stat-emoji" aria-hidden="true">
+            <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="#ffcf4d" stroke="#e79a17" stroke-width="1.3"/><text x="10" y="13.5" text-anchor="middle" font-size="8.6" font-weight="800" fill="#c2691a">₩</text></svg>
+          </span>
+          <div class="stat-text"><b>3,840P</b><span>밥테크 포인트</span></div>
+          <button class="round-arrow" type="button" aria-label="포인트 내역 보기"><span aria-hidden="true">›</span></button>
+        </div>
+      </div>
+
+      <img class="piggy" src="assets/piggy.png" alt="" width="135" height="176">
+    </section>
+
+    <!-- 룰렛 배너 -->
+    <section class="roulette-banner">
+      <div class="roulette-copy">
+        <p>오늘은 뭐가 땡기세요?</p>
+        <h3>모르겠다면 룰렛을 돌려보세요!</h3>
+      </div>
+      <img class="roulette-img" src="assets/roulette.png" alt="" width="206" height="189">
+      <button class="roulette-arrow" type="button" id="rouletteBtn" aria-label="메뉴 룰렛 돌리기">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4.6 12h14.4M13.2 6.4 18.9 12l-5.7 5.6"/>
+        </svg>
+      </button>
+    </section>
+
+  </main>
+
+  <!-- 하단 내비게이션 -->
+  <nav class="bottom-nav" aria-label="주요 메뉴">
+    <button class="nav-item active" type="button" aria-current="page">
+      <svg class="nav-icon" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M13 2.8 2.8 11.4v10.8a1.4 1.4 0 0 0 1.4 1.4h5.4v-6.4a3.4 3.4 0 0 1 6.8 0v6.4h5.4a1.4 1.4 0 0 0 1.4-1.4V11.4Z" fill="currentColor"/>
+      </svg>
+      <b>홈</b>
+    </button>
+    <button class="nav-item" type="button">
+      <svg class="nav-icon" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M8.2 15.6a5.2 5.2 0 0 1 1.5-9.9 7.4 7.4 0 0 1 13.6.3 5.2 5.2 0 0 1-1.5 9.6v2.2c0 1.8-2.6 2.9-6.8 2.9s-6.8-1.1-6.8-2.9Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+        <path d="M8.2 17.6c1.6.9 4.1 1.4 6.8 1.4s5.2-.5 6.8-1.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <b>추천</b>
+    </button>
+    <button class="nav-item" type="button">
+      <svg class="nav-icon" viewBox="0 0 26 26" aria-hidden="true">
+        <rect x="6.6" y="2.8" width="12.8" height="20.4" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/>
+        <path d="M6.6 11.4h12.8" stroke="currentColor" stroke-width="1.9"/>
+        <path d="M10 6.4v2.4M10 14.4v2.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </svg>
+      <b>냉장고</b>
+    </button>
+    <button class="nav-item" type="button">
+      <svg class="nav-icon" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="13" cy="13" r="9.8" fill="none" stroke="currentColor" stroke-width="1.9"/>
+        <path d="M10.8 18.2V7.9h3.4a3.2 3.2 0 0 1 0 6.4h-3.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <b>밥테크</b>
+    </button>
+    <button class="nav-item" type="button">
+      <svg class="nav-icon" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="13" cy="8.6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.9"/>
+        <path d="M4.8 22.8c0-4.6 3.7-7.3 8.2-7.3s8.2 2.7 8.2 7.3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </svg>
+      <b>마이</b>
+    </button>
+    <span class="home-indicator" aria-hidden="true"></span>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
