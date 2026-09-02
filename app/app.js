@@ -8,6 +8,19 @@
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  /* ── 하단 내비게이션 링크 ──────────────────────────────────
+     여기에 주소만 채우면 해당 탭이 링크로 동작합니다.
+     빈 문자열('')로 두면 "준비 중이에요" 안내만 뜹니다.
+     예) home: '/app/', recipe: '/category.html'
+     ------------------------------------------------------- */
+  var NAV_LINKS = {
+    home:   '/app/',
+    recipe: '',
+    fridge: '',
+    point:  '',
+    my:     ''
+  };
+
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ── 토스트 ────────────────────────────────────────────── */
@@ -173,14 +186,31 @@
     rouletteBtn.addEventListener('click', function () { toast('룰렛 화면으로 연결하세요 🎲'); });
   }
 
-  $$('.nav-item').forEach(function (n) {
-    n.addEventListener('click', function () {
-      $$('.nav-item').forEach(function (x) {
-        x.classList.remove('active');
-        x.removeAttribute('aria-current');
-      });
-      n.classList.add('active');
-      n.setAttribute('aria-current', 'page');
+  /* ── 하단 내비게이션 ───────────────────────────────────── */
+  var navKeys  = ['home', 'recipe', 'fridge', 'point', 'my'];
+  var navItems = $$('.nav-item');
+
+  /* 현재 열려 있는 페이지의 탭에 자동으로 불을 켠다 */
+  var here = location.pathname.replace(/index\.html$/, '');
+  var matchedIndex = -1, bestLen = 0;
+  navKeys.forEach(function (key, i) {
+    var url = NAV_LINKS[key];
+    if (!url) return;
+    var path = url.split('?')[0].split('#')[0].replace(/index\.html$/, '');
+    if (here === path && path.length > bestLen) { matchedIndex = i; bestLen = path.length; }
+  });
+
+  navItems.forEach(function (item, i) {
+    var on = (matchedIndex === -1) ? (i === 0) : (i === matchedIndex);
+    item.classList.toggle('active', on);
+    if (on) { item.setAttribute('aria-current', 'page'); }
+    else    { item.removeAttribute('aria-current'); }
+
+    item.addEventListener('click', function () {
+      var url = NAV_LINKS[navKeys[i]];
+      if (!url) { toast($('b', item).textContent + ' 화면은 준비 중이에요'); return; }
+      if (i === matchedIndex) return;          /* 현재 페이지면 이동하지 않음 */
+      location.href = url;
     });
   });
 
