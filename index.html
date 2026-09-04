@@ -20,6 +20,12 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 :root{--o:#ff6900;--ink:#191512;--muted:#756b63;--line:#eee6de;--cream:#fff8f0;--soft:#fff1e4}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Arial,"Noto Sans KR",sans-serif}button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}.ico{width:1.1em;height:1.1em;vertical-align:-0.18em;object-fit:contain}.wrap{max-width:1180px;margin:auto;padding:0 26px}.top{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:46px}.logo{font-size:28px;font-weight:900;color:var(--o);letter-spacing:-1.5px}.nav{display:flex;gap:30px;font-size:15px;font-weight:800}.nav a:hover{color:var(--o)}.right{margin-left:auto;display:flex;gap:10px;align-items:center}.point,.cert{border-radius:11px;padding:11px 16px;font-weight:900;border:0}.point{background:#fff;border:1px solid #ffd8bd;color:var(--o)}.cert{background:var(--o);color:#fff}
 .write-view{padding-top:28px;padding-bottom:60px}
 .write-back{background:none;border:0;color:var(--o);font-weight:800;font-size:14px;margin-bottom:20px;padding:0}
+.write-mode-tabs{display:flex;gap:8px;margin-bottom:18px}
+.wmt{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 16px;font-weight:800;font-size:14px;color:var(--muted)}
+.wmt.active{background:var(--o);border-color:var(--o);color:#fff}
+.import-panel{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:22px}
+.import-notice{font-size:12.5px;color:#8a5a3a;line-height:1.7;background:#fff3e5;border-radius:10px;padding:12px 14px;margin:0 0 14px}
+.import-notice b{color:#c0562f}
 .write-layout{display:grid;grid-template-columns:1fr 320px;gap:28px}
 .write-title{width:100%;border:0;border-bottom:2px solid var(--line);font-size:32px;font-weight:900;padding:10px 0;margin-bottom:24px;letter-spacing:-1px;font-family:inherit}
 .write-title:focus{outline:0;border-color:var(--o)}
@@ -119,6 +125,25 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 
 <main class="wrap write-view" id="write-view" style="display:none">
   <button class="write-back" id="write-back-btn">‹ 홈으로 돌아가기</button>
+
+  <div class="write-mode-tabs">
+    <button class="wmt active" id="wmt-direct">✏️ 직접 쓰기</button>
+    <button class="wmt" id="wmt-import">🔗 블로그에서 가져오기</button>
+  </div>
+
+  <div class="import-panel" id="import-panel" style="display:none">
+    <p class="import-notice">
+      ⚠️ <b>네이버 블로그 · 티스토리</b> 글 주소만 가져올 수 있어요.<br>
+      <b>본인이 직접 쓴 글</b>만 가져와 주세요 — 다른 사람 글을 무단으로 가져오면 저작권 문제가 될 수 있고,
+      <b>그에 대한 법적 책임은 가져온 분 본인에게 있습니다.</b>
+    </p>
+    <div style="display:flex;gap:8px">
+      <input class="c-input" id="import-url" placeholder="https://blog.naver.com/..." style="flex:1">
+      <button class="cert" id="import-go-btn" style="padding:0 20px">가져오기</button>
+    </div>
+    <p id="import-status" style="font-size:12.5px;color:var(--muted);margin-top:8px"></p>
+  </div>
+
   <div class="write-layout">
     <div class="write-main">
       <input class="write-title" id="w-title" placeholder="레시피 제목을 적어주세요 (예: 제육볶음)">
@@ -385,6 +410,42 @@ $('#write-back-btn').onclick=()=>{
  closeWriteView();
 };
 document.querySelectorAll('#w-target .w-chip').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#w-target .w-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); wTarget=c.dataset.t; });
+
+/* ── 블로그에서 가져오기 ── */
+$('#wmt-direct').onclick=()=>{
+ $('#wmt-direct').classList.add('active'); $('#wmt-import').classList.remove('active');
+ $('#import-panel').style.display='none';
+};
+$('#wmt-import').onclick=()=>{
+ $('#wmt-import').classList.add('active'); $('#wmt-direct').classList.remove('active');
+ $('#import-panel').style.display='block';
+};
+$('#import-go-btn').onclick=async()=>{
+ const url=$('#import-url').value.trim();
+ if(!url)return toast('블로그 글 주소를 입력해주세요');
+ const btn=$('#import-go-btn'), status=$('#import-status');
+ btn.disabled=true; btn.textContent='가져오는 중...'; status.textContent='';
+ try{
+  const r=await fetch('/api/import-blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})});
+  const d=await r.json();
+  if(!r.ok){ status.textContent='❌ '+(d.error||'가져오기에 실패했어요'); return; }
+  $('#w-title').value=d.title||'';
+  $('#w-body').value=d.body||'';
+  if(d.target){
+   document.querySelectorAll('#w-target .w-chip').forEach(x=>{
+    const match=x.dataset.t===d.target;
+    x.classList.toggle('active',match);
+    if(match)wTarget=x.dataset.t;
+   });
+  }
+  status.textContent='✅ 가져왔어요! 내용을 확인하고 수정한 뒤 등록해주세요.';
+  toast('블로그 내용을 불러왔어요');
+ }catch(e){
+  status.textContent='❌ 가져오기에 실패했어요';
+ }finally{
+  btn.disabled=false; btn.textContent='가져오기';
+ }
+};
 $('#w-photo-box').onclick=()=>$('#w-photo').click();
 $('#w-photo').onchange=async e=>{
  let file=e.target.files[0]||null;
