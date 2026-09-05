@@ -317,6 +317,7 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .wheel-sheet-bg.open{display:flex}
 #family-meal-app .wheel-sheet{background:#fffdf9;width:100%;max-width:430px;border-radius:24px 24px 0 0;padding:26px 20px calc(24px + env(safe-area-inset-bottom));position:relative;max-height:88vh;overflow-y:auto}
 #family-meal-app .wheel-sheet-close{position:absolute;top:16px;right:16px;background:#fff3e6;border:0;width:32px;height:32px;border-radius:50%;font-size:14px;color:#72665e}
+#family-meal-app .meal-emoji-badge{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:96px;filter:drop-shadow(0 12px 18px rgba(80,38,10,.18))}
 #family-meal-app .quick-dropdown.open{display:block}
 #family-meal-app .quick-dropdown button{display:block;width:100%;text-align:left;background:none;border:0;padding:11px 12px;font-size:13.5px;font-weight:700;border-radius:9px;color:#251b15}
 #family-meal-app .quick-dropdown button:hover{background:#fff3e6}
@@ -916,15 +917,14 @@ function heroResult(){
     '<span class="pill">'+person+' 맞춤 추천</span>'+
     '<h2 class="meal-title">'+esc(res.name)+'</h2>'+
     '<ul class="meal-meta">'+
-     (res.time?'<li><svg class="meta-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 5.7V10l3 1.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>'+esc(res.time)+' 완성</span></li>':'')+
-     '<li><svg class="meta-icon" viewBox="0 0 20 20"><path d="M17.4 2.6C8.6 3.1 2.4 6.6 2.4 13.1c0 1.9.7 3.5 1.9 4.5C6.6 11.4 11.1 7 17.4 2.6Z" fill="currentColor"/></svg><span>'+esc(matchNote)+'</span></li>'+
-     '<li><svg class="meta-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="currentColor"/></svg><span>'+res.kcal+'kcal</span></li>'+
+     (res.time?'<li>◷ '+esc(res.time)+' 완성</li>':'')+
+     '<li>🌿 '+esc(matchNote)+'</li>'+
+     '<li>🔥 '+res.kcal+'kcal</li>'+
      '<li id="cost-chip-slot-v2"></li>'+
     '</ul>'+
     (res.urgent?'<p style="background:#fff0e7;color:#d84d18;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;margin:10px 0 0">⏰ '+esc(res.urgent)+'</p>':'')+
    '</div>'+
    '<div class="meal-image-wrap">'+
-    '<svg class="meal-spark" viewBox="0 0 34 30" aria-hidden="true"><path d="M3.4 15.6 1.4 21.4M13.6 5.4 12.8 11.8M22.4 8.4 26.6 3.8"/></svg>'+
     '<div class="meal-emoji-badge">'+(res.emoji||"🍽️")+'</div>'+
    '</div>'+
    '<div class="meal-actions">'+
@@ -953,7 +953,7 @@ async function renderCostChip(){
  // 대략적인 1인분 사용량 반영: 재료 1kg 기준가의 1/4을 1회 조리 사용량으로 추정
  const est=Math.round(matched.reduce((s,p)=>s+p*0.25,0)/100)*100;
  if(est<=0)return;
- slot.innerHTML='<svg class="meta-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="11" fill="currentColor">₩</text></svg><span>약 '+est.toLocaleString()+'원'+(matched.length<names.length?' (참고)':'')+'</span>';
+ slot.innerHTML='🪙 약 '+est.toLocaleString()+'원'+(matched.length<names.length?' (참고)':'');
 }
 function renderExtra(){
  const m=res.macros,kc={c:m.carb*4,p:m.protein*4,f:m.fat*9},tot=kc.c+kc.p+kc.f||1;
