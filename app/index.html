@@ -815,18 +815,8 @@ function renderTop(){
  }
 }
 function heroIdle(){
- $('#hero').innerHTML=
-  '<article class="recommend-card card">'+
-   '<div class="meal-copy" style="width:100%;text-align:center;padding:30px 10px">'+
-    '<p style="color:var(--muted);font-size:14px;margin:0 0 6px">아직 추천을 안 받으셨어요</p>'+
-    '<h2 class="meal-title" style="font-size:20px">오늘 뭐 먹을지<br>제가 골라드릴까요?</h2>'+
-   '</div>'+
-   '<div class="meal-actions">'+
-    '<button class="primary-button" id="decide-btn">오늘 저녁 정해줘! ✨</button>'+
-   '</div>'+
-  '</article>';
- $('#decide-btn').onclick=decide;
  $('#result-extra').innerHTML="";
+ decide();
 }
 
 /* ── 오늘 뭐먹지 룰렛(카테고리 선택) ── */
