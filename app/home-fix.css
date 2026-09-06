@@ -170,3 +170,19 @@ body{margin:0;background:#ebe5df}
 #family-meal-app .v2 .choice-copy small{font-size:11px;line-height:1.55;color:#62503f;letter-spacing:-.5px;white-space:nowrap}
 #family-meal-app .v2 main{padding-bottom:26px}
 @media(max-width:365px){#family-meal-app .v2 .meal-choice-grid{gap:10px}#family-meal-app .v2 .meal-choice{height:150px;padding:14px 9px}#family-meal-app .v2 .choice-copy strong{font-size:18px}#family-meal-app .v2 .choice-copy small{font-size:10px}#family-meal-app .v2 .meal-choice .choice-art{height:112px;width:55%;right:0}}
+#family-meal-app .v2 .choice-home .choice-art{mask-image:radial-gradient(ellipse 65% 65% at center,#000 62%,transparent 100%)}
+
+/* v13: eating-out roulette, visible before location search. */
+#family-meal-app [data-view="eatout"]{background:#fffdf8}
+#family-meal-app .wheel-outer{width:min(100%,300px);height:auto;aspect-ratio:1;padding:17px;border:3px solid #ffd59a;box-sizing:border-box;border-radius:50%;background:linear-gradient(140deg,#ffb65c,#f97c32);box-shadow:0 4px 0 #d6873e,0 12px 25px #99632120;margin:28px auto 10px}
+#family-meal-app .wheel{width:100%;height:100%;border:3px solid #fff4cc;box-sizing:border-box;box-shadow:0 0 0 2px #e4ab42;background:conic-gradient(#ffbc55 0deg 60deg,#fff0cd 60deg 120deg,#ffd582 120deg 180deg,#fff6dc 180deg 240deg,#ffc366 240deg 300deg,#ffe6ae 300deg)}
+#family-meal-app .wheel-pointer{top:-10px;width:27px;height:33px;background:linear-gradient(90deg,#ae7d3f,#efcd87,#ae7d3f);clip-path:polygon(0 0,100% 0,50% 100%);font-size:0}
+#family-meal-app .wheel-center{width:53px;height:53px;background:#fff9e8;border:2px solid #edc982;display:grid;place-items:center;font-size:24px;box-shadow:0 3px 8px #9c622122}
+#family-meal-app .eatout-label{position:absolute;width:68px;transform:translate(-50%,-50%);text-align:center}
+#family-meal-app .eatout-label-text{display:block;font-size:12px;font-weight:750;color:#583818;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere;transition:transform 3.2s cubic-bezier(.17,.67,.13,1);transform:rotate(0deg)}
+#family-meal-app .eatout-lights{position:absolute;inset:0;pointer-events:none}
+#family-meal-app .eatout-lights i{position:absolute;left:calc(50% - 4px);top:calc(50% - 4px);width:8px;height:8px;background:#fff7cc;box-shadow:0 0 5px #fff0ae;border-radius:50%;transform:rotate(var(--a)) translateY(calc(-1 * var(--radius,138px)))}
+#family-meal-app .wheel-spin-btn-below{width:min(100%,300px);height:52px;border-radius:17px;flex-direction:row;gap:8px;margin-top:15px;background:linear-gradient(90deg,#ff951b,#fc6e0c);font-size:17px}
+#family-meal-app #roulette-sub{font-size:13px!important;color:#75583f!important;line-height:1.6}
+#family-meal-app #eatout-cat{flex-wrap:wrap;justify-content:center}
+#family-meal-app #eatout-cat{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;overflow:visible}#family-meal-app #eatout-cat .chip{padding:9px 2px;font-size:11px;min-width:0}
