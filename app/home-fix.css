@@ -90,3 +90,25 @@ body{margin:0;background:#ebe5df}
 #family-meal-app .tabbar .nav:focus-visible{outline:2px solid #ff6516;outline-offset:-2px;border-radius:8px}
 #family-meal-app .view{padding-bottom:105px}
 @media(max-width:365px){#family-meal-app .v2 .greeting-hero h1{font-size:25px}#family-meal-app .v2 .meal-copy h2{font-size:23px}#family-meal-app .v2 .filter-chip b{font-size:10px}#family-meal-app .v2 .quick-card strong{font-size:11px}#family-meal-app .v2 .quick-card small{font-size:10px}#family-meal-app .v2 .saving-number{font-size:23px}#family-meal-app .v2 .stat-row b{font-size:11px}#family-meal-app .v2 .piggy{width:45px}#family-meal-app .v2 .roulette-banner h3{font-size:14px}}
+
+/* v5: centered, responsive roulette with a warm illuminated rim. */
+#family-meal-app .wheel-sheet{box-sizing:border-box;width:min(100%,430px);max-width:100%;padding:28px 20px calc(24px + env(safe-area-inset-bottom));overflow-x:hidden;max-height:94dvh;background:linear-gradient(#fffefb,#fffaf1);text-align:center}
+#family-meal-app .wheel-sheet h3{font-size:19px!important;margin:0 20px 24px!important;color:#34291f}
+#family-meal-app .wheel-outer2{width:min(100%,330px);height:auto;aspect-ratio:1;margin:12px auto 0!important;border-radius:50%;background:linear-gradient(145deg,#ffb756,#ff783b 55%,#ec6536);box-shadow:0 5px 0 #dc8241,0 12px 30px #b47c3426;border:3px solid #ffd092;padding:17px;box-sizing:border-box}
+#family-meal-app .wheel2{width:100%;height:100%;border:3px solid #fff4c9;box-shadow:0 0 0 3px #e9a637;box-sizing:border-box}
+#family-meal-app .wheel2-seg-label{width:66px;height:53px;padding:0;text-align:center;transform:translate(-50%,-50%);transform-origin:center}
+#family-meal-app .wheel2-seg-inner{font-size:12px;gap:4px;color:#55341d;text-shadow:none;white-space:nowrap}
+#family-meal-app .wheel-food-icon{font-size:25px;line-height:1.1}
+#family-meal-app .wheel-center-btn{width:83px;height:83px;border:3px solid #f6c472;box-shadow:0 3px 9px #97551f25;background:linear-gradient(#fffef9,#fff1d4);gap:0}
+#family-meal-app .wheel-center-btn .wheel-dice{font-size:22px;color:#ba5b17;line-height:1}
+#family-meal-app .wheel-center-btn em{font-size:15px;color:#9c4811}
+#family-meal-app .wheel-center-btn small{font-size:10px;color:#755b45;margin:0}
+#family-meal-app .wheel-pointer2{width:28px;height:34px;top:-12px;background:linear-gradient(90deg,#9f6b32,#dfbe82,#9f6b32);clip-path:polygon(0 0,100% 0,50% 100%);z-index:8;font-size:0}
+#family-meal-app .wheel-lights{position:absolute;inset:0;border-radius:50%;pointer-events:none}
+#family-meal-app .wheel-lights i{position:absolute;left:calc(50% - 4px);top:calc(50% - 4px);width:8px;height:8px;background:#fff6cc;border:1px solid #ffe9a2;border-radius:50%;box-shadow:0 0 6px #fff3ae;transform:rotate(var(--angle)) translateY(calc(-1 * var(--bulb-radius,150px)))}
+#family-meal-app .wheel-sheet .wheel-main-cta{position:relative;box-sizing:border-box;display:flex;width:min(100%,330px);height:52px;margin:10px auto 0;padding:10px;border-radius:18px;font-size:16px;color:#fff;background:linear-gradient(100deg,#ff9218,#fa6509);box-shadow:0 7px 15px #ed7a1825}
+#family-meal-app .wheel-sheet #wheel-decide-btn{background:#fff3df;color:#9f4812;border:1px solid #f0d1a5;box-shadow:none;height:46px;font-size:14px}
+#family-meal-app .wheel-sheet #wheel-decide-btn:disabled{color:#897766;background:#f7f1e8;border-color:#eee4d7}
+#family-meal-app .wheel-sheet .wheel-result-text{margin:22px 0 14px;color:#765337;font-size:15px;font-weight:700;min-height:22px}
+#family-meal-app .wheel-sheet-close{z-index:9}
+@media(max-width:370px){#family-meal-app .wheel-sheet{padding-left:16px;padding-right:16px}#family-meal-app .wheel2-seg-inner{font-size:11px}#family-meal-app .wheel-food-icon{font-size:22px}#family-meal-app .wheel-center-btn{width:74px;height:74px}}
