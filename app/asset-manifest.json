@@ -1,0 +1,21 @@
+{
+  "source": "todaymeal-home-v2-source.zip",
+  "assets": {
+    "assets/hero_woman.png": {
+      "sha256": "16c77b37dcb31f18d5d3e95ace91bfe54bd6ef66bccac1bf125861a095141b6d",
+      "bytes": 183844
+    },
+    "assets/meal_bowl.png": {
+      "sha256": "810a8157cd8dd26e19e2b8de4dcf44546b5ab99bbf6e499bdbb65626f3c024be",
+      "bytes": 301402
+    },
+    "assets/piggy.png": {
+      "sha256": "5352854197b2802aa6c487d3ca33820340198551d92138260e9ce93d8d8fbea2",
+      "bytes": 47594
+    },
+    "assets/roulette.png": {
+      "sha256": "205dea40f6bd96dd7d76b6de899b0e6cc755211fbc28d61caffb1f02c9edd7c4",
+      "bytes": 92666
+    }
+  }
+}

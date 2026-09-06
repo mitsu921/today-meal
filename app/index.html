@@ -359,7 +359,7 @@ details.fold.sub .body p{font-size:13px!important}
           <h1>오늘 저녁,<br><strong>제가 정해드릴게요</strong></h1>
         </div>
 
-        <img class="hero-woman" src="/hero-woman-v3.png" alt="" width="230" height="250">
+        <img class="hero-woman" src="./assets/hero_woman.png" alt="" width="230" height="250">
       </section>
 
       <div id="urgent-slot"></div>
@@ -444,7 +444,7 @@ details.fold.sub .body p{font-size:13px!important}
           </div>
         </div>
 
-        <img class="piggy" src="/piggy.png" alt="" width="135" height="176">
+        <img class="piggy" src="./assets/piggy.png" alt="" width="135" height="176">
       </section>
 
       <!-- 룰렛 배너 -->
@@ -453,7 +453,7 @@ details.fold.sub .body p{font-size:13px!important}
           <p>오늘은 뭐가 땡기세요?</p>
           <h3>모르겠다면 룰렛을 돌려보세요!</h3>
         </div>
-        <img class="roulette-img" src="/roulette-banner.png" alt="" width="206" height="189">
+        <img class="roulette-img" src="./assets/roulette.png" alt="" width="206" height="189">
         <button class="roulette-arrow" type="button" id="rouletteBtn" aria-label="메뉴 룰렛 돌리기">→</button>
       </section>
     </main>
@@ -520,7 +520,7 @@ details.fold.sub .body p{font-size:13px!important}
 
   <!-- ══ 냉장고 ══ -->
   <section class="view" data-view="fridge">
-    <header class="head"><h1>냉장고 <img class="ico" style="width:26px;height:26px" src="/icons/fridge.png"></h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
+    <header class="head"><h1>냉장고 <img class="ico" style="width:26px;height:26px" src="./assets/ui-kit/icons/fridge.png"></h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
     <div class="section">
       <h2>자주 쓰는 재료 — 눌러서 담기</h2>
       <div class="chips" id="quick-chips" style="flex-wrap:wrap"></div>
@@ -664,9 +664,9 @@ details.fold.sub .body p{font-size:13px!important}
   </div>
 
   <nav class="tabbar">
-    <button class="nav on" data-go="home"><span><img class="ico" src="/icons/home.png"></span>홈</button>
+    <button class="nav on" data-go="home"><span><img class="ico" src="./assets/ui-kit/nav/home.png"></span>홈</button>
     <button class="nav" data-go="explore"><span><img class="ico" src="/icons/search.png"></span>탐색</button>
-    <button class="nav" data-go="fridge"><span><img class="ico" src="/icons/fridge.png"></span>냉장고</button>
+    <button class="nav" data-go="fridge"><span><img class="ico" src="./assets/ui-kit/icons/fridge.png"></span>냉장고</button>
     <button class="nav" data-go="upload"><span><img class="ico" src="/icons/pencil.png"></span>올리기</button>
     <button class="nav" data-go="shop"><span><img class="ico" src="/icons/cart.png"></span>장보기<b id="shop-badge"></b></button>
     <button class="nav" data-go="kitchen"><span><img class="ico" src="/icons/chefhat.png"></span>내 주방</button>
@@ -823,12 +823,12 @@ function heroIdle(){
 
 /* ── 오늘 뭐먹지 룰렛(카테고리 선택) ── */
 const WHEEL2_CATS=[
- {name:"한식",icon:"/icons/rice.png"},
- {name:"면 요리",icon:"/icons/dish_noodle.png"},
- {name:"고기 요리",icon:"/icons/meat.png"},
- {name:"국물 요리",icon:"/icons/dish_stew.png"},
- {name:"가볍게",icon:"/icons/dish_salad.png"},
- {name:"간단식",icon:"/icons/egg.png"},
+ {name:"한식",icon:"./assets/ui-kit/roulette/rice_hansik.png"},
+ {name:"면 요리",icon:"./assets/ui-kit/roulette/noodle.png"},
+ {name:"고기 요리",icon:"./assets/ui-kit/roulette/meat.png"},
+ {name:"국물 요리",icon:"./assets/ui-kit/roulette/soup.png"},
+ {name:"가볍게",icon:"./assets/ui-kit/roulette/light.png"},
+ {name:"간단식",icon:"./assets/ui-kit/roulette/quick_pan.png"},
  {name:"아무거나",icon:null}
 ];
 const WHEEL2_COLORS=['#ffc052','#f6d5bf','#f77468','#9b7dd6','#5bb8d8','#68c883','#b8d96b'];
@@ -926,7 +926,7 @@ function heroResult(){
     (res.urgent?'<p style="background:#fff0e7;color:#d84d18;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;margin:10px 0 0">⏰ '+esc(res.urgent)+'</p>':'')+
    '</div>'+
    '<div class="meal-image-wrap">'+
-    '<img src="/meal-bowl-v3.png" class="meal-image" alt="'+esc(res.name)+'">'+
+    '<img src="./assets/meal_bowl.png" class="meal-image" alt="'+esc(res.name)+'">'+
    '</div>'+
    '<div class="meal-actions">'+
     '<button class="primary-button" id="eat-btn-main">'+(eaten?'✓ 오늘 이거 먹었어요':'오늘 이거 먹을래! +15P')+'</button>'+
@@ -1180,7 +1180,7 @@ function renderDetail(){
  $('#detail-body').innerHTML=
   '<div class="detail-cover">'+(res.emoji||"🍳")+'</div>'+
   '<h1 class="detail-title">'+res.name+'</h1>'+
-  '<p class="stats"><img class="ico" src="/icons/cat-timer.png"> '+recipe.total_min+'분　·　'+recipe.level+'　·　<img class="ico" src="/icons/forkknife.png"> 2인분</p>'+
+  '<p class="stats"><img class="ico" src="./assets/ui-kit/icons/clock.png"> '+recipe.total_min+'분　·　'+recipe.level+'　·　<img class="ico" src="/icons/forkknife.png"> 2인분</p>'+
   '<h3 style="margin-top:16px">재료</h3>'+
   recipe.ingredients.map(g=>{const have=D.pantry.some(p=>g.name.includes(p.name)||p.name.includes(g.name));
    return '<div class="ingredient">'+(have?'<span class="have">있음</span>':"")+g.name+' <span>'+(g.amt||"")+'</span></div>'}).join("")+
@@ -1824,7 +1824,7 @@ function demoCardHtml(d){
   '<div class="mk-photo" style="background-image:url(\''+d.img+'\')">'+(d.tag?'<span class="mk-foodtag">'+d.tag+'</span>':'')+'</div>'+
   '<div class="mk-foodBody"><div class="mk-foodName">'+esc(d.title)+'</div>'+
   '<div class="mk-foodmeta"><span>'+esc(d.meta)+'</span><span><img class="ico" src="/icons/heart-outline.png"> '+d.like+'</span></div>'+
-  '<div class="mk-by"><img class="ico" src="/icons/person.png"> by '+esc(d.name)+' · 예시</div></div></article>';
+  '<div class="mk-by"><img class="ico" src="./assets/ui-kit/nav/my.png"> by '+esc(d.name)+' · 예시</div></div></article>';
 }
 function renderHomeFeed(){
  const el=$('#home-feed'); if(!el)return;
@@ -1833,7 +1833,7 @@ function renderHomeFeed(){
   '<div class="mk-photo" style="'+(r.image_url?'background-image:url('+esc(r.image_url)+')':'background:#fff0e7;display:flex;align-items:center;justify-content:center;font-size:30px')+'">'+(r.image_url?'':esc(r.emoji||'🍽️'))+(i===0?'<span class="mk-foodtag">BEST</span>':'')+'</div>'+
   '<div class="mk-foodBody"><div class="mk-foodName">'+esc(r.title)+'</div>'+
   '<div class="mk-foodmeta"><span>'+(r.kcal?r.kcal+'kcal':'')+'</span><span><img class="ico" src="/icons/heart-outline.png"> '+likeCount(r)+'</span></div>'+
-  '<div class="mk-by"><img class="ico" src="/icons/person.png"> by '+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+'</div></div></article>').join('');
+  '<div class="mk-by"><img class="ico" src="./assets/ui-kit/nav/my.png"> by '+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+'</div></div></article>').join('');
  if(top.length<4){ html+=DEMO_CARDS.slice(0,4-top.length).map(demoCardHtml).join(''); }
  el.innerHTML=html;
  el.querySelectorAll('[data-goexp]').forEach(c=>c.onclick=()=>go('explore'));
