@@ -112,3 +112,6 @@ body{margin:0;background:#ebe5df}
 #family-meal-app .wheel-sheet .wheel-result-text{margin:22px 0 14px;color:#765337;font-size:15px;font-weight:700;min-height:22px}
 #family-meal-app .wheel-sheet-close{z-index:9}
 @media(max-width:370px){#family-meal-app .wheel-sheet{padding-left:16px;padding-right:16px}#family-meal-app .wheel2-seg-inner{font-size:11px}#family-meal-app .wheel-food-icon{font-size:22px}#family-meal-app .wheel-center-btn{width:74px;height:74px}}
+
+/* Counter-rotation cancels the wheel rotation without changing sector positions. */
+#family-meal-app .wheel2-seg-inner{transform:rotate(0deg);transform-origin:center;transition:transform 3s cubic-bezier(.17,.67,.18,1)}
