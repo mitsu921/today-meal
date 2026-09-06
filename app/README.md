@@ -1,27 +1,22 @@
-# TodayMeal 원본 이미지 연결 수정본
+# TodayMeal 화면 수정본 v3
 
-기존 files.zip의 index.html 구조와 기능을 유지하면서 이미지 참조를 수정했습니다.
+## 적용 위치
+기존 /app/index.html을 백업한 뒤 이 폴더 안의 index.html, home-fix.css, assets/를 /app/에 복사하세요. /app/todaymeal-design-fixed/로 중첩하지 마세요. 기존 다른 파일과 서버 API는 유지합니다. 적용 후 강력 새로고침하세요.
 
-## 적용
-- assets/hero_woman.png: 인사말 캐릭터
-- assets/meal_bowl.png: 추천 메뉴
-- assets/piggy.png: 절약 리포트
-- assets/roulette.png: 룰렛 배너
+## 수정 사항
+- 상단 greeting-hero를 기존 hero 스타일에서 분리하여 주황색 배경과 글자 가림 해결.
+- 홈에만 적용하는 home-fix.css로 크기·간격·카드·반응형 배치 조정.
+- 네 원본을 참고해 내장 이미지 편집 도구로 주변 글자·버튼·배경을 제거한 *-clean.png 연결. 편집 결과는 원본과 픽셀 단위로 동일하지 않습니다. 원본 PNG도 assets에 보관했습니다.
+- 음식 배경 가장자리는 CSS 마스크로 카드에 자연스럽게 연결.
+- 한 상 구성·조리법은 '메뉴 구성 · 만드는 법 보기'를 펼쳐 접근. 기존 버튼과 이벤트 유지.
+- 서버 요청 실패 후 다시 추천받기 버튼 제공.
+- 누락된 하단 아이콘은 기본 기호로 표시, 알림 아이콘은 인라인 SVG로 표시.
 
-네 파일 모두 todaymeal-home-v2-source.zip의 원본과 바이트 단위로 일치합니다. v3 이미지는 사용하지 않습니다. 이미지 변환, 재생성, 외부 대체, 오류 시 자동 대체를 추가하지 않았습니다. 원본 이미지 자체에 잘린 글자·버튼·배경이 들어 있는 점은 그대로 유지했습니다.
+## 검증
+Chrome 360px·430px에서 화면 확인. 가로 넘침 없음, 네 이미지 로드 성공, 스크립트 오류 없음. 테스트용 API 응답으로 다른 메뉴 추천, 상세 펼치기, 룰렛 열기, 서버 오류 후 재시도 검증. 실제 운영 API·로그인·광고·업로드는 테스트하지 않았습니다. 기존 /api/menu, /api/nearby, /api/price, Supabase 환경이 필요합니다.
 
-UI 키트의 냉장고·홈·시계·사람 및 6개 음식 분류 아이콘을 해당 용도에 연결했습니다. assets/ui-kit에는 제공된 이미지 전체를 보관했습니다.
+## 남은 원본 의존성
+기존 다른 화면의 /hero-collage.jpg, /mission-pot.png, /thumb-*.jpg, /icon-192.png, /manifest.json 등은 제공되지 않았으며 기존 배포 경로를 유지했습니다. 이번 ZIP은 운영 서버 전체를 포함하지 않습니다.
 
-## 실행
-기존 서비스의 index.html을 이 파일로 교체하고 같은 위치에 assets 폴더를 복사하세요. /app/index.html에서는 /app/assets/로 연결되며 다른 하위 폴더에서도 네 이미지의 상대 경로가 유지됩니다.
-
-기존 서버 API /api/menu, /api/nearby, /api/price 및 Supabase 연결은 유지했습니다. 해당 서버 구현은 세 ZIP에 포함되어 있지 않아 전체 서비스의 독립 실행이나 서버 연동은 검증하지 못했습니다. 외부 스크립트·폰트·광고·실제 게시물 이미지도 기존 기능을 위해 유지합니다.
-
-## 여전히 제공되지 않은 별도 자산
-다음은 홈 시안의 네 이미지와 별개이며, 세 ZIP에서 대응 원본을 찾을 수 없었습니다. 임의의 그림을 배정하지 않고 기존 참조를 유지했습니다. 기존 서버 루트에 파일이 없으면 해당 화면에서 누락될 수 있습니다.
-- /hero-collage.jpg, /mission-pot.png, /icon-192.png
-- /thumb-popular.jpg, /thumb-recent.jpg, /thumb-fridge.jpg, /thumb-demo4.jpg
-- /icons/search.png, /icons/pencil.png, /icons/cart.png, /icons/chefhat.png, /icons/forkknife.png, /icons/heart-outline.png
-
-## 검사 결과
-네 원본 이미지 SHA-256 및 바이트 일치, 새 로컬 이미지 참조의 실제 파일 존재, HTML 내부 JavaScript 3개 문법 검사를 통과했습니다. asset-manifest.json으로 네 원본 파일을 확인할 수 있습니다. 브라우저 화면 및 서버 기능 검증은 수행하지 않았습니다.
+## 이미지 편집 지시
+내장 ImageGen 사용. 공통 지시: 기존 피사체·색·스타일·구도를 유지하고 모든 텍스트, 버튼, 카드, 테두리와 주변 UI를 제거. 캐릭터·돼지저금통·룰렛은 투명 배경, 음식은 단색 주황 배경으로 편집. 이미지 자체의 자동 대체 또는 외부 이미지 요청은 추가하지 않았습니다.

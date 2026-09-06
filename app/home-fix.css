@@ -1,0 +1,55 @@
+/* Home-only rules: leave recipe, pantry, shopping and community screens intact. */
+body{margin:0;background:#ebe5df}
+#family-meal-app{background:#fffdf9;overflow-x:clip;padding:0;min-height:100vh}
+#family-meal-app .v2{background:#fffdf9;padding-bottom:90px}
+#family-meal-app .v2 .topbar{height:70px;padding:0 18px}
+#family-meal-app .v2 .brand{font-size:25px}
+#family-meal-app .v2 main{padding:0 16px 24px}
+#family-meal-app .v2 .greeting-hero{position:relative;min-height:184px;margin:0;padding:44px 0 0;background:none;color:#251b15;overflow:visible;box-shadow:none;border:0;border-radius:0}
+#family-meal-app .v2 .hero-copy{position:relative;z-index:2;max-width:66%;pointer-events:none}
+#family-meal-app .v2 .eyebrow{font-size:12px;font-weight:600;margin:0 0 8px}
+#family-meal-app .v2 .greeting-hero h1{font-size:27px;line-height:1.22;letter-spacing:-1.3px;margin:0;font-weight:900}
+#family-meal-app .v2 .greeting-hero h1 strong{font-size:inherit;color:#ff5b16}
+#family-meal-app .v2 .hero-woman{width:155px;height:190px;right:-10px;bottom:0;object-fit:contain;object-position:bottom}
+#family-meal-app .v2 .filter-row{padding:9px 4px;border-radius:16px;margin:0 0 12px;min-height:49px}
+#family-meal-app .v2 .filter-chip span{font-size:17px}
+#family-meal-app .v2 .filter-chip b{font-size:9px}
+#family-meal-app .v2 .recommend-card{min-height:260px;padding:20px 17px 82px;border-radius:24px;background:linear-gradient(115deg,#ff8612,#ff981c);isolation:isolate}
+#family-meal-app .v2 .meal-copy{width:56%;z-index:2}
+#family-meal-app .v2 .pill{font-size:10px;padding:5px 9px}
+#family-meal-app .v2 .meal-copy h2{font-size:22px;margin:10px 0;line-height:1.25;overflow-wrap:anywhere}
+#family-meal-app .v2 .meal-meta{font-size:11px;gap:5px}
+#family-meal-app .v2 .meal-image-wrap{right:0;top:48px;width:49%;height:143px;pointer-events:none;z-index:1}
+#family-meal-app .v2 .meal-image{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 8px #95440025)}
+#family-meal-app .v2 .meal-actions{left:16px;right:16px;bottom:16px;gap:9px;z-index:3;grid-template-columns:1.35fr 1fr}
+#family-meal-app .v2 .primary-button,#family-meal-app .v2 .secondary-button{min-height:46px;padding:8px;font-size:12px;border-radius:16px}
+#family-meal-app .v2 .scrap-heart-btn{position:absolute;right:13px;top:13px;background:transparent;color:white;font-size:22px;z-index:3}
+#family-meal-app .v2 .meal-detail-toggle{margin:10px 0 15px;font-size:12px}
+#family-meal-app .v2 .meal-detail-toggle>summary{cursor:pointer;text-align:center;color:#8b7060;padding:6px;list-style-position:inside}
+#family-meal-app .v2 .quick-grid{gap:8px;margin:12px 0}
+#family-meal-app .v2 .quick-card{min-height:112px;padding:13px 4px 10px;border-radius:20px}
+#family-meal-app .v2 .quick-icon{font-size:26px;margin-bottom:8px}
+#family-meal-app .v2 .quick-card strong{font-size:11px;letter-spacing:-.5px}
+#family-meal-app .v2 .quick-card small{font-size:9px;margin-top:6px}
+#family-meal-app .v2 .saving-card{min-height:145px;padding:19px 15px;grid-template-columns:43% 37%;gap:9px;margin-bottom:12px;border-radius:24px}
+#family-meal-app .v2 .saving-main p{font-size:11px;margin-bottom:4px}
+#family-meal-app .v2 .saving-number{font-size:25px;letter-spacing:-1px}
+#family-meal-app .v2 .saving-main h3{font-size:13px;margin:2px 0 8px}
+#family-meal-app .v2 .text-button{font-size:10px;padding:6px 9px}
+#family-meal-app .v2 .saving-stats{padding:2px 0 0 9px}
+#family-meal-app .v2 .stat-row{gap:4px;justify-content:flex-start}
+#family-meal-app .v2 .stat-row b{font-size:11px}
+#family-meal-app .v2 .stat-row span{font-size:9px}
+#family-meal-app .v2 .round-arrow{width:19px;height:19px;font-size:15px;flex-shrink:0}
+#family-meal-app .v2 .divider{margin:13px 0}
+#family-meal-app .v2 .piggy{right:0;bottom:19px;width:72px;height:93px;object-fit:contain;pointer-events:none}
+#family-meal-app .v2 .roulette-banner{min-height:95px;border-radius:23px;padding:24px 143px 20px 16px}
+#family-meal-app .v2 .roulette-banner p{font-size:11px;margin-bottom:5px}
+#family-meal-app .v2 .roulette-banner h3{font-size:13px;line-height:1.4}
+#family-meal-app .v2 .roulette-banner img{right:35px;bottom:5px;width:106px;height:86px}
+#family-meal-app .v2 .roulette-arrow{right:10px;width:29px;height:29px;font-size:19px}
+@media(min-width:700px){#family-meal-app{margin:28px auto;border-radius:30px;box-shadow:0 20px 55px #71503520}.v2{border-radius:30px}}
+@media(max-width:365px){#family-meal-app .v2 .greeting-hero h1{font-size:24px}#family-meal-app .v2 .hero-woman{width:137px}#family-meal-app .v2 .meal-copy h2{font-size:20px}#family-meal-app .v2 .saving-number{font-size:21px}#family-meal-app .v2 .piggy{width:59px}#family-meal-app .v2 .roulette-banner{padding-right:130px}}
+
+#family-meal-app .v2 .meal-image-wrap{overflow:hidden;max-height:143px}#family-meal-app .v2 .meal-image{max-height:143px}#family-meal-app .v2 .quick-card strong{word-break:keep-all;font-size:10px}#family-meal-app .v2 .stat-row b{font-size:10px;word-break:keep-all}#family-meal-app .v2 .saving-stats{padding-left:7px}#family-meal-app .v2 .roulette-banner h3{word-break:keep-all}.local-icon{display:inline-block;font-size:22px;line-height:1}#family-meal-app .v2 .meal-actions{z-index:5}#family-meal-app .v2 .bell-icon{color:#30251c}
+#family-meal-app .v2 .meal-image{mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 76%,transparent 100%)}
