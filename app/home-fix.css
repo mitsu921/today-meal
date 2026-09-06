@@ -159,3 +159,14 @@ body{margin:0;background:#ebe5df}
 #family-meal-app .v2 .choice-copy small{font-size:11px;line-height:1.4;letter-spacing:-.4px;white-space:nowrap}
 #family-meal-app .v2 .choice-arrow{width:22px;height:22px;right:9px;top:9px;font-size:16px}
 @media(max-width:365px){#family-meal-app .v2 .meal-choice{height:120px;padding:8px 9px 10px}#family-meal-app .v2 .meal-choice .choice-art{height:55px;width:82px}#family-meal-app .v2 .choice-copy strong{font-size:15px}#family-meal-app .v2 .choice-copy small{font-size:10px}}
+
+/* v11: two clean horizontal choice cards with small explanations. */
+#family-meal-app .v2 .meal-choices{margin:18px 0 0}
+#family-meal-app .v2 .meal-choice-grid{gap:12px}
+#family-meal-app .v2 .meal-choice{height:168px;padding:18px 11px;display:flex;justify-content:center;overflow:hidden;border-radius:21px}
+#family-meal-app .v2 .meal-choice .choice-art{position:absolute;right:1px;top:50%;transform:translateY(-50%);width:57%;height:135px;max-width:none;margin:0;object-fit:contain}
+#family-meal-app .v2 .choice-copy{position:relative;z-index:1;width:45%;gap:11px}
+#family-meal-app .v2 .choice-copy strong{font-size:21px;line-height:1.35;letter-spacing:-.8px;white-space:nowrap}
+#family-meal-app .v2 .choice-copy small{font-size:11px;line-height:1.55;color:#62503f;letter-spacing:-.5px;white-space:nowrap}
+#family-meal-app .v2 main{padding-bottom:26px}
+@media(max-width:365px){#family-meal-app .v2 .meal-choice-grid{gap:10px}#family-meal-app .v2 .meal-choice{height:150px;padding:14px 9px}#family-meal-app .v2 .choice-copy strong{font-size:18px}#family-meal-app .v2 .choice-copy small{font-size:10px}#family-meal-app .v2 .meal-choice .choice-art{height:112px;width:55%;right:0}}
