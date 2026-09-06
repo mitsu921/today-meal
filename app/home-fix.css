@@ -135,3 +135,18 @@ body{margin:0;background:#ebe5df}
 #family-meal-app .v2 .roulette-image-shortcut .shortcut-wheel{position:absolute;width:110px;height:96px;right:36px;top:50%;transform:translateY(-50%);object-fit:contain;pointer-events:none}
 #family-meal-app .v2 .roulette-image-shortcut .shortcut-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;color:#aa5d20;font-size:23px;box-shadow:0 3px 10px #8b501018}
 @media(max-width:365px){#family-meal-app .v2 .roulette-image-shortcut{padding-right:131px}#family-meal-app .v2 .roulette-image-shortcut .shortcut-wheel{width:95px;right:32px}#family-meal-app .v2 .roulette-image-shortcut b{font-size:14px}}
+
+/* v9: equally discoverable home cooking and eating out. */
+#family-meal-app .v2 .meal-choices{margin:16px 0 18px}
+#family-meal-app .v2 .meal-choices h2{font-size:17px;font-weight:750;letter-spacing:-.5px;margin:0 0 12px;color:#352b24}
+#family-meal-app .v2 .meal-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#family-meal-app .v2 .meal-choice{position:relative;display:flex;flex-direction:column;align-items:stretch;min-width:0;text-align:left;border-radius:23px;border:1px solid #f5dfaa;padding:12px 13px 20px;box-shadow:0 6px 16px #9663260c;background:linear-gradient(145deg,#fff6df,#fff0c9);color:#34271c;cursor:pointer}
+#family-meal-app .v2 .meal-choice.choice-out{background:linear-gradient(145deg,#fff1e6,#ffe8d8);border-color:#f5d9c4}
+#family-meal-app .v2 .meal-choice .choice-art{position:static;display:block;width:100%;height:155px;object-fit:contain;margin:0 auto 10px;pointer-events:none}
+#family-meal-app .v2 .choice-copy{display:flex;flex-direction:column;gap:6px;padding-right:0}
+#family-meal-app .v2 .choice-copy strong{font-size:20px;line-height:1.3;font-weight:800;letter-spacing:-.8px}
+#family-meal-app .v2 .choice-copy small{font-size:12px;line-height:1.5;color:#65513d;letter-spacing:-.3px}
+#family-meal-app .v2 .choice-arrow{position:absolute;right:12px;top:12px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#ffffffc9;color:#6c4628;font-size:18px}
+#family-meal-app .v2 .meal-choice:focus-visible{outline:3px solid #dc6617;outline-offset:3px}
+#family-meal-app .v2 .meal-choice:active{transform:translateY(1px)}
+@media(max-width:365px){#family-meal-app .v2 .meal-choice-grid{gap:10px}#family-meal-app .v2 .meal-choice{padding:10px 10px 17px;border-radius:20px}#family-meal-app .v2 .meal-choice .choice-art{height:129px}#family-meal-app .v2 .choice-copy strong{font-size:18px}#family-meal-app .v2 .choice-copy small{font-size:11px}}
