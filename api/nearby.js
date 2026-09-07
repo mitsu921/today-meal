@@ -10,9 +10,20 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "서버에 KAKAO_REST_API_KEY가 설정되지 않았어요" });
   }
 
+  // Only owner-supplied, licensed photo URLs keyed by the exact Kakao place ID.
+  let photoMap = {};
+  try { photoMap = JSON.parse(process.env.PLACES_PHOTO_MAP_JSON || '{}'); }
+  catch { return res.status(500).json({ error: '가게 사진 설정의 JSON 형식을 확인해주세요' }); }
+  if (!photoMap || Array.isArray(photoMap) || typeof photoMap !== 'object') return res.status(500).json({error:'가게 사진 설정 형식이 잘못되었습니다'});
+  const httpsUrl = value => { try { const u = new URL(value); return u.protocol === 'https:' && !u.username && !u.password ? u.href : null; } catch { return null; } };
+  const getPhoto = id => {
+    const entry = Object.prototype.hasOwnProperty.call(photoMap, id) ? photoMap[id] : null;
+    if (!entry || typeof entry !== 'object' || !httpsUrl(entry.url)) return {};
+    return { photo_url: httpsUrl(entry.url), photo_credit: String(entry.credit || '').slice(0, 200), photo_credit_url: httpsUrl(entry.creditUrl), photo_source: 'owner_registered' };
+  };
   const { lat, lng, query, cat } = req.query;
   const y = parseFloat(lat), x = parseFloat(lng);
-  if (!y || !x || Number.isNaN(y) || Number.isNaN(x)) {
+  if (!Number.isFinite(y) || !Number.isFinite(x) || y < -90 || y > 90 || x < -180 || x > 180) {
     return res.status(400).json({ error: "위치 정보(lat, lng)가 필요해요" });
   }
 
@@ -78,7 +89,10 @@ export default async function handler(req, res) {
     docs = docs.slice(0, 20);
 
     const places = docs.map((p) => ({
+      id: p.id,
       name: p.place_name,
+      category_full: p.category_name || "",
+      ...getPhoto(p.id),
       category: (p.category_name || "").split(">").pop().trim(),
       address: p.road_address_name || p.address_name,
       distance: p.distance ? Math.round(p.distance) : null, // 미터
@@ -87,6 +101,7 @@ export default async function handler(req, res) {
       x: p.x, y: p.y,
     }));
 
+    res.setHeader('Cache-Control', 'private, no-store');
     res.status(200).json({ places });
   } catch (e) {
     if (e && e.status) return res.status(e.status).json({ error: "카카오 API 오류", detail: e.data });

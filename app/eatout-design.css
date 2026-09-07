@@ -39,3 +39,7 @@
 #family-meal-app .place-art .food-sprite{width:90px;height:90px}
 #family-meal-app .discovery-chip .food-sprite{width:35px;height:35px}
 @media(max-width:365px){#family-meal-app .food-art .food-sprite{width:45px;height:45px}}
+
+#family-meal-app .food-glyph{display:inline-grid;place-items:center;font-size:39px;line-height:1.2;width:57px;height:57px}#family-meal-app .place-art{position:relative}#family-meal-app .place-art .food-glyph{font-size:57px;width:90px;height:80px}#family-meal-app .art-caption{position:absolute;right:5px;bottom:3px;font-size:9px;color:#776759;background:#ffffffc9;padding:1px 4px;border-radius:4px}@media(max-width:365px){#family-meal-app .food-glyph{width:45px;height:45px;font-size:31px}}
+
+#family-meal-app .place-link{display:block;color:inherit;text-decoration:none}#family-meal-app .place-illustration{display:grid;place-items:center;width:100%;height:100%}#family-meal-app .real-place-photo{width:100%;height:88px;object-fit:cover;display:block}#family-meal-app .place-art [hidden]{display:none!important}#family-meal-app .photo-credit{font-size:10px;color:#756d64;padding:5px 8px;overflow-wrap:anywhere}#family-meal-app .photo-credit a{color:inherit;text-decoration:underline}
