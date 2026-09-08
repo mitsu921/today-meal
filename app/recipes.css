@@ -1,0 +1,33 @@
+#family-meal-app [data-view="explore"]{background:#fffdf9;padding-bottom:100px}
+#family-meal-app [data-view="explore"] .head{background:transparent;padding:26px 18px 10px}
+#family-meal-app [data-view="explore"] h1{font-size:28px;margin:0 0 8px;font-weight:800}
+#family-meal-app [data-view="explore"] .section{padding:14px 16px 0}
+#family-meal-app .recipe-tips{border:1px solid #f7dcc3;border-radius:17px;background:#fff}
+#family-meal-app .recipe-tips>summary{padding:15px;cursor:pointer;font-size:15px;font-weight:650;list-style:none}
+#family-meal-app .recipe-tips>summary::after{content:'›';float:right;color:#a65b22}
+#family-meal-app .recipe-tips[open]>summary::after{content:'⌄'}
+#family-meal-app .recipe-tips>summary span{color:#ff721c;margin-right:8px}
+#family-meal-app .recipe-tips .article-row{padding:0 10px 10px}
+#family-meal-app #feed-search{border:1px solid #dedbd7!important;border-radius:24px!important;padding:14px!important;font-size:14px!important;margin-bottom:15px!important}
+#family-meal-app .recipe-list-title{font-size:16px;margin:3px 0 14px;letter-spacing:-.5px}
+#family-meal-app .recipe-list-card{display:grid;grid-template-columns:36% minmax(0,1fr);gap:11px;padding:9px;margin-bottom:11px;background:#fff;border:1px solid #f0ebe4;border-radius:18px;box-shadow:0 3px 10px #58412504;overflow:visible}
+#family-meal-app .recipe-thumb{display:block;width:100%;min-height:135px;padding:0;background:#fff2df;border-radius:12px;overflow:hidden;align-self:stretch;cursor:pointer}
+#family-meal-app .recipe-thumb img{width:100%;height:100%;min-height:135px;object-fit:cover;display:block}
+#family-meal-app .recipe-no-photo{font-size:42px}
+#family-meal-app .recipe-summary{min-width:0;padding:4px 0;display:flex;flex-direction:column;gap:8px}
+#family-meal-app .recipe-title-button{padding:0;background:none;text-align:left;font-size:16px;font-weight:750;line-height:1.4;color:#28231f;word-break:keep-all;overflow-wrap:anywhere}
+#family-meal-app .recipe-author{font-size:11px;color:#82766c;line-height:1.4}
+#family-meal-app .recipe-nutrition{display:flex;flex-wrap:wrap;gap:4px}
+#family-meal-app .recipe-nutrition>span{font-size:11px;color:#a04c1b;background:#fff6ee;border-radius:8px;padding:5px 6px}
+#family-meal-app .recipe-controls{display:flex;align-items:center;gap:10px;margin-top:auto;position:relative}
+#family-meal-app .recipe-controls .likebtn,#family-meal-app .recipe-controls>.textbtn{background:none;border:0;padding:0;color:#817c75;font-size:23px;min-height:32px}
+#family-meal-app .recipe-controls .likebtn.on{color:#f66a19}
+#family-meal-app .recipe-controls small{font-size:11px}
+#family-meal-app .recipe-more{margin-left:auto;position:relative}
+#family-meal-app .recipe-more>summary{list-style:none;cursor:pointer;font-size:24px;color:#766c63;padding:0 5px}
+#family-meal-app .recipe-more-menu{position:absolute;right:0;top:100%;min-width:90px;background:#fff;border:1px solid #eee1d5;border-radius:12px;padding:7px;box-shadow:0 8px 22px #32200f1f;z-index:10}
+#family-meal-app .recipe-more-menu>*{display:block;padding:8px;text-decoration:none;font-size:13px;background:none;color:#665244}
+#family-meal-app .recipe-expanded,#family-meal-app .recipe-list-card>[id^="cmt-"]{grid-column:1/-1;min-width:0;font-size:13px;line-height:1.6}
+#family-meal-app .recipe-list-card input{min-width:0}
+#family-meal-app .recipe-share-prompt{display:flex;justify-content:space-between;width:100%;background:#fff4e9;color:#a14c1d;border-radius:15px;margin:15px 0;padding:16px;font-size:14px}
+@media(max-width:365px){#family-meal-app .recipe-list-card{gap:9px;padding:8px}#family-meal-app .recipe-title-button{font-size:14px}#family-meal-app .recipe-nutrition>span{font-size:10px;padding:4px}#family-meal-app .recipe-author{font-size:10px}}
