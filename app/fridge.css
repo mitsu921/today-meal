@@ -1,0 +1,31 @@
+/* Refrigerator screen only. Keep existing navigation and storage behavior. */
+#family-meal-app [data-view="fridge"] { background:#faf9f6; font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif; padding-bottom:104px; }
+#family-meal-app [data-view="fridge"] .head { background:transparent; padding:30px 22px 24px; border-bottom:1px solid #eae6df; }
+#family-meal-app [data-view="fridge"] h1 { display:flex; align-items:center; gap:10px; margin:0 0 9px; font-family:inherit; font-size:28px; font-weight:800; letter-spacing:-1px; }
+#family-meal-app [data-view="fridge"] .head .muted { font-size:14px; color:#706b64; line-height:1.6; }
+#family-meal-app [data-view="fridge"] .section { padding:25px 22px 0; }
+#family-meal-app [data-view="fridge"] h2 { font-family:inherit; font-size:19px; font-weight:750; margin:0 0 7px; letter-spacing:-.5px; }
+#family-meal-app [data-view="fridge"] .fridge-help { font-size:13px; line-height:1.6; color:#716c65; margin:0 0 16px; }
+#family-meal-app #quick-chips { gap:8px; overflow:visible; padding:0; }
+#family-meal-app #quick-chips .chip { min-height:40px; padding:9px 14px; border:1px solid #e5e0d8; border-radius:12px; background:white; color:#57524b; font-size:14px; font-weight:550; }
+#family-meal-app #quick-chips .chip.active { background:#fff0e7!important; color:#ad3b0d!important; border-color:#eea47e; font-weight:700; }
+#family-meal-app [data-view="fridge"] .fridge-add { display:flex; gap:8px; margin-top:18px; }
+#family-meal-app #custom-ing { flex:1; width:0; min-width:0; height:48px; padding:0 13px; border:1px solid #ded9d1; border-radius:12px; background:white; font-size:14px; color:#302b26; }
+#family-meal-app #custom-ing::placeholder { color:#817a72; }
+#family-meal-app #add-ing { flex:0 0 66px; min-height:48px; white-space:nowrap; font-size:14px; background:#d84d18; color:white; }
+#family-meal-app #pantry-count { display:inline-block; margin-left:5px; color:#b44013; font-size:15px; }
+#family-meal-app #pantry-list { display:grid; gap:10px; }
+#family-meal-app #pantry-list .ingline { display:flex; flex-direction:column; align-items:stretch!important; gap:13px; position:relative; padding:17px; border:1px solid #e9e4dc; border-radius:16px; background:white; }
+#family-meal-app #pantry-list .ingredient-name { display:block; padding-right:30px; font-size:16px; line-height:1.5; overflow-wrap:anywhere; }
+#family-meal-app #pantry-list .expiry-options { gap:5px!important; padding:4px; border-radius:10px; background:#f5f3ef; }
+#family-meal-app #pantry-list .exp { flex:1; min-width:0; min-height:36px; margin:0; padding:7px 4px; border-radius:8px; background:transparent; color:#736c64; font-size:12px; white-space:nowrap; }
+#family-meal-app #pantry-list .exp[aria-pressed="true"] { background:#fff; color:#343029; font-weight:750; box-shadow:0 1px 4px #302b2612; }
+#family-meal-app #pantry-list .exp[data-exp="오늘까지"][aria-pressed="true"] { background:#fff0e9; color:#b13d17; }
+#family-meal-app #pantry-list .exp[data-exp="이번주"][aria-pressed="true"] { background:#fff4d9; color:#856008; }
+#family-meal-app #pantry-list .exp[data-exp="여유"][aria-pressed="true"] { background:#e7f1e9; color:#326944; }
+#family-meal-app #pantry-list .back { position:absolute; right:7px; top:6px; width:44px; height:44px; color:#827a70; }
+#family-meal-app [data-view="fridge"] button:focus-visible,#family-meal-app #custom-ing:focus-visible { outline:3px solid #c66b38; outline-offset:3px; }
+#family-meal-app [data-view="fridge"] .fridge-empty { padding:30px 18px; text-align:center; border:1px dashed #ded8ce; border-radius:16px; background:white; }
+#family-meal-app [data-view="fridge"] .fridge-empty strong { font-size:16px; }
+#family-meal-app [data-view="fridge"] .fridge-empty p { color:#716c65; font-size:13px; line-height:1.6; margin:9px 0 0; }
+@media(max-width:360px) { #family-meal-app [data-view="fridge"] .section { padding-left:16px; padding-right:16px; } #family-meal-app #quick-chips .chip { padding-inline:12px; } }

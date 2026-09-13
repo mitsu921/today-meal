@@ -327,6 +327,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./home-fix.css?v=13">
 <link rel="stylesheet" href="./eatout-design.css?v=2">
 <link rel="stylesheet" href="./recipes.css?v=1">
+<link rel="stylesheet" href="./fridge.css?v=1">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -472,14 +473,14 @@ details.fold.sub .body p{font-size:13px!important}
   <section class="view" data-view="fridge">
     <header class="head"><h1>냉장고 <img class="ico" style="width:26px;height:26px" src="./assets/ui-kit/icons/fridge.png"></h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
     <div class="section">
-      <h2>자주 쓰는 재료 — 눌러서 담기</h2>
+      <h2>재료 담기</h2><p class="fridge-help">자주 쓰는 재료를 눌러 추가하세요.</p>
       <div class="chips" id="quick-chips" style="flex-wrap:wrap"></div>
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <input id="custom-ing" placeholder="없는 재료는 직접 입력">
+      <div class="fridge-add">
+        <input id="custom-ing" aria-label="직접 추가할 재료" maxlength="40" placeholder="다른 재료 직접 입력">
         <button class="b-green" style="border-radius:11px;padding:0 18px;font-weight:800" id="add-ing">담기</button>
       </div>
     </div>
-    <div class="section"><h2>내 냉장고 <span id="pantry-count"></span></h2><div id="pantry-list"></div></div>
+    <div class="section"><h2>내 냉장고 <span id="pantry-count"></span></h2><p class="fridge-help">언제까지 먹을지 선택해 주세요.</p><div id="pantry-list" aria-live="polite"></div></div>
   </section>
 
   <!-- ══ 레시피 올리기 (준비 중) ══ -->
@@ -1233,20 +1234,20 @@ function scrap(){
 function renderPantry(){
  const qc=$('#quick-chips');qc.innerHTML="";
  QUICK.forEach(n=>{const has=D.pantry.some(p=>p.name===n);
-  const b=document.createElement('button');b.className="chip"+(has?" active":"");b.textContent=n;
+  const b=document.createElement('button');b.className="chip"+(has?" active":"");b.textContent=n;b.setAttribute("aria-pressed",String(has));
   b.onclick=()=>{has?rmIng(n):addIng(n)};qc.appendChild(b)});
- $('#pantry-count').textContent=D.pantry.length?D.pantry.length+"개":"";
+ $('#pantry-count').textContent=D.pantry.length+"개";
  const pl=$('#pantry-list');
- if(!D.pantry.length){pl.innerHTML='<p class="muted">아직 비어 있어요. 위에서 재료를 담아보세요!</p>';return;}
+ if(!D.pantry.length){pl.innerHTML='<div class="fridge-empty"><strong>냉장고에 무엇이 있나요?</strong><p>재료를 담아두면 메뉴 추천에 반영해요.</p></div>';return;}
  pl.innerHTML="";
  D.pantry.forEach(p=>{
   const row=document.createElement('div');row.className="ingline";row.style.alignItems="center";
-  row.innerHTML='<span style="font-weight:700">'+p.name+'</span>';
-  const right=document.createElement('span');right.style.display="flex";right.style.gap="4px";right.style.alignItems="center";
+  const name=document.createElement("strong");name.className="ingredient-name";name.textContent=p.name;row.appendChild(name);
+  const right=document.createElement('span');right.className="expiry-options";right.setAttribute("role","group");right.setAttribute("aria-label",p.name+" 보관 기간");right.style.display="flex";right.style.gap="4px";right.style.alignItems="center";
   EXPS.forEach(([e,cls])=>{const b=document.createElement('button');
-   b.className="exp"+(p.exp===e?" "+cls:"");b.textContent=e;
+   b.className="exp"+(p.exp===e?" "+cls:"");b.textContent=e;b.dataset.exp=e;b.setAttribute("aria-pressed",String(p.exp===e));
    b.onclick=()=>{p.exp=e;save();renderPantry();renderTop()};right.appendChild(b)});
-  const x=document.createElement('button');x.className="back";x.textContent="✕";x.style.fontSize="14px";
+  const x=document.createElement('button');x.className="back";x.textContent="✕";x.style.fontSize="14px";x.setAttribute("aria-label",p.name+" 삭제");
   x.onclick=()=>rmIng(p.name);right.appendChild(x);
   row.appendChild(right);pl.appendChild(row);});
 }
