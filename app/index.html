@@ -332,6 +332,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./shop.css?v=1">
 <link rel="stylesheet" href="./legal-links.css?v=1">
 <link rel="stylesheet" href="./todaymeal-theme.css?v=20260913">
+<link rel="stylesheet" href="./home-redesign.css?v=20260913b">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -374,24 +375,12 @@ details.fold.sub .body p{font-size:13px!important}
       <div id="warn-slot"></div>
 
       <!-- 필터 칩 -->
-      <section class="filter-row" aria-label="추천 조건">
-        <button class="filter-chip" type="button" id="pref-summary">
-          <span>👨‍👩‍👧</span>
-          <b id="pref-summary-text">온 가족</b>
-        </button>
-        <button class="filter-chip" type="button" id="filter-time-chip" aria-pressed="false">
-          <span>🕒</span>
-          <b>20분 이내</b>
-        </button>
-        <button class="filter-chip" type="button" data-go="fridge">
-          <span>🧊</span>
-          <b>냉장고 <span id="pantry-count-home" style="font-size:11px">0</span>개</b>
-        </button>
-        <button class="filter-chip" type="button" id="filter-budget-chip" aria-pressed="false">
-          <span>🪙</span>
-          <b>1만원 이하</b>
-        </button>
+      <section class="home-filters" aria-label="추천 조건">
+        <button type="button" id="pref-summary"><b id="pref-summary-text">온 가족</b><span aria-hidden="true">⌄</span></button>
+        <button type="button" id="filter-time-chip" aria-pressed="false">20분 이내</button>
+        <button type="button" id="filter-budget-chip" aria-pressed="false">1만원 이하</button>
       </section>
+      <button type="button" class="home-pantry-link" data-go="fridge"><span>냉장고에 <b id="pantry-count-home">0</b>개 보관 중</span><span>재료 관리 ›</span></button>
 
       <!-- 오늘 추천 메뉴 -->
       <section class="recommend">
@@ -399,19 +388,10 @@ details.fold.sub .body p{font-size:13px!important}
         <details class="meal-detail-toggle"><summary>메뉴 구성 · 만드는 법 보기</summary><div id="result-extra" style="margin-top:12px"></div></details>
       </section>
 
-<section class="meal-choices" aria-label="식사 방법 선택">
- 
- <div class="meal-choice-grid">
-  <button class="meal-choice choice-home" id="roulette-banner-btn" type="button">
-   <img src="./assets/roulette-approved.png" alt="" class="choice-art">
-   <span class="choice-copy"><strong>집에서<br>먹기</strong><small>룰렛으로<br>메뉴 고르기</small></span>
-  </button>
-  <button class="meal-choice choice-out" id="eatout-home-btn" data-go="eatout" type="button">
-   <img src="./assets/restaurant.png" alt="" class="choice-art">
-   <span class="choice-copy"><strong>나가서<br>먹기</strong><small>가까운 맛집<br>찾아보기</small></span>
-  </button>
- </div>
-</section>
+<section class="home-alternatives" aria-label="다른 방법으로 고르기"><h2>다르게 골라볼까요?</h2><div>
+<button id="roulette-banner-btn" type="button"><span class="home-alt-symbol" aria-hidden="true">↻</span><strong>룰렛으로 고르기</strong><small>고민될 땐 가볍게 한 번</small><span class="home-alt-arrow" aria-hidden="true">›</span></button>
+<button id="eatout-home-btn" data-go="eatout" type="button"><span class="home-alt-symbol" aria-hidden="true">⌖</span><strong>밖에서 먹자</strong><small>가까운 맛집 찾아보기</small><span class="home-alt-arrow" aria-hidden="true">›</span></button>
+</div></section>
       <!-- 바로가기 -->
       
 
@@ -918,38 +898,21 @@ function heroBusy(msg){
  $('#hero').innerHTML='<article class="recommend-card card"><div class="meal-copy" style="width:100%;text-align:center;padding:40px 10px"><span class="pill">고르는 중</span><p class="loadmsg" style="margin-top:14px;font-weight:800">'+msg+'</p></div></article>';
 }
 function heroResult(){
- const m=res.macros;
- const missCount=(res.missing||[]).filter(x=>x.name).length;
- const trayCount=(res.tray||[]).length||4;
- const haveCount=Math.max(0,trayCount-missCount);
- const matchNote=D.pantry.length?'담아둔 재료를 참고한 추천이에요':'냉장고 재료를 담으면 추천에 반영해요';
- $('#hero').innerHTML=
-  '<article class="recommend-card card">'+
-   '<div class="meal-copy">'+
-    '<span class="pill">'+person+' 맞춤 추천</span>'+
-    '<h2 class="meal-title">'+esc(res.name)+'</h2>'+
-    '<ul class="meal-meta">'+
-     (res.time?'<li>◷ '+esc(res.time)+' 완성</li>':'')+
-     '<li>🌿 '+esc(matchNote)+'</li>'+
-     '<li>🔥 '+res.kcal+'kcal</li>'+
-     '<li id="cost-chip-slot-v2"></li>'+
-    '</ul>'+
-    (res.urgent?'<p style="background:#fff0e7;color:#d84d18;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;margin:10px 0 0">⏰ '+esc(res.urgent)+'</p>':'')+
-   '</div>'+
-   '<div class="meal-image-wrap">'+
-    '<img src="./assets/meal_bowl-clean.png" class="meal-image" alt="한 끼 식사 예시 이미지"><span class="meal-image-caption">식사 예시 이미지</span>'+
-   '</div>'+
-   '<div class="meal-actions">'+
-    '<button class="primary-button" id="eat-btn-main">'+(eaten?'✓ 오늘 이거 먹었어요':'오늘 이거 먹을래! +15P')+'</button>'+
-    '<button class="secondary-button" id="btn-again">다른 메뉴 볼래요</button>'+
-   '</div>'+
-   '<button class="scrap-heart-btn" id="btn-scrap" aria-label="저장">'+(scrapped?"♥":"♡")+'</button>'+
-  '</article>';
- $('#btn-again').onclick=decide;
- $('#btn-scrap').onclick=scrap;
- $('#eat-btn-main').onclick=eat;
- renderCostChip();
- renderExtra();
+ const dishes=(res.tray||[]).map(t=>t.item).filter(Boolean);
+ const note=D.pantry.length?'냉장고에 담아둔 재료를 참고했어요.':'냉장고 재료를 담으면 추천에 반영해요.';
+ $('#hero').innerHTML='<article class="home-recommendation">'+
+ '<div class="home-recommendation-top"><span>오늘의 추천</span><button type="button" id="btn-scrap" aria-label="메뉴 저장" aria-pressed="'+String(!!scrapped)+'">'+(scrapped?'♥':'♡')+'</button></div>'+
+ '<p class="home-recommendation-for">'+esc(person)+' · '+esc(meal)+'</p>'+
+ '<h2>'+esc(res.name)+'</h2>'+
+ '<div class="home-recommendation-meta">'+(res.time?'<span>'+esc(res.time)+'</span>':'')+(res.kcal?'<span>'+esc(String(res.kcal))+' kcal · 추정</span>':'')+'</div>'+
+ (dishes.length?'<div class="home-menu"><p>오늘의 한 상</p><ul>'+dishes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul></div>':'')+
+ '<p class="home-recommendation-note">'+esc(note)+'</p>'+
+ (res.urgent?'<p class="home-urgent">'+esc(res.urgent)+'</p>':'')+
+ '<div id="cost-chip-slot-v2"></div>'+
+ '<button type="button" class="home-decide" id="eat-btn-main">'+(eaten?'✓ 식사 기록 완료':'이 메뉴로 정하기')+'</button>'+
+ '<button type="button" class="home-again" id="btn-again">다른 메뉴 보기 <span aria-hidden="true">↻</span></button></article>';
+ $('#btn-again').onclick=decide;$('#btn-scrap').onclick=scrap;$('#eat-btn-main').onclick=eat;
+ renderCostChip();renderExtra();
 }
 async function renderCostChip(){
  const names=[...(res.tray||[]).map(t=>t.item), ...(res.missing||[]).map(m=>m.name)].filter(Boolean);
