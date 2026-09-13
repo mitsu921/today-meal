@@ -329,6 +329,8 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./recipes.css?v=1">
 <link rel="stylesheet" href="./fridge.css?v=1">
 <link rel="stylesheet" href="./upload.css?v=1">
+<link rel="stylesheet" href="./shop.css?v=1">
+<link rel="stylesheet" href="./legal-links.css?v=1">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -560,11 +562,11 @@ details.fold.sub .body p{font-size:13px!important}
   <!-- ══ 장보기 ══ -->
   <section class="view" data-view="shop">
     <header class="head"><h1>장보기 🛒</h1><p class="muted">추천 메뉴에서 없는 재료를 담으면 여기 모여요</p></header>
-    <div class="section"><div class="line"><h2>장보기 목록</h2><div style="display:flex;gap:10px"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">산 것 지우기</button></div></div><div id="shop-list"></div></div>
-    <div class="section" style="margin-top:60px">
+    <div class="section"><div class="line"><h2>장보기 목록</h2><p id="shop-progress" role="status"></p></div><p class="shop-help">산 재료는 체크해 주세요.</p><div class="shop-actions"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">구매 완료 지우기</button></div><div id="shop-list"></div></div>
+    <div class="section shop-search">
       <div style="background:#fff;border:1px solid #eef1ee;border-radius:16px;padding:14px 14px 10px;overflow:hidden">
-        <p style="font-size:14px;font-weight:800;color:#39774e;margin:0 0 10px;line-height:1.4">🔎 장보기 목록에 없는 것도<br>여기서 검색해보세요!</p>
-        <iframe src="https://coupa.ng/col8Vc" width="100%" height="36" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics style="border-radius:10px"></iframe>
+        <p style="font-size:14px;font-weight:800;color:#39774e;margin:0 0 10px;line-height:1.4">재료 더 찾기</p>
+        <iframe title="쿠팡 상품 검색" src="https://coupa.ng/col8Vc" width="100%" height="36" frameborder="0" scrolling="no" referrerpolicy="unsafe-url" browsingtopics style="border-radius:10px"></iframe>
         <p class="muted" style="font-size:10.5px;margin:8px 0 0;color:#b7c0b4">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
       </div>
     </div>
@@ -647,6 +649,7 @@ details.fold.sub .body p{font-size:13px!important}
       <p class="muted" style="margin:-2px 0 10px">받은 추천(♥) 수에 따라 등급이 올라가요. 레시피를 올리고 추천을 받아보세요!</p>
       <div id="tier-progress"></div>
     </div>
+    <section class="section legal-settings" aria-labelledby="legal-settings-title"><h2 id="legal-settings-title">서비스 안내</h2><a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 <span aria-hidden="true">↗</span></a><a href="/terms.html" target="_blank" rel="noopener">이용약관 <span aria-hidden="true">↗</span></a></section>
   </section>
 
   <div class="pref-sheet-bg" id="pref-sheet-bg">
@@ -669,6 +672,10 @@ details.fold.sub .body p{font-size:13px!important}
     </div>
   </div>
 
+  <footer class="legal-footer" aria-label="서비스 정책">
+    <span class="legal-brand">TodayMeal</span>
+    <div><a href="/privacy.html" target="_blank" rel="noopener" aria-label="개인정보처리방침, 새 창">개인정보처리방침</a><a href="/terms.html" target="_blank" rel="noopener" aria-label="이용약관, 새 창">이용약관</a></div>
+  </footer>
   <nav class="tabbar" aria-label="주요 메뉴"><button class="nav on" data-go="home" aria-label="홈"><svg class="nav-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span class="nav-label">홈</span></button><button class="nav" data-go="explore" aria-label="탐색"><svg class="nav-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7.5"/><path d="m16 16 5 5"/></svg><span class="nav-label">탐색</span></button><button class="nav" data-go="fridge" aria-label="냉장고"><svg class="nav-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M5 10h14M8 5v2m0 6v4"/></svg><span class="nav-label">냉장고</span></button><button class="nav" data-go="upload" aria-label="올리기"><svg class="nav-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg><span class="nav-label">올리기</span></button><button class="nav" data-go="shop" aria-label="장보기"><svg class="nav-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h2l3 13h11l2-9H6"/><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg><span class="nav-label">장보기</span><b id="shop-badge"></b></button><button class="nav" data-go="kitchen" aria-label="내 주방"><svg class="nav-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg><span class="nav-label">내 주방</span></button></nav>
 
   <div id="toast" class="toast"></div>
@@ -1293,22 +1300,28 @@ async function fetchPrice(itemCd){
 function renderShop(){
  const el=$('#shop-list');
  const sa=$('#select-all-shop');
+ const done=D.shop.filter(s=>s.done).length;
+ $('#shop-progress').textContent=D.shop.length?'남은 재료 '+(D.shop.length-done)+'개 · 구매 완료 '+done+'개':'0개';
+ $('#clear-done').disabled=done===0;if(sa)sa.disabled=D.shop.length===0;
  if(sa)sa.textContent=(D.shop.length&&D.shop.every(s=>s.done))?"전체해제":"전체선택";
- if(!D.shop.length){el.innerHTML='<p class="muted">비어 있어요. 추천 메뉴의 "없는 재료"를 담으면 여기 모여요.</p>';return;}
+ if(!D.shop.length){el.innerHTML='<p class="muted">아직 담은 재료가 없어요.<br>추천 메뉴에서 부족한 재료를 담아보세요.</p>';return;}
  el.innerHTML="";
  D.shop.forEach((s,i)=>{
-  const row=document.createElement('div');row.className="ingline";row.style.alignItems="center";row.style.gap="10px";
-  const cb=document.createElement('button');cb.className="cb"+(s.done?" done":"");cb.textContent=s.done?"✓":"";
+  const row=document.createElement('div');row.className="ingline shop-item"+(s.done?" is-done":"");row.style.alignItems="center";row.style.gap="10px";
+  const cb=document.createElement('button');cb.className="cb"+(s.done?" done":"");cb.textContent=s.done?"✓":"";cb.setAttribute("aria-label",s.name+" 구매 완료");cb.setAttribute("aria-pressed",String(!!s.done));
   cb.onclick=()=>{s.done=!s.done;save();renderShop();renderTop()};
   const nm=document.createElement('span');nm.style.flex="1";nm.style.fontWeight="700";
   nm.style.textDecoration=s.done?"line-through":"none";nm.style.color=s.done?"#9aa79b":"#26392d";
   const priceId='price-'+i;
-  nm.innerHTML=s.name+' <small class="muted">'+(s.amt||"")+'</small><br><small class="muted" id="'+priceId+'" style="color:#f45f25"></small>';
-  const fr=document.createElement('small');fr.className="muted";fr.textContent=s.from||"";
+  nm.className="shop-copy";
+  const title=document.createElement('strong');title.className='shop-name';title.textContent=s.name;nm.appendChild(title);
+  if(s.amt){const amount=document.createElement('small');amount.className='shop-amount';amount.textContent=s.amt;nm.appendChild(amount);}
+  const price=document.createElement('small');price.id=priceId;price.className='shop-price';nm.appendChild(price);
+  const fr=document.createElement('small');fr.className="shop-from";fr.textContent=s.from?"사용할 요리 · "+s.from:"";
   const buy=document.createElement('a');buy.href="https://www.coupang.com/np/search?q="+encodeURIComponent(s.name);
-  buy.target="_blank";buy.rel="noopener";buy.textContent="🛒 보기";buy.title="쿠팡에서 "+s.name+" 찾기";
+  buy.target="_blank";buy.rel="noopener";buy.className="shop-product";buy.textContent="상품 보기 ↗";buy.setAttribute("aria-label",s.name+" 쿠팡 상품 보기, 새 창");buy.title="쿠팡에서 "+s.name+" 찾기";
   buy.style.cssText="text-decoration:none;font-size:11.5px;font-weight:800;color:#39774e;background:#eef6ee;border-radius:10px;padding:6px 9px;flex:0 0 auto;white-space:nowrap";
-  row.appendChild(cb);row.appendChild(nm);row.appendChild(fr);row.appendChild(buy);el.appendChild(row);
+  nm.appendChild(fr);row.appendChild(cb);row.appendChild(nm);row.appendChild(buy);el.appendChild(row);
   const code=findKamisCode(s.name);
   if(code){
    fetchPrice(code).then(p=>{
