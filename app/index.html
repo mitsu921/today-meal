@@ -333,6 +333,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./legal-links.css?v=1">
 <link rel="stylesheet" href="./todaymeal-theme.css?v=20260913">
 <link rel="stylesheet" href="./home-redesign.css?v=20260913b">
+<link rel="stylesheet" href="./roulette-photos.css?v=1">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -815,7 +816,7 @@ const WHEEL2_CATS=[
  {name:"간단식",icon:"./assets/ui-kit/roulette/quick_pan.png"},
  {name:"아무거나",icon:null}
 ];
-const WHEEL2_COLORS=['#ffb84d','#fff0cc','#ffd17b','#fff8e5','#ffc15d','#ffedc1','#ffe0a0'];
+const WHEEL2_COLORS=['#f8cb79','#fff0d2','#f8d998','#fff3df','#f4ca80','#fff0d4','#f5dfb0'];
 let wheelCategory="", wheel2Spinning=false, wheelRotation=0;
 function buildWheel2(){
  const wheel=$('#wheel2'); if(!wheel)return;
@@ -825,8 +826,8 @@ function buildWheel2(){
  wheel.innerHTML=WHEEL2_CATS.map((c,i)=>{
   const angle=(i*seg+seg/2-90)*Math.PI/180;
   const x=50+34*Math.cos(angle),y=50+34*Math.sin(angle);
-  const glyphs=['🍚','🍜','🍖','🍲','🥗','🍳','🎲'];
-  return '<span class="wheel2-seg-label" style="left:'+x+'%;top:'+y+'%"><span class="wheel2-seg-inner"><span class="wheel-food-icon">'+glyphs[i]+'</span>'+c.name+'</span></span>';
+
+  return '<span class="wheel2-seg-label" style="left:'+x+'%;top:'+y+'%"><span class="wheel2-seg-inner"><span class="wheel-food-photo" aria-hidden="true" style="background-position:'+((i%3)*50)+'% '+(Math.floor(i/3)*50)+'%"></span>'+c.name+'</span></span>';
  }).join('');
 }
 buildWheel2();

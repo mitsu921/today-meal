@@ -1,0 +1,8 @@
+/* Seven photographic category assets; keep existing counter-rotation. */
+#family-meal-app .wheel2-seg-label{width:76px;height:76px;padding:0;text-align:center}
+#family-meal-app .wheel2-seg-inner{display:flex;flex-direction:column;align-items:center;gap:0;font-size:11px;font-weight:750;line-height:1.35;color:#493420;text-shadow:none}
+#family-meal-app .wheel-food-photo{display:block;flex:none;width:66px;height:60px;background-image:url('./assets/roulette-food-photos.png');background-size:300% 300%;background-repeat:no-repeat;mix-blend-mode:multiply}
+#family-meal-app .wheel-outer2{background:#f0d6bd;border-color:#e3bea0;box-shadow:0 3px 10px #7956310c}
+#family-meal-app .wheel-center-btn{width:66px;height:66px;background:#fff8eb;color:#a95327;box-shadow:0 2px 7px #83522812}
+#family-meal-app #wheel-spin-btn{background:#c46639!important;color:#fff;box-shadow:none}
+@media(max-width:360px){#family-meal-app .wheel2-seg-label{width:63px;height:66px}#family-meal-app .wheel-food-photo{width:56px;height:51px}#family-meal-app .wheel2-seg-inner{font-size:10px}#family-meal-app .wheel-center-btn{width:58px;height:58px}}
