@@ -1,0 +1,80 @@
+/* Shared visual system: ivory, oat and soft orange. Loaded last. */
+:root{--tm-bg:#fcfaf6;--tm-panel:#f3f0e9;--tm-ink:#352f2a;--tm-muted:#726a62;--tm-accent:#bd5934;--tm-border:#e6e0d7}
+body{background:#edeae4}
+#family-meal-app{background:var(--tm-bg);color:var(--tm-ink);font-family:Pretendard,'Malgun Gothic','Apple SD Gothic Neo',sans-serif}
+#family-meal-app .view,#family-meal-app .v2{background:var(--tm-bg)}
+#family-meal-app h1,#family-meal-app h2,#family-meal-app h3,#family-meal-app .v2 h1,#family-meal-app .v2 h2{font-family:inherit!important;color:var(--tm-ink);letter-spacing:-.6px}
+#family-meal-app .head{background:transparent;padding:27px 20px 20px}
+#family-meal-app .head h1{font-size:27px;font-weight:800;margin:0 0 9px}
+#family-meal-app .muted{color:var(--tm-muted);line-height:1.7}
+#family-meal-app button,#family-meal-app input,#family-meal-app textarea{font-family:inherit}
+#family-meal-app input:not([type=file]),#family-meal-app textarea{font-size:16px!important;color:var(--tm-ink);border-color:var(--tm-border)!important}
+#family-meal-app .primary,#family-meal-app .b-green,#family-meal-app #add-ing,#family-meal-app #up-submit,#family-meal-app .wheel-spin-btn-below{background:var(--tm-accent)!important;color:white!important;box-shadow:none!important}
+#family-meal-app .chip.active,#family-meal-app #quick-chips .chip.active,#family-meal-app #up-target .chip.active,#family-meal-app #eatout-cat .chip.active{background:#f7e9df!important;color:#984321!important;border-color:#dba990!important}
+#family-meal-app .tabbar{grid-template-columns:repeat(5,minmax(0,1fr));background:#fcfaf6;border-color:var(--tm-border);box-shadow:none}
+#family-meal-app .tabbar [data-go=upload]{display:none}
+#family-meal-app .tabbar .nav.on{color:var(--tm-accent)!important}
+#family-meal-app .v2 .topbar{height:64px;padding:0 20px}
+#family-meal-app .v2 .brand{color:var(--tm-accent);font-family:inherit;font-size:25px}
+#family-meal-app .v2 .greeting-hero{min-height:0;padding:21px 0 18px;margin:0;background:var(--tm-panel);border-radius:18px}
+#family-meal-app .v2 .hero-copy{max-width:100%;padding:0 16px}
+#family-meal-app .v2 .hero-woman{display:none}
+#family-meal-app .v2 .greeting-hero h1{font-size:27px;line-height:1.35;margin:5px 0 8px}
+#family-meal-app .home-intro{font-size:14px;color:var(--tm-muted);margin:0;line-height:1.6}
+#family-meal-app .v2 .eyebrow{font-size:12px;color:var(--tm-muted)}
+#family-meal-app .v2 .filter-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;background:transparent;box-shadow:none;padding:12px 0}
+#family-meal-app .v2 .filter-chip{min-height:44px;border:1px solid var(--tm-border);border-radius:11px;background:#fff;padding:8px}
+#family-meal-app .v2 .filter-chip b{font-size:12px}
+#family-meal-app .v2 .recommend-card{display:flex;flex-direction:column;padding:0;min-height:0;background:white!important;border:1px solid var(--tm-border);border-radius:18px;overflow:hidden;box-shadow:none;color:var(--tm-ink)}
+#family-meal-app .v2 .meal-image-wrap{order:-1;position:relative;inset:auto;width:100%;height:205px;max-height:none;background:#f3e9dc;overflow:hidden}
+#family-meal-app .v2 .meal-image{width:100%;height:100%;max-height:none;object-fit:contain;mask-image:none;filter:none}
+#family-meal-app .meal-image-caption{position:absolute;bottom:8px;right:10px;font-size:10px;background:#fffcf5e8;color:#75695b;padding:4px 7px;border-radius:6px}
+#family-meal-app .v2 .meal-copy{position:static;width:100%;padding:18px}
+#family-meal-app .v2 .meal-copy h2{font-size:23px;line-height:1.4;margin:9px 0}
+#family-meal-app .v2 .pill{background:#f6e9df;color:#984321;font-size:12px}
+#family-meal-app .v2 .meal-meta{color:var(--tm-muted);font-size:13px;line-height:1.7}
+#family-meal-app .v2 .meal-actions{position:static;display:flex;flex-direction:column;padding:0 16px 16px;gap:6px}
+#family-meal-app .v2 .primary-button{background:var(--tm-accent);color:white;min-height:49px;font-size:15px;border-radius:12px}
+#family-meal-app .v2 .secondary-button{background:transparent;color:#67594d;min-height:44px;font-size:14px}
+#family-meal-app .v2 .scrap-heart-btn{top:12px;right:12px;background:#fffaf2e8;color:var(--tm-accent);border-radius:50%;width:44px;height:44px}
+#family-meal-app .v2 .meal-detail-toggle{font-size:14px;background:white;border:1px solid var(--tm-border);border-radius:12px;padding:7px}
+#family-meal-app .v2 .meal-detail-toggle>summary{min-height:40px;padding:10px;color:var(--tm-muted)}
+#family-meal-app .v2 .choice-card{background:#f3ebe3!important;border-color:var(--tm-border);box-shadow:none}
+#family-meal-app .v2 .meal-choice{background:#f3ebe3!important;border:1px solid var(--tm-border);box-shadow:none;height:120px;border-radius:15px}
+#family-meal-app .v2 .choice-copy strong{font-size:18px;color:var(--tm-ink)}
+#family-meal-app .v2 .meal-choice .choice-art{height:90px;opacity:.9}
+#family-meal-app .wheel-outer2{background:#efd5be;border-color:#e0b99d;box-shadow:none}
+#family-meal-app .bulb-ring{opacity:.35}
+#family-meal-app .recipe-list-card{border-color:var(--tm-border);box-shadow:none;border-radius:15px}
+#family-meal-app .recipe-title-button{font-size:16px!important;line-height:1.5}
+#family-meal-app .recipe-author{font-size:12px!important}
+#family-meal-app .recipe-expanded{font-size:15px;line-height:1.85;padding:14px 4px;border-top:1px solid var(--tm-border)}
+#family-meal-app .recipe-expanded .fbody{font-size:15px;line-height:1.85}
+#family-meal-app .recipe-controls button{min-height:44px!important}
+#family-meal-app .recipe-tips{background:var(--tm-panel);border-color:var(--tm-border)}
+#family-meal-app .recipe-share-prompt{background:#f4e8df;color:#984321;min-height:48px}
+#family-meal-app #feed-search{background:#fff;border-radius:13px!important;min-height:50px}
+#family-meal-app .kitchen-summary{display:grid;grid-template-columns:repeat(3,1fr);margin:0 18px 18px;padding:20px 8px;border-radius:16px;background:var(--tm-panel);text-align:center}
+#family-meal-app .kitchen-summary strong{display:block;font-size:25px;margin-bottom:7px}
+#family-meal-app .kitchen-summary span{font-size:12px;color:var(--tm-muted)}
+#family-meal-app .kitchen-report{padding:0 18px 10px}
+#family-meal-app .kitchen-report .saving-card{display:none}
+#family-meal-app .kitchen-report .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#family-meal-app .kitchen-report .quick-card{min-height:92px;box-shadow:none;background:white;border:1px solid var(--tm-border);border-radius:13px}
+#family-meal-app .kitchen-report .quick-card strong{font-size:14px}
+#family-meal-app .kitchen-report .quick-card small{font-size:12px;line-height:1.5}
+#family-meal-app .kitchen-report .quick-icon{font-size:22px}
+#family-meal-app [data-view=kitchen] .section{padding-top:24px}
+#family-meal-app [data-view=kitchen] h2{font-size:19px}
+#family-meal-app [data-view=kitchen] .authbox{border:1px solid var(--tm-border);background:#f5eee7;border-radius:14px;margin:10px 18px;padding:16px;font-size:14px}
+#family-meal-app [data-view=eatout] .wheel-outer{background:#f0d2bb;border-color:#e0b699;padding:8px;box-shadow:none}
+#family-meal-app [data-view=eatout] .wheel-pointer{background:var(--tm-accent)}
+#family-meal-app [data-view=eatout] .food-art .food-sprite{display:inline-block;width:43px;height:43px;background-image:url('./assets/eatout-foods.png')}
+#family-meal-app [data-view=eatout] .nearby-panel{background:white;border-color:var(--tm-border)}
+#family-meal-app [data-view=eatout] #eatout-list-toggle{background:#f8eee6;color:#984321;border-color:#dfb9a1}
+#family-meal-app [data-view=shop] .cb.done{background:var(--tm-accent)!important;border-color:var(--tm-accent)!important}
+#family-meal-app [data-view=shop] .is-done{background:var(--tm-panel)!important;border-color:var(--tm-border)!important}
+#family-meal-app #pantry-list .exp[aria-pressed=true]{background:#f4e7dc!important;color:#864728!important}
+#family-meal-app .legal-footer{background:var(--tm-bg);padding-bottom:105px}
+#family-meal-app button:focus-visible,#family-meal-app a:focus-visible{outline:3px solid #bd5934;outline-offset:3px}
+@media(max-width:360px){#family-meal-app .v2 .greeting-hero h1{font-size:24px}#family-meal-app .v2 .meal-copy h2{font-size:21px}#family-meal-app .v2 .meal-image-wrap{height:180px}}
