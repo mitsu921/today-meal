@@ -1,0 +1,74 @@
+/* TodayMeal photo home update. Loaded after legacy CSS; scoped to the home view. */
+#family-meal-app [data-view="home"].v2{--orange:#f66c27;--tm-accent:#f66c27;--tm-ink:#20252b;--tm-muted:#777b80;background:#fffdfa;color:#20252b;padding-bottom:24px}
+#family-meal-app [data-view="home"].v2 main{padding:0 18px 22px}
+#family-meal-app [data-view="home"] .topbar{height:70px;padding:0 18px;display:grid;grid-template-columns:1fr 42px 42px;gap:4px;background:transparent}
+#family-meal-app [data-view="home"] .topbar>.brand{grid-column:1;grid-row:1;justify-self:start;color:#f66c27;font-size:28px;font-weight:850;letter-spacing:-1px}
+#family-meal-app [data-view="home"] .topbar>div:first-child{grid-column:2;grid-row:1}
+#family-meal-app [data-view="home"] .topbar>.bell-button{grid-column:3;grid-row:1}
+#family-meal-app [data-view="home"] .icon-button{width:42px;height:44px}
+#family-meal-app [data-view="home"] .hamburger{width:21px;gap:4px}
+#family-meal-app [data-view="home"] .hamburger i{height:2px;background:#30363a}
+#family-meal-app [data-view="home"] .badge{width:19px;height:19px;font-size:11px;right:0;top:1px;background:#f66c27}
+#family-meal-app [data-view="home"] .quick-dropdown{left:auto;right:0}
+#family-meal-app [data-view="home"] .greeting-hero{padding:8px 0 18px;margin:0;background:none;border:0;border-radius:0;min-height:0;box-shadow:none}
+#family-meal-app [data-view="home"] .hero-copy{max-width:100%;width:100%;padding:0}
+#family-meal-app [data-view="home"] .greeting-hero h1{font-size:32px;line-height:1.3;margin:0 0 5px;font-weight:800;letter-spacing:-1.2px;color:#20252b}
+#family-meal-app [data-view="home"] .home-intro{font-size:16px;line-height:1.5;color:#777b80;margin:0}
+#family-meal-app [data-view="home"] #greet{display:none}
+#family-meal-app [data-view="home"] .home-photo-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 13px}
+#family-meal-app [data-view="home"] .home-photo-tabs button{display:flex;justify-content:center;align-items:center;gap:6px;min-height:46px;padding:8px 4px;border:1px solid #e6e5e2;border-radius:11px;background:#fff;color:#30363a;font-size:14px;font-weight:650;white-space:nowrap}
+#family-meal-app [data-view="home"] .home-photo-tabs button[aria-pressed="true"]{background:#fff0e7;color:#d65015;border-color:#ffc5a7}
+#family-meal-app [data-view="home"] .home-photo-tabs svg{width:20px;height:20px;flex-shrink:0}
+#family-meal-app [data-view="home"] .home-filters{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 4px}
+#family-meal-app [data-view="home"] .home-filters button{font-size:13px;min-height:40px;border-radius:22px;padding:8px 12px;background:#fff;border:1px solid #e6e5e2;color:#62686d}
+#family-meal-app [data-view="home"] .home-filters #pref-summary{order:3;min-width:40px;flex:1;justify-content:space-between;border-radius:10px;font-size:12px}
+#family-meal-app [data-view="home"] .home-filters button[aria-pressed="true"]{color:#ba4514;background:#fff0e7;border-color:#ffa275}
+#family-meal-app [data-view="home"] .home-pantry-link{font-size:12px;min-height:36px;padding:5px 0 10px;color:#797d80}
+#family-meal-app [data-view="home"] .home-pantry-link b{color:#da591f}
+#family-meal-app [data-view="home"] .recommend,#family-meal-app [data-view="home"] #hero{margin:0;padding:0;border:0;background:none;box-shadow:none}
+#family-meal-app [data-view="home"] .home-photo-recommendation{border:0;border-radius:0;box-shadow:none;padding:0;background:none;color:#20252b}
+#family-meal-app [data-view="home"] .home-photo-cover{position:relative;aspect-ratio:1.68;border-radius:15px;overflow:hidden;background:#f2e9df}
+#family-meal-app [data-view="home"] .home-photo-cover>img{width:100%;height:100%;object-fit:cover;display:block}
+#family-meal-app [data-view="home"] .home-recommendation-top{position:absolute;inset:12px 12px auto;display:flex;justify-content:space-between;align-items:flex-start;margin:0}
+#family-meal-app [data-view="home"] .home-recommendation-top>span{background:#fffaf0;color:#de5b20;border-radius:22px;padding:7px 12px;font-size:13px;font-weight:750}
+#family-meal-app [data-view="home"] .home-recommendation-top button{width:40px;height:40px;border-radius:50%;border:1px solid #fff9;background:#3b2c204f;color:#fff;font-size:28px;line-height:1}
+#family-meal-app [data-view="home"] .home-recommendation-top button[aria-pressed="true"]{color:#ee6425;background:#fff}
+#family-meal-app [data-view="home"] .home-photo-caption{position:absolute;right:9px;bottom:8px;padding:3px 7px;font-size:11px;border-radius:5px;color:white;background:#32271e80}
+#family-meal-app [data-view="home"] .home-photo-copy{padding:12px 1px 0}
+#family-meal-app [data-view="home"] .home-photo-copy h2{font-size:24px;font-weight:800;line-height:1.4;letter-spacing:-.8px;color:#20252b;margin:0 0 6px;overflow-wrap:anywhere}
+#family-meal-app [data-view="home"] .home-recommendation-meta{font-size:14px;color:#777b80;gap:12px;line-height:1.6}
+#family-meal-app [data-view="home"] .home-recommendation-note{font-size:12px;color:#848586;margin:7px 0 10px;line-height:1.6}
+#family-meal-app [data-view="home"] #cost-chip-slot-v2:empty{display:none}
+#family-meal-app [data-view="home"] #cost-chip-slot-v2{font-size:13px;color:#a85222;margin-bottom:8px}
+#family-meal-app [data-view="home"] .home-photo-actions{display:grid;grid-template-columns:1.6fr 1fr;gap:9px;margin-top:13px}
+#family-meal-app [data-view="home"] .home-photo-actions button{min-height:49px;border-radius:12px;padding:12px 8px;margin:0;font-size:15px;font-weight:700;line-height:1.4}
+#family-meal-app [data-view="home"] .home-photo-actions .home-cook{color:#fff;background:#f66c27;border:1px solid #f66c27}
+#family-meal-app [data-view="home"] .home-photo-actions .home-again{color:#353a3d;background:#fff;border:1px solid #dfe0df}
+#family-meal-app [data-view="home"] .home-photo-actions .home-again span{margin:0 4px 0 0}
+#family-meal-app [data-view="home"] button:disabled{opacity:.6;cursor:wait}
+#family-meal-app [data-view="home"] .meal-detail-toggle{margin:6px 0 15px;padding:0;border:0;background:none;border-radius:0}
+#family-meal-app [data-view="home"] .meal-detail-toggle>summary{text-align:center;padding:10px 4px;min-height:40px;font-size:12px;color:#8a8178;font-weight:500}
+#family-meal-app [data-view="home"] .home-photo-record{width:100%;padding:12px;background:#fff0e7;color:#b84b1f;border-radius:10px;font-size:14px}
+#family-meal-app [data-view="home"] .home-photo-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 19px}
+#family-meal-app [data-view="home"] .home-photo-shortcuts button{display:flex;align-items:center;gap:9px;min-width:0;min-height:79px;text-align:left;background:#fff0e7;padding:13px 10px;border-radius:14px;color:#252c31}
+#family-meal-app [data-view="home"] .home-photo-shortcuts button:nth-child(2){background:#f4f1ed}
+#family-meal-app [data-view="home"] .home-photo-quickicon{width:30px;height:34px;flex:none;font-size:38px;line-height:30px;color:#ec702e;text-align:center}
+#family-meal-app [data-view="home"] .home-photo-shortcuts strong{display:block;font-size:14px;font-weight:750;line-height:1.5;white-space:nowrap}
+#family-meal-app [data-view="home"] .home-photo-shortcuts small{display:block;font-size:11px;color:#7b7e80;margin-top:3px;white-space:nowrap}
+#family-meal-app [data-view="home"] .home-photo-shortcuts button>span:last-child{margin-left:auto;font-size:20px;color:#7b7e80}
+#family-meal-app [data-view="home"] .home-photo-section-title{display:flex;justify-content:space-between;align-items:center;gap:5px;margin:0 0 11px}
+#family-meal-app [data-view="home"] .home-photo-section-title h2{font-size:19px;color:#20252b;margin:0;line-height:1.5;font-weight:750;letter-spacing:-.8px}
+#family-meal-app [data-view="home"] .home-photo-section-title button{background:none;color:#7a7f82;font-size:12px;padding:9px 0;white-space:nowrap;min-height:40px}
+#family-meal-app [data-view="home"] .home-photo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#family-meal-app [data-view="home"] .home-photo-card{min-width:0;text-align:left;padding:0;background:none;color:#20252b}
+#family-meal-app [data-view="home"] .home-photo-card img{width:100%;height:auto;aspect-ratio:1.5;object-fit:cover;border-radius:12px;display:block}
+#family-meal-app [data-view="home"] .home-photo-card strong{display:block;font-size:15px;font-weight:700;margin-top:8px;line-height:1.5;letter-spacing:-.4px}
+#family-meal-app [data-view="home"] .home-photo-card small{display:block;font-size:12px;color:#808487;margin-top:4px}
+#family-meal-app [data-view="home"] .home-photo-week{display:flex;align-items:center;gap:12px;width:100%;padding:13px 11px;margin:20px 0 0;min-height:49px;text-align:left;background:#fff;border:1px solid #e5e4e1;border-radius:12px;font-size:14px;color:#33393d}
+#family-meal-app [data-view="home"] .home-photo-week svg{flex:none}
+#family-meal-app [data-view="home"] .home-photo-week>span:last-child{margin-left:auto;font-size:20px}
+#family-meal-app:has([data-view="home"].active) .tabbar{background:#fffdfa;border-top-color:#e9e7e4}
+#family-meal-app:has([data-view="home"].active) .tabbar .nav.on{color:#ef6a27!important}
+#family-meal-app [data-view="home"] button:focus-visible{outline:3px solid #b44917;outline-offset:3px}
+@media(max-width:365px){#family-meal-app [data-view="home"].v2 main{padding-inline:14px}#family-meal-app [data-view="home"] .home-photo-tabs button{font-size:12px;gap:4px}#family-meal-app [data-view="home"] .home-photo-tabs svg{width:18px}#family-meal-app [data-view="home"] .home-filters{gap:5px}#family-meal-app [data-view="home"] .home-filters button{padding:8px;font-size:12px}#family-meal-app [data-view="home"] .home-filters #pref-summary{font-size:11px}#family-meal-app [data-view="home"] .home-photo-shortcuts button{padding:12px 8px;gap:6px}#family-meal-app [data-view="home"] .home-photo-shortcuts button>span:last-child{display:none}#family-meal-app [data-view="home"] .home-photo-shortcuts strong{font-size:13px}#family-meal-app [data-view="home"] .home-photo-section-title h2{font-size:17px}#family-meal-app [data-view="home"] .home-photo-copy h2{font-size:22px}}
+@media(prefers-reduced-motion:reduce){#family-meal-app [data-view="home"] .home-photo-card{scroll-behavior:auto}}
