@@ -72,3 +72,22 @@
 #family-meal-app [data-view="home"] button:focus-visible{outline:3px solid #b44917;outline-offset:3px}
 @media(max-width:365px){#family-meal-app [data-view="home"].v2 main{padding-inline:14px}#family-meal-app [data-view="home"] .home-photo-tabs button{font-size:12px;gap:4px}#family-meal-app [data-view="home"] .home-photo-tabs svg{width:18px}#family-meal-app [data-view="home"] .home-filters{gap:5px}#family-meal-app [data-view="home"] .home-filters button{padding:8px;font-size:12px}#family-meal-app [data-view="home"] .home-filters #pref-summary{font-size:11px}#family-meal-app [data-view="home"] .home-photo-shortcuts button{padding:12px 8px;gap:6px}#family-meal-app [data-view="home"] .home-photo-shortcuts button>span:last-child{display:none}#family-meal-app [data-view="home"] .home-photo-shortcuts strong{font-size:13px}#family-meal-app [data-view="home"] .home-photo-section-title h2{font-size:17px}#family-meal-app [data-view="home"] .home-photo-copy h2{font-size:22px}}
 @media(prefers-reduced-motion:reduce){#family-meal-app [data-view="home"] .home-photo-card{scroll-behavior:auto}}
+
+/* Preference selector opens directly beneath its trigger row, in normal flow. */
+#family-meal-app [data-view="home"] .home-inline-preferences{position:static;inset:auto;z-index:auto;width:100%;background:none;margin:8px 0 12px;padding:0;display:none}
+#family-meal-app [data-view="home"] .home-inline-preferences.open{display:block}
+#family-meal-app [data-view="home"] .home-inline-preferences[hidden]{display:none}
+#family-meal-app [data-view="home"] .home-inline-preferences .pref-sheet{width:100%;max-width:none;padding:16px;background:#fff;border:1px solid #f0d7c6;border-radius:14px;box-shadow:0 4px 14px #38261408}
+#family-meal-app [data-view="home"] .home-inline-preferences .pref-sheet-head{margin-bottom:12px;gap:8px}
+#family-meal-app [data-view="home"] .home-inline-preferences .pref-sheet-head b{font-size:16px;line-height:1.5}
+#family-meal-app [data-view="home"] .home-inline-preferences .pref-sheet-head button{width:36px;height:36px;flex:none;font-size:16px}
+#family-meal-app [data-view="home"] .home-inline-preferences .pref-sheet-label{font-size:13px;color:#777b80;margin:12px 0 8px}
+#family-meal-app [data-view="home"] .home-inline-preferences .preference-chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:0}
+#family-meal-app [data-view="home"] .home-inline-preferences .preference-chips button{min-width:0;min-height:44px;padding:8px 3px;border:1px solid #ebe5df;border-radius:10px;background:#fffdfa;color:#41464a;font-size:13px;line-height:1.5;white-space:normal;word-break:keep-all;box-shadow:none;margin:0}
+#family-meal-app [data-view="home"] .home-inline-preferences .preference-chips button[aria-pressed="true"]{background:#fff0e7!important;color:#bb4917!important;border-color:#f5ae87!important;font-weight:700;box-shadow:none}
+#family-meal-app [data-view="home"] .pref-inline-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px;padding-top:13px;border-top:1px solid #f1ede9}
+#family-meal-app [data-view="home"] .pref-inline-footer span{font-size:12px;color:#7a7e82;line-height:1.5}
+#family-meal-app [data-view="home"] #pref-inline-done{background:#f66c27;color:#fff;min-height:44px;padding:10px 13px;border-radius:10px;font-size:14px;font-weight:700;white-space:nowrap}
+#family-meal-app [data-view="home"] #pref-summary[aria-expanded="true"]{background:#fff0e7;border-color:#f5ae87;color:#b94b1d}
+#family-meal-app [data-view="home"] #pref-summary[aria-expanded="true"]>span{transform:rotate(180deg)}
+@media(max-width:350px){#family-meal-app [data-view="home"] .home-inline-preferences .preference-chips{grid-template-columns:repeat(2,minmax(0,1fr))}}

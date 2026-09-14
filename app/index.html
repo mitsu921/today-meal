@@ -334,7 +334,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./todaymeal-theme.css?v=20260913">
 <link rel="stylesheet" href="./home-redesign.css?v=20260913b">
 <link rel="stylesheet" href="./roulette-photos.css?v=1">
-<link rel="stylesheet" href="./home-photo-update.css?v=20260914">
+<link rel="stylesheet" href="./home-photo-update.css?v=20260914-inline2">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -383,10 +383,30 @@ details.fold.sub .body p{font-size:13px!important}
       </div>
       <!-- 필터 칩 -->
       <section class="home-filters" aria-label="추천 조건">
-        <button type="button" id="pref-summary"><b id="pref-summary-text">온 가족</b><span aria-hidden="true">⌄</span></button>
+        <button type="button" id="pref-summary" aria-expanded="false" aria-controls="pref-sheet-bg"><b id="pref-summary-text">온 가족</b><span aria-hidden="true">⌄</span></button>
         <button type="button" id="filter-time-chip" aria-pressed="false">20분 이내</button>
         <button type="button" id="filter-budget-chip" aria-pressed="false">1만원 이하</button>
       </section>
+      <div class="pref-sheet-bg home-inline-preferences" id="pref-sheet-bg" role="region" aria-labelledby="pref-inline-title" hidden>
+    <div class="pref-sheet">
+      <div class="pref-sheet-head"><b id="pref-inline-title">누구와, 언제 먹을까요?</b><button type="button" id="pref-sheet-close" aria-label="선택 창 닫기">✕</button></div>
+      <p class="pref-sheet-label">대상</p>
+      <div class="preference-chips" id="families">
+        <button class="family selected" data-person="우리 아이">아이와 함께</button>
+        <button class="family" data-person="나">나를 위해</button>
+        <button class="family" data-person="남편">남편 밥</button>
+        <button class="family" data-person="온 가족">온 가족</button>
+      </div>
+      <p class="pref-sheet-label">끼니</p>
+      <div class="preference-chips" id="meal-chips">
+        <button class="chip" data-meal="아침">아침밥</button>
+        <button class="chip active" data-meal="점심">점심밥</button>
+        <button class="chip" data-meal="저녁">저녁밥</button>
+        <button class="chip" data-meal="간식">아이 간식</button>
+      </div>
+      <div class="pref-inline-footer"><span>다음 메뉴 추천부터 적용돼요</span><button type="button" id="pref-inline-done">선택 완료</button></div>
+    </div>
+  </div>
       <button type="button" class="home-pantry-link" data-go="fridge"><span>냉장고에 <b id="pantry-count-home">0</b>개 보관 중</span><span>재료 관리 ›</span></button>
 
       <!-- 오늘 추천 메뉴 -->
@@ -648,25 +668,6 @@ details.fold.sub .body p{font-size:13px!important}
     <section class="section legal-settings" aria-labelledby="legal-settings-title"><h2 id="legal-settings-title">서비스 안내</h2><a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 <span aria-hidden="true">↗</span></a><a href="/terms.html" target="_blank" rel="noopener">이용약관 <span aria-hidden="true">↗</span></a></section>
   </section>
 
-  <div class="pref-sheet-bg" id="pref-sheet-bg">
-    <div class="pref-sheet">
-      <div class="pref-sheet-head"><b>누구를, 언제 위한 메뉴인가요?</b><button id="pref-sheet-close">✕</button></div>
-      <p class="pref-sheet-label">대상</p>
-      <div class="preference-chips" id="families">
-        <button class="family selected" data-person="우리 아이">아이와 함께</button>
-        <button class="family" data-person="나">나를 위해</button>
-        <button class="family" data-person="남편">남편 밥</button>
-        <button class="family" data-person="온 가족">온 가족</button>
-      </div>
-      <p class="pref-sheet-label">끼니</p>
-      <div class="preference-chips" id="meal-chips">
-        <button class="chip" data-meal="아침">아침밥</button>
-        <button class="chip active" data-meal="점심">점심밥</button>
-        <button class="chip" data-meal="저녁">저녁밥</button>
-        <button class="chip" data-meal="간식">아이 간식</button>
-      </div>
-    </div>
-  </div>
 
   <footer class="legal-footer" aria-label="서비스 정책">
     <span class="legal-brand">TodayMeal</span>
@@ -698,6 +699,7 @@ let person="우리 아이",meal="점심",res=null,recipe=null,mode=null,busy=fal
 
 function toast(t){const n=$('#toast');n.textContent=t;n.classList.add('show');const dur=Math.min(6000,Math.max(1800,t.length*55));clearTimeout(n._tt);n._tt=setTimeout(()=>n.classList.remove('show'),dur)}
 function go(v){
+ if(v!=='home'&&!$('#pref-sheet-bg').hidden)closePrefSheet(false);
  if(window.gaEvent)gaEvent('tab_view',{tab:v});
  if(v==='upload')refreshAuth();
  if(v==='kitchen'){refreshAuth();renderTierProgress();renderPoints();}
@@ -1361,12 +1363,14 @@ $('#allergy-save').onclick=()=>{D.allergy=$('#allergy-input').value.trim();save(
 
 /* ── 기타 ── */
 
-app.querySelectorAll('#families .family').forEach(x=>x.onclick=()=>{app.querySelectorAll('.family').forEach(y=>y.classList.remove('selected'));x.classList.add('selected');person=x.dataset.person;if(!res)heroIdle();else $('#hero-tag')&&($('#hero-tag').textContent=person+" 맞춤 · AI가 골랐어요");updatePrefSummary();closePrefSheet();});
-app.querySelectorAll('#meal-chips .chip').forEach(x=>x.onclick=()=>{app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.remove('active'));x.classList.add('active');meal=x.dataset.meal;if(!res)heroIdle();updatePrefSummary();closePrefSheet();});
+app.querySelectorAll('#families .family').forEach(x=>x.onclick=()=>{app.querySelectorAll('.family').forEach(y=>y.classList.remove('selected'));x.classList.add('selected');person=x.dataset.person;if(!res)heroIdle();else $('#hero-tag')&&($('#hero-tag').textContent=person+" 맞춤 · AI가 골랐어요");updatePrefSummary();});
+app.querySelectorAll('#meal-chips .chip').forEach(x=>x.onclick=()=>{app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.remove('active'));x.classList.add('active');meal=x.dataset.meal;if(!res)heroIdle();updatePrefSummary();});
 function updatePrefSummary(){
  const t=$('#pref-summary-text'); if(t)t.textContent=person+' · '+(meal==='간식'?'간식':meal+'밥');
  $('#home-tab-family').setAttribute('aria-pressed',String(person!=='우리 아이'));
  $('#home-tab-kids').setAttribute('aria-pressed',String(person==='우리 아이'));
+ app.querySelectorAll('#families .family').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.person===person)));
+ app.querySelectorAll('#meal-chips .chip').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.meal===meal)));
 }
 function setHomePerson(next){
  person=next;
@@ -1381,11 +1385,26 @@ app.querySelectorAll('[data-home-dish]').forEach(b=>b.onclick=()=>{
  homeDishHint=b.dataset.homeDish;wheelCategory=null;decide();
  $('#hero').scrollIntoView({behavior:'smooth',block:'start'});
 });
-function openPrefSheet(){ $('#pref-sheet-bg').classList.add('open'); }
-function closePrefSheet(){ $('#pref-sheet-bg').classList.remove('open'); }
-$('#pref-summary').onclick=openPrefSheet;
-$('#pref-sheet-close').onclick=closePrefSheet;
-$('#pref-sheet-bg').onclick=e=>{ if(e.target.id==='pref-sheet-bg')closePrefSheet(); };
+function openPrefSheet(){
+ const panel=$('#pref-sheet-bg');panel.hidden=false;panel.classList.add('open');
+ $('#pref-summary').setAttribute('aria-expanded','true');
+ const selected=panel.querySelector('#families .selected');if(selected)selected.focus({preventScroll:true});
+}
+function closePrefSheet(restoreFocus=true){
+ const panel=$('#pref-sheet-bg');panel.classList.remove('open');panel.hidden=true;
+ $('#pref-summary').setAttribute('aria-expanded','false');
+ if(restoreFocus)$('#pref-summary').focus({preventScroll:true});
+}
+$('#pref-summary').onclick=()=>{if($('#pref-sheet-bg').hidden)openPrefSheet();else closePrefSheet();};
+$('#pref-sheet-close').onclick=()=>closePrefSheet();
+$('#pref-inline-done').onclick=()=>closePrefSheet();
+document.addEventListener('click',e=>{
+ const panel=$('#pref-sheet-bg');
+ if(!panel.hidden&&!panel.contains(e.target)&&!$('#pref-summary').contains(e.target))closePrefSheet(false);
+});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'&&!$('#pref-sheet-bg').hidden){e.preventDefault();closePrefSheet();}
+});
 updatePrefSummary();
 
 /* 시작 */
