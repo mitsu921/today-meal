@@ -9,7 +9,7 @@
 #family-meal-app .wheel-sheet .wheel-lights i{width:6px;height:6px;left:calc(50% - 3px);top:calc(50% - 3px);background:#fffaf0;border:0;box-shadow:none;opacity:.9}
 #family-meal-app .wheel-sheet .wheel2-seg-label{width:64px;height:70px;width:clamp(38px,24cqw,68px);height:clamp(45px,26cqw,74px);padding:0;text-align:center;transform:translate(-50%,-50%);transform-origin:center}
 #family-meal-app .wheel-sheet .wheel2-seg-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;font-size:clamp(9px,4cqw,12px);line-height:1.3;font-weight:750;color:#433321;text-shadow:none;white-space:nowrap}
-#family-meal-app .wheel-sheet .wheel-food-photo{display:block;flex:none;width:50px;height:50px;width:clamp(28px,18cqw,52px);height:clamp(28px,18cqw,52px);border-radius:50%;overflow:hidden;background-image:url('./assets/roulette-food-photos.png');background-size:300% 300%;background-repeat:no-repeat;background-color:#fff;mix-blend-mode:normal;box-shadow:0 2px 5px #83572a15}
+#family-meal-app .wheel-sheet .wheel-food-photo{display:block;flex:none;width:56px;height:56px;width:clamp(31px,20cqw,58px);height:clamp(31px,20cqw,58px);border-radius:50%;overflow:hidden;background-image:url('./assets/roulette-food-photos.png');background-size:300% 300%;background-repeat:no-repeat;background-color:transparent;mix-blend-mode:normal;box-shadow:none}
 #family-meal-app .wheel-sheet #wheel-spin-btn{width:58px;height:58px;width:clamp(42px,21cqw,60px);height:clamp(42px,21cqw,60px);padding:0;display:flex;align-items:center;justify-content:center;gap:0;border:3px solid #fff6e6;background:#f4772a!important;color:#fff!important;box-shadow:0 3px 10px #b96a2822;opacity:1}
 #family-meal-app .wheel-sheet #wheel-spin-btn .wheel-dice,#family-meal-app .wheel-sheet #wheel-spin-btn small{display:none}
 #family-meal-app .wheel-sheet #wheel-spin-btn b{display:block;margin:0;padding:0;font-size:13px;font-weight:800;line-height:1;color:white}
@@ -23,3 +23,7 @@
 #family-meal-app .wheel-sheet #wheel-go-btn:disabled{opacity:.65;cursor:wait}
 #family-meal-app .wheel-sheet button:focus-visible{outline:3px solid #9d3b11;outline-offset:3px}
 @media(max-height:580px){#family-meal-app .wheel-sheet-bg .wheel-sheet{padding-top:12px;padding-bottom:12px}#family-meal-app .wheel-sheet-bg .wheel-sheet h3{margin-bottom:19px!important;font-size:16px!important}#family-meal-app .wheel-sheet .wheel-outer2{width:min(100%,245px,calc(100dvh - 265px))}#family-meal-app .wheel-sheet .wheel-result-text{margin-top:12px;margin-bottom:8px}}
+
+/* Blend the transformed label as a whole with the wheel sector beneath it.
+   Applying multiply to only the inner sprite cannot cross its transformed parent. */
+#family-meal-app .wheel-sheet .wheel2-seg-label{mix-blend-mode:multiply}
