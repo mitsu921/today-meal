@@ -337,6 +337,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./home-photo-update.css?v=20260914-inline2">
 <link rel="stylesheet" href="./simple-recipe.css?v=20260919">
 <link rel="stylesheet" href="./weekplan-update.css?v=20260919">
+<link rel="stylesheet" href="./kitchen-clean.css?v=20260919">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -492,7 +493,7 @@ details.fold.sub .body p{font-size:13px!important}
 
   <!-- ══ 냉장고 ══ -->
   <section class="view" data-view="fridge">
-    <header class="head"><h1>냉장고 <img class="ico" style="width:26px;height:26px" src="./assets/ui-kit/icons/fridge.png"></h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
+    <header class="head"><h1>냉장고</h1><p class="muted">담아두면 이 재료부터 쓰는 메뉴를 추천해요</p></header>
     <div class="section">
       <h2>재료 담기</h2><p class="fridge-help">자주 쓰는 재료를 눌러 추가하세요.</p>
       <div class="chips" id="quick-chips" style="flex-wrap:wrap"></div>
@@ -580,7 +581,7 @@ details.fold.sub .body p{font-size:13px!important}
 
   <!-- ══ 장보기 ══ -->
   <section class="view" data-view="shop">
-    <header class="head"><h1>장보기 🛒</h1><p class="muted">추천 메뉴에서 없는 재료를 담으면 여기 모여요</p></header>
+    <header class="head"><h1>장보기</h1><p class="muted">추천 메뉴에서 없는 재료를 담으면 여기 모여요</p></header>
     <div class="section"><div class="line"><h2>장보기 목록</h2><p id="shop-progress" role="status"></p></div><p class="shop-help">산 재료는 체크해 주세요.</p><div class="shop-actions"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">구매 완료 지우기</button></div><div id="shop-list"></div></div>
     <div class="section shop-search">
       <div style="background:#fff;border:1px solid #eef1ee;border-radius:16px;padding:14px 14px 10px;overflow:hidden">
@@ -592,83 +593,77 @@ details.fold.sub .body p{font-size:13px!important}
   </section>
 
   <!-- ══ 내 주방 ══ -->
-  <section class="view" data-view="kitchen"><header class="head"><h1 id="kitchen-title">내 주방 👩‍🍳</h1></header><div class="kitchen-summary"><div><strong id="theme-saved">0</strong><span>저장한 메뉴</span></div><div><strong id="theme-history">0</strong><span>먹은 기록</span></div><div><strong id="theme-pantry">0</strong><span>냉장고 재료</span></div></div><div class="v2 kitchen-report"><section class="quick-grid" aria-label="바로가기">
-        <button class="quick-card" type="button" data-go="fridge">
-          <span class="quick-icon">🧊</span>
-          <strong>냉장고 털어줘</strong>
-          <small>있는 재료로<br>메뉴 추천</small>
-        </button>
+ <section class="view" data-view="kitchen"><header class="head"><h1 id="kitchen-title">내 주방</h1></header><div class="authbox" id="auth-box"></div><div class="kitchen-summary"><div><strong id="theme-saved">0</strong><span>저장한 메뉴</span></div><div><strong id="theme-history">0</strong><span>먹은 기록</span></div><div><strong id="theme-pantry">0</strong><span>냉장고 재료</span></div></div>
 
-        <button class="quick-card" type="button" data-go="shop">
-          <span class="quick-icon">🧺</span>
-          <strong>장보기 리스트</strong>
-          <small>부족한 재료<br>한 번에 보기</small>
-        </button>
+<details class="kitchen-panel" open=""><summary>저장한 메뉴<span class="muted" id="saved-count"></span></summary><div class="kitchen-panel-body"><div id="saved-list"></div></div></details>
+<details class="kitchen-panel"><summary>먹은 기록</summary><div class="kitchen-panel-body"><div id="warn-slot2"></div><div id="hist-list"></div></div></details><div class="v2 kitchen-report"><section aria-label="바로가기" class="quick-grid">
+<button class="quick-card" data-go="fridge" type="button">
 
-        <button class="quick-card" type="button" data-go="upload">
-          <span class="quick-icon">📖</span>
-          <strong>레시피 쓰기</strong>
-          <small>우리 집 요리법<br>함께 나누기</small>
-        </button>
+<strong>냉장고 털어줘</strong>
 
-        <button class="quick-card" type="button" id="verify-quick-btn">
-          <span class="quick-icon">📸</span>
-          <strong>집밥 인증하기</strong>
-          <small>맛있게 먹고<br>포인트 받기</small>
-          <input id="meal-photo-input-v2" type="file" accept="image/*" capture="environment" style="display:none">
-        </button>
-      </section>      <section class="saving-card card">
-        <div class="saving-main">
-          <p>절약 리포트 · 예시 금액</p>
-          <strong class="saving-number"><span id="saving-amount-v2">0</span><span>원</span></strong>
-          <h3>절약했어요!</h3>
-          <button class="text-button" type="button" data-go="kitchen">자세히 보기 <span aria-hidden="true">›</span></button>
-        </div>
+<span aria-hidden="true" class="quick-chevron">›</span></button>
+<button class="quick-card" data-go="shop" type="button">
 
-        <div class="saving-stats">
-          <div class="stat-row">
-            <span class="stat-emoji" aria-hidden="true">🔥</span>
-            <div class="stat-text"><b id="streak-inline-v2">계산 중</b><span>연속 기록</span></div>
-            <button class="round-arrow" type="button" data-go="kitchen" aria-label="연속 기록 보기"><span aria-hidden="true">›</span></button>
-          </div>
-          <div class="divider"></div>
-          <div class="stat-row is-point">
-            <span class="stat-emoji" aria-hidden="true">
-              <svg viewBox="0 0 20 20" width="20" height="20"><circle cx="10" cy="10" r="8.5" fill="#ffcf4d" stroke="#e79a17" stroke-width="1.3"/><text x="10" y="13.5" text-anchor="middle" font-size="8.6" font-weight="800" fill="#c2691a">₩</text></svg>
-            </span>
-            <div class="stat-text"><b id="points-inline-v2">0P</b><span>밥테크 포인트</span></div>
-            <button class="round-arrow" type="button" data-go="kitchen" aria-label="포인트 내역 보기"><span aria-hidden="true">›</span></button>
-          </div>
-        </div>
+<strong>장보기 리스트</strong>
 
-        <img class="piggy" src="./assets/piggy-clean.png" alt="" width="135" height="176">
-      </section></div>
-    
-    <div class="authbox" id="auth-box"></div>
-    <div class="section"><h2>저장한 메뉴 <span class="muted" id="saved-count"></span></h2><div id="saved-list"></div></div>
-    <div class="section"><h2>먹은 기록</h2><div id="warn-slot2"></div><div id="hist-list"></div></div>
-    <div class="section">
-      <h2>알레르기 · 안 먹는 것</h2>
-      <p class="muted" style="margin-bottom:8px">적어두면 모든 추천에서 자동으로 뺍니다 (예: 새우, 땅콩, 오이)</p>
-      <input id="allergy-input" placeholder="쉼표로 구분해서 입력">
-      <button class="b-green" id="allergy-save" style="border-radius:11px;padding:10px 16px;font-weight:800;margin-top:8px">저장</button>
-    </div>
-    <div class="section" style="padding-bottom:20px">
-      <h2>💰 내 포인트</h2>
-      <div class="roulette-result" style="margin-top:8px">
-        <div class="rname"><span id="points-total">0</span>P</div>
-        <div class="rmeta">레시피가 추천(♥)받거나 영수증을 인증하면 쌓여요. 나중에 상품권으로 교환할 수 있게 준비 중이에요!</div>
-      </div>
-      <input id="receipt-input" type="file" accept="image/*" capture="environment" style="display:none">
-      <button class="c-btn-outline" id="receipt-btn" style="margin-top:10px">🧾 영수증 인증하고 20P 받기</button>
-      <p class="muted" style="font-size:11.5px;margin-top:6px">하루 최대 3장까지 인증할 수 있어요</p>
-    </div>
-    <div class="section" style="padding-bottom:20px">
-      <h2>맘셰프 등급</h2>
-      <p class="muted" style="margin:-2px 0 10px">받은 추천(♥) 수에 따라 등급이 올라가요. 레시피를 올리고 추천을 받아보세요!</p>
-      <div id="tier-progress"></div>
-    </div>
-  </section>
+<span aria-hidden="true" class="quick-chevron">›</span></button>
+<button class="quick-card" data-go="upload" type="button">
+
+<strong>레시피 쓰기</strong>
+
+<span aria-hidden="true" class="quick-chevron">›</span></button>
+<button class="quick-card" id="verify-quick-btn" type="button">
+
+<strong>집밥 인증하기</strong>
+
+<input accept="image/*" capture="environment" id="meal-photo-input-v2" style="display:none" type="file"/>
+<span aria-hidden="true" class="quick-chevron">›</span></button>
+</section> <section class="saving-card card">
+<div class="saving-main">
+<p>절약 리포트 · 예시 금액</p>
+<strong class="saving-number"><span id="saving-amount-v2">0</span><span>원</span></strong>
+<h3>절약했어요!</h3>
+<button class="text-button" data-go="kitchen" type="button">자세히 보기 <span aria-hidden="true">›</span></button>
+</div>
+<div class="saving-stats">
+<div class="stat-row">
+<span aria-hidden="true" class="stat-emoji">🔥</span>
+<div class="stat-text"><b id="streak-inline-v2">계산 중</b><span>연속 기록</span></div>
+<button aria-label="연속 기록 보기" class="round-arrow" data-go="kitchen" type="button"><span aria-hidden="true">›</span></button>
+</div>
+<div class="divider"></div>
+<div class="stat-row is-point">
+<span aria-hidden="true" class="stat-emoji">
+<svg height="20" viewbox="0 0 20 20" width="20"><circle cx="10" cy="10" fill="#ffcf4d" r="8.5" stroke="#e79a17" stroke-width="1.3"></circle><text fill="#c2691a" font-size="8.6" font-weight="800" text-anchor="middle" x="10" y="13.5">₩</text></svg>
+</span>
+<div class="stat-text"><b id="points-inline-v2">0P</b><span>밥테크 포인트</span></div>
+<button aria-label="포인트 내역 보기" class="round-arrow" data-go="kitchen" type="button"><span aria-hidden="true">›</span></button>
+</div>
+</div>
+<img alt="" class="piggy" height="176" src="./assets/piggy-clean.png" width="135"/>
+</section></div>
+<details class="kitchen-panel"><summary>알레르기 · 안 먹는 것</summary><div class="kitchen-panel-body">
+
+<p class="muted" style="margin-bottom:8px">적어두면 모든 추천에서 자동으로 뺍니다 (예: 새우, 땅콩, 오이)</p>
+<input aria-label="알레르기 및 안 먹는 재료" id="allergy-input" placeholder="쉼표로 구분해서 입력"/>
+<button class="b-green" id="allergy-save" style="border-radius:11px;padding:10px 16px;font-weight:800;margin-top:8px">저장</button>
+</div></details>
+<details class="kitchen-panel"><summary>포인트 · 영수증 인증</summary><div class="kitchen-panel-body">
+
+<div class="roulette-result" style="margin-top:8px">
+<div class="rname"><span id="points-total">0</span>P</div>
+<div class="rmeta">레시피가 추천(♥)받거나 영수증을 인증하면 쌓여요. 나중에 상품권으로 교환할 수 있게 준비 중이에요!</div>
+</div>
+<input accept="image/*" capture="environment" id="receipt-input" style="display:none" type="file"/>
+<button class="c-btn-outline" id="receipt-btn" style="margin-top:10px">영수증 인증하고 20P 받기</button>
+<p class="muted" style="font-size:11.5px;margin-top:6px">하루 최대 3장까지 인증할 수 있어요</p>
+</div></details>
+<details class="kitchen-panel"><summary>맘셰프 등급</summary><div class="kitchen-panel-body">
+
+<p class="muted" style="margin:-2px 0 10px">받은 추천(♥) 수에 따라 등급이 올라가요. 레시피를 올리고 추천을 받아보세요!</p>
+<div id="tier-progress"></div>
+</div></details>
+</section>
 
 
   <footer class="legal-footer" aria-label="서비스 정책">
@@ -1363,17 +1358,17 @@ $('#clear-done').onclick=()=>{D.shop=D.shop.filter(s=>!s.done);save();renderShop
 /* ── 내 주방 ── */
 function renderKitchen(){
  $('#theme-saved').textContent=D.saved.length;$('#theme-history').textContent=D.history.length;$('#theme-pantry').textContent=D.pantry.length;
- $('#kitchen-title').textContent=(D.name?D.name+"님의 주방":"내 주방")+" 👩‍🍳";
+ $('#kitchen-title').textContent=(D.name?D.name+"님의 주방":"내 주방");
  $('#allergy-input').value=D.allergy||"";
  $('#saved-count').textContent=D.saved.length?D.saved.length+"개":"";
  const sl=$('#saved-list');
  sl.innerHTML=D.saved.length?"":'<p class="muted">추천 카드의 ♡를 누르면 여기 저장돼요.</p>';
  D.saved.forEach((s,i)=>{
   const c=document.createElement('div');c.className="ingline";c.style.cursor="pointer";
-  c.innerHTML='<span style="font-weight:700">'+(s.res.emoji||"🍽️")+' '+s.res.name+'</span><span class="muted">'+s.res.kcal+'kcal ›</span>';
+  c.innerHTML='<span style="font-weight:700">'+esc(s.res.name)+'</span><span class="muted">'+s.res.kcal+'kcal ›</span>';
   c.onclick=()=>{res=s.res;recipe=null;mode=null;eaten=false;scrapped=true;heroResult();go('home');toast("저장한 메뉴를 불러왔어요")};
   sl.appendChild(c);});
- const w=analyze();$('#warn-slot2').innerHTML=w.length?'<div class="warnbar" style="margin:0 0 10px">💡 '+w.join(" · ")+'</div>':"";
+ const w=analyze();$('#warn-slot2').innerHTML=w.length?'<div class="warnbar" style="margin:0 0 10px">'+w.join(" · ")+'</div>':"";
  const hl=$('#hist-list');
  hl.innerHTML=D.history.length?"":'<p class="muted">추천받고 "이거 먹었어요"를 누르면 쌓여요.</p>';
  [...D.history].reverse().forEach((h,ri)=>{
@@ -1512,9 +1507,9 @@ function renderTierProgress(){
  const cur=tierFor(n)||TIERS[TIERS.length-1];
  const next=[...TIERS].reverse().find(t=>t.min>n);
  el.innerHTML='<div style="background:#fff;border:1px solid #eaf0e9;border-radius:14px;padding:13px 15px">'+
-  '<div style="font-size:14px;font-weight:800;color:#26392d">'+cur.emoji+' 현재 등급: '+cur.label+'</div>'+
+  '<div style="font-size:14px;font-weight:800;color:#26392d">현재 등급: '+cur.label+'</div>'+
   '<div class="muted" style="font-size:12px;margin-top:3px">받은 추천 총 '+n+'개'+
-  (next?' · 다음 등급("'+next.label+'")까지 '+(next.min-n)+'개 남았어요':' · 최고 등급이에요! 👑')+'</div></div>';
+  (next?' · 다음 등급("'+next.label+'")까지 '+(next.min-n)+'개 남았어요':' · 최고 등급이에요!')+'</div></div>';
 }
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
@@ -1643,7 +1638,7 @@ sb.auth.onAuthStateChange(async(ev,s)=>{
 function renderAuthUI(){
  const box=$('#auth-box'); if(!box)return;
  if(me){
-  box.innerHTML='<span class="big">👩‍🍳</span><div><b>'+esc(myNick)+'님</b> <button class="textbtn" id="nick-edit" style="font-size:11.5px;padding:2px 4px">✏️ 변경</button><p class="muted" style="font-size:12px;margin:2px 0 0" id="my-stats"></p></div><button class="textbtn" id="logout-btn">로그아웃</button>';
+  box.innerHTML='<div><b>'+esc(myNick)+'님</b> <button class="textbtn" id="nick-edit" style="font-size:11.5px;padding:2px 4px">변경</button><p class="muted" style="font-size:12px;margin:2px 0 0" id="my-stats"></p></div><button class="textbtn" id="logout-btn">로그아웃</button>';
   $('#logout-btn').onclick=async()=>{await sb.auth.signOut();toast('로그아웃했어요');};
   $('#nick-edit').onclick=async()=>{
    const n=prompt('새 닉네임을 알려주세요 (12자 이내)',myNick);
@@ -1658,7 +1653,7 @@ function renderAuthUI(){
   };
   myStats();
  }else{
-  box.innerHTML='<span class="big">🔑</span><div><b>로그인하고 레시피를 올려보세요</b><p class="muted" style="font-size:12px;margin:2px 0 0">추천을 모으면 맘셰프 혜택이 준비돼 있어요</p></div><button class="textbtn" data-go="login" id="go-login-btn">로그인 ›</button>';
+  box.innerHTML='<div><b>로그인하고 레시피를 올려보세요</b><p class="muted" style="font-size:12px;margin:2px 0 0">추천을 모으면 맘셰프 혜택이 준비돼 있어요</p></div><button class="textbtn" data-go="login" id="go-login-btn">로그인 ›</button>';
   $('#go-login-btn').onclick=()=>go('login');
  }
 }
