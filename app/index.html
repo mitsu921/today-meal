@@ -333,7 +333,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./legal-links.css?v=1">
 <link rel="stylesheet" href="./todaymeal-theme.css?v=20260913">
 <link rel="stylesheet" href="./home-redesign.css?v=20260913b">
-<link rel="stylesheet" href="./roulette-photos.css?v=1">
+<link rel="stylesheet" href="./roulette-photos.css?v=20260914-both">
 <link rel="stylesheet" href="./home-photo-update.css?v=20260914-inline2">
 </head>
 <body style="margin:0;background:#efe9df">
@@ -471,6 +471,7 @@ details.fold.sub .body p{font-size:13px!important}
       <div class="wheel-outer">
         <div class="wheel-pointer" aria-hidden="true"></div><div class="eatout-lights" aria-hidden="true"><i style="--a:0deg"></i><i style="--a:18deg"></i><i style="--a:36deg"></i><i style="--a:54deg"></i><i style="--a:72deg"></i><i style="--a:90deg"></i><i style="--a:108deg"></i><i style="--a:126deg"></i><i style="--a:144deg"></i><i style="--a:162deg"></i><i style="--a:180deg"></i><i style="--a:198deg"></i><i style="--a:216deg"></i><i style="--a:234deg"></i><i style="--a:252deg"></i><i style="--a:270deg"></i><i style="--a:288deg"></i><i style="--a:306deg"></i><i style="--a:324deg"></i><i style="--a:342deg"></i></div>
         <div class="wheel" id="wheel"><span class="wheel-hint">룰렛을 돌려보세요</span></div>
+        <button type="button" id="eatout-center-spin" aria-label="맛집 룰렛 돌리기">START</button>
       </div>
       <div style="display:flex;justify-content:center">
         <button class="wheel-spin-btn-below" id="roulette-spin"><span>↻</span> 룰렛 돌리기</button>
@@ -1095,7 +1096,7 @@ async function fetchNearbyFor(cat){
   }, ()=>reject("📍 위치 권한을 허용해주셔야 룰렛을 돌릴 수 있어요"), {timeout:10000});
  });
 }
-const WHEEL_COLORS=['#f4eee2','#f3dfd2','#f7eedb','#ecd9cc','#eee8df','#f7e6da'];
+const WHEEL_COLORS=['#f8cb79','#fff0d2','#f8d998','#fff3df','#f4ca80','#fff0d4'];
 function foodIcon(place){
  const text=typeof place==='string'?place:[place.name,place.place_name,place.category,place.category_name].filter(Boolean).join(' ');
  let i=-1;
@@ -1118,7 +1119,7 @@ function buildWheel(list){
  const seg=360/n;
  const stops=list.map((p,i)=>WHEEL_COLORS[i%WHEEL_COLORS.length]+' '+(i*seg)+'deg '+((i+1)*seg)+'deg').join(',');
  wheel.style.background='conic-gradient('+stops+')';
- wheel.innerHTML='<div class="wheel-center" aria-hidden="true"><span class="food-sprite" style="background-position:100% 100%"></span></div>'+list.map((p,i)=>{
+ wheel.innerHTML=list.map((p,i)=>{
  const rad=(i*seg+seg/2-90)*Math.PI/180;
  return '<span class="eatout-label" style="left:'+(50+32*Math.cos(rad))+'%;top:'+(50+32*Math.sin(rad))+'%"><span class="eatout-label-text">'+'<span class="food-art" aria-hidden="true">'+foodIcon(p)+'</span>'+esc(p.name.length>9?p.name.slice(0,9)+'…':p.name)+'</span></span>';
  }).join('');
@@ -1130,16 +1131,17 @@ function buildWheel(list){
 function buildEatoutPreview(){buildWheel(['한식','양식','일식','패스트푸드','건강식','분식'].map(name=>({name})));}
 buildEatoutPreview();
 new ResizeObserver(entries=>{for(const e of entries)e.target.style.setProperty('--radius',(e.target.clientWidth/2-9)+'px')}).observe(document.querySelector('.wheel-outer'));
+$('#eatout-center-spin').onclick=()=>$('#roulette-spin').click();
 $('#roulette-spin').onclick=async()=>{
  if(eatoutSpinning)return;
  eatoutSpinning=true;
  const btn=$('#roulette-spin'), subEl=$('#roulette-sub'), wheel=$('#wheel');
- btn.disabled=true; $('#roulette-result').innerHTML="";
+ btn.disabled=true; $('#eatout-center-spin').disabled=true; $('#roulette-result').innerHTML="";
  subEl.textContent="근처를 찾는 중...";
  try{
   if(!eatoutPlaces.length) eatoutPlaces=await fetchNearbyFor(eatoutCat);
  }catch(msg){
-  subEl.textContent=String(msg); btn.disabled=false; eatoutSpinning=false; return;
+  subEl.textContent=String(msg); btn.disabled=false; $('#eatout-center-spin').disabled=false; eatoutSpinning=false; return;
  }
  renderNearbyCards(eatoutPlaces);
  const list=eatoutPlaces.slice(0,6);
@@ -1158,7 +1160,7 @@ $('#roulette-spin').onclick=async()=>{
    '<div class="roulette-result"><div class="rname">'+esc(winner.name)+'</div>'+
    '<div class="rmeta">'+esc(winner.category||'')+' · '+esc(winner.address||'')+(winner.distance?' · '+winner.distance+'m':'')+'</div>'+
    '<a class="rlink" href="'+esc(winner.url)+'" target="_blank" rel="noopener">🗺️ 카카오맵에서 길찾기 →</a></div>';
-  btn.disabled=false; eatoutSpinning=false;
+  btn.disabled=false; $('#eatout-center-spin').disabled=false; eatoutSpinning=false;
   if(window.gaEvent)gaEvent('eatout_roulette',{cat:eatoutCat});
  }, {once:true});
 };

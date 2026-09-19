@@ -27,3 +27,22 @@
 /* Blend the transformed label as a whole with the wheel sector beneath it.
    Applying multiply to only the inner sprite cannot cross its transformed parent. */
 #family-meal-app .wheel-sheet .wheel2-seg-label{mix-blend-mode:multiply}
+
+/* Dining-out wheel shares the home roulette visual treatment. */
+#family-meal-app [data-view="eatout"] .wheel-outer{box-sizing:border-box;position:relative;width:min(100%,310px);height:auto;aspect-ratio:1;padding:13px;margin:27px auto 20px;border:2px solid #f4c49b;border-radius:50%;background:#ffe6c9;box-shadow:0 3px 12px #b1763510;container-type:inline-size}
+#family-meal-app [data-view="eatout"] #wheel{box-sizing:border-box;width:100%;height:100%;border:2px solid #fff9e9;box-shadow:0 0 0 2px #eeb86e;border-radius:50%;overflow:hidden;transition:transform 3.2s cubic-bezier(.17,.67,.13,1)}
+#family-meal-app [data-view="eatout"] .wheel-pointer{width:23px;height:28px;top:-12px;border-radius:0;background:#e88934;clip-path:polygon(0 0,100% 0,50% 100%);text-shadow:none;z-index:8}
+#family-meal-app [data-view="eatout"] .eatout-lights{display:block;position:absolute;inset:0;border-radius:50%;pointer-events:none}
+#family-meal-app [data-view="eatout"] .eatout-lights i{width:6px;height:6px;left:calc(50% - 3px);top:calc(50% - 3px);background:#fffaf0;border:0;box-shadow:none;opacity:.9}
+#family-meal-app [data-view="eatout"] .eatout-label{width:clamp(48px,25cqw,74px);padding:0;transform:translate(-50%,-50%);text-align:center;mix-blend-mode:multiply}
+#family-meal-app [data-view="eatout"] .eatout-label-text{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:clamp(10px,4cqw,12px);font-weight:750;line-height:1.3;color:#433321;text-shadow:none;overflow-wrap:anywhere;transform:rotate(0deg);transform-origin:center;transition:transform 3.2s cubic-bezier(.17,.67,.13,1)}
+#family-meal-app [data-view="eatout"] .wheel .food-art{display:flex;align-items:center;justify-content:center;margin:0;line-height:1;filter:none;flex:none}
+#family-meal-app [data-view="eatout"] .wheel .food-art .food-sprite{display:block;flex:none;width:clamp(31px,20cqw,58px);height:clamp(31px,20cqw,58px);background-image:url('./assets/eatout-foods.png');background-color:transparent;background-size:300% 300%;background-repeat:no-repeat;border-radius:50%;mask-image:none;-webkit-mask-image:none;box-shadow:none;vertical-align:middle}
+#family-meal-app [data-view="eatout"] .wheel .food-glyph{display:grid;place-items:center;width:clamp(31px,20cqw,58px);height:clamp(31px,20cqw,58px);font-size:clamp(27px,16cqw,43px);line-height:1;background:none}
+#family-meal-app [data-view="eatout"] #eatout-center-spin{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6;display:grid;place-items:center;width:clamp(42px,21cqw,60px);height:clamp(42px,21cqw,60px);padding:0;border:3px solid #fff6e6;border-radius:50%;background:#f4772a;color:#fff;font-size:clamp(10px,4.5cqw,14px);font-weight:800;line-height:1;letter-spacing:.2px;box-shadow:0 3px 10px #b96a2822}
+#family-meal-app [data-view="eatout"] #eatout-center-spin:disabled{opacity:.65;cursor:wait}
+#family-meal-app [data-view="eatout"] #roulette-spin{display:flex;flex-direction:row;align-items:center;justify-content:center;width:min(100%,330px);min-height:48px;height:auto;padding:12px 14px;margin:9px auto 0;border-radius:12px;background:#f4772a!important;color:#fff;font-size:15px;font-weight:750;line-height:1.5;box-shadow:none}
+#family-meal-app [data-view="eatout"] #roulette-spin>span{display:none}
+#family-meal-app [data-view="eatout"] #roulette-sub{margin:14px 0 18px!important;font-size:14px!important;color:#5c5750!important;line-height:1.6}
+#family-meal-app [data-view="eatout"] #eatout-center-spin:focus-visible,#family-meal-app [data-view="eatout"] #roulette-spin:focus-visible{outline:3px solid #9d3b11;outline-offset:3px}
+@media(max-width:350px){#family-meal-app [data-view="eatout"] .wheel-outer{padding:11px}#family-meal-app [data-view="eatout"] .eatout-label{width:clamp(45px,25cqw,68px)}}
