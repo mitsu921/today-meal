@@ -1,0 +1,34 @@
+/* Restrict this update to the header dropdown and the selected recipe. */
+#family-meal-app [data-view="home"] .quick-dropdown{min-width:180px;padding:6px;top:44px;border:1px solid #e7e3df;border-radius:14px;box-shadow:0 8px 24px #29201812;background:#fff}
+#family-meal-app .quick-dropdown button{min-height:48px;padding:13px 16px;font-size:15px;font-weight:500;line-height:1.5;color:#292623;letter-spacing:-.2px}
+#family-meal-app .quick-dropdown button+button{border-top:1px solid #f2efec;border-radius:0}
+#family-meal-app .quick-dropdown button:hover{background:#f8f6f3}
+#family-meal-app .quick-dropdown button:focus-visible{outline:2px solid #df682d;outline-offset:-2px}
+#family-meal-app [data-view="detail"]{background:#fffdf9}
+#family-meal-app [data-view="detail"] .head h2{font-size:19px;color:#252321}
+#family-meal-app #detail-body{padding:0 20px 110px!important;color:#292623}
+#family-meal-app #detail-body .detail-cover{display:block;position:relative;height:auto;aspect-ratio:16/10;margin:0 0 22px;overflow:hidden;border-radius:16px;background:#eee9e1;font-size:14px}
+#family-meal-app #detail-body .detail-cover[hidden]{display:none}
+#family-meal-app #detail-body .detail-cover img{display:block;width:100%;height:100%;object-fit:cover}
+#family-meal-app #detail-body figcaption{position:absolute;right:10px;bottom:10px;padding:5px 9px;border-radius:6px;color:#fff;background:#0009;font-size:11px;line-height:1.4}
+#family-meal-app #detail-body .detail-title{margin:0 0 12px;font-size:26px;line-height:1.35;letter-spacing:-.8px;word-break:keep-all;color:#242220}
+#family-meal-app #detail-body .stats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px;padding:0;border:0;font-size:14px;color:#514c47}
+#family-meal-app #detail-body .stats span{padding:6px 11px;background:#f0ede8;border-radius:7px}
+#family-meal-app #detail-body .recipe-section{margin:28px 0}
+#family-meal-app #detail-body h3{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px;font-size:20px;line-height:1.5;color:#242220}
+#family-meal-app #detail-body h3 small{font-size:13px;font-weight:500;color:#625c55}
+#family-meal-app #detail-body .ingredient-list{border-top:1px solid #ddd7cf}
+#family-meal-app #detail-body .ingredient{display:grid;grid-template-columns:minmax(0,1fr) minmax(90px,.8fr);gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #e9e4dc;font-size:16px;line-height:1.55}
+#family-meal-app #detail-body .ingredient span{float:none;color:#48433e;text-align:right;font-size:15px;overflow-wrap:anywhere}
+#family-meal-app #detail-body .ingredient-name{font-weight:600;overflow-wrap:anywhere}
+#family-meal-app #detail-body .have{display:inline-block;margin-left:7px;padding:2px 5px;background:#eaf1e6;color:#3e6138;border-radius:4px;font-size:11px;font-weight:500}
+#family-meal-app #detail-body .recipe-basics{font-size:14px;color:#565049;line-height:1.8;margin:14px 0;padding:14px;background:#f3f0ea;border-radius:10px}
+#family-meal-app #detail-body .recipe-basics strong{display:block;color:#39342f;margin-bottom:3px}
+#family-meal-app #detail-body .recipe-steps{list-style:none;padding:0;margin:0}
+#family-meal-app #detail-body .step{display:flex;gap:12px;padding:17px 0;border-bottom:1px solid #e9e4dc;font-size:16px;line-height:1.85;color:#302c28}
+#family-meal-app #detail-body .number{width:28px;height:28px;margin-top:2px;flex:none;border-radius:8px;background:#fae9db;color:#a94518;font-size:14px;font-weight:700;line-height:1}
+#family-meal-app #detail-body .step-copy{flex:1;min-width:0;overflow-wrap:anywhere;word-break:keep-all}
+#family-meal-app #detail-body .step-time{display:inline-block;padding:1px 7px;border-radius:5px;background:#f0ede8;color:#575047;font-size:13px;white-space:nowrap}
+#family-meal-app #detail-body .recipe-tip{margin:24px 0;padding:18px;border-radius:12px;background:#fff0e2;font-size:15px;line-height:1.8;color:#533d2e}
+#family-meal-app #detail-body .recipe-tip p{margin:6px 0 0}
+#family-meal-app #detail-body #detail-eat{font-size:16px;min-height:52px;background:#ee732e;color:#fff;margin:8px 0 0}
