@@ -336,6 +336,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./roulette-photos.css?v=20260914-both">
 <link rel="stylesheet" href="./home-photo-update.css?v=20260914-inline2">
 <link rel="stylesheet" href="./simple-recipe.css?v=20260919">
+<link rel="stylesheet" href="./weekplan-update.css?v=20260919">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -667,7 +668,6 @@ details.fold.sub .body p{font-size:13px!important}
       <p class="muted" style="margin:-2px 0 10px">받은 추천(♥) 수에 따라 등급이 올라가요. 레시피를 올리고 추천을 받아보세요!</p>
       <div id="tier-progress"></div>
     </div>
-    <section class="section legal-settings" aria-labelledby="legal-settings-title"><h2 id="legal-settings-title">서비스 안내</h2><a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 <span aria-hidden="true">↗</span></a><a href="/terms.html" target="_blank" rel="noopener">이용약관 <span aria-hidden="true">↗</span></a></section>
   </section>
 
 
@@ -1023,43 +1023,62 @@ async function decide(){
 /* ── 나가서 먹기(주변 맛집) ── */
 
 /* ── 일주일 식단표 ── */
+const WEEK_DAYS=['월','화','수','목','금','토','일'];
 function renderWeekplan(){
- const el=$('#weekplan-body');
- const wp=D.weekplan;
- if(!wp||!wp.days||!wp.days.length){
-  el.innerHTML='<p class="muted" style="text-align:center;padding:30px 0 20px">아직 만든 식단표가 없어요.<br>AI가 이번 주 저녁 메뉴를 짜드릴게요!</p>'+
-   '<button class="primary" id="wp-make" style="margin-top:0">✨ AI로 일주일 식단표 만들기</button>';
-  $('#wp-make').onclick=makeWeekplan;
-  return;
+ const el=$('#weekplan-body'), wp=D.weekplan;
+ if(!wp||!Array.isArray(wp.days)||!wp.days.length){
+  el.innerHTML='<p class="muted">월요일부터 일요일까지, 7일 저녁 메뉴를 준비해요.</p><button class="primary" id="wp-make">일주일 식단표 만들기</button>';
+  $('#wp-make').onclick=()=>makeWeekplan();return;
  }
- const days=['월','화','수','목','금'];
- el.innerHTML='<p class="muted" style="margin-bottom:12px">'+(wp.person||'온 가족')+'을 위한 이번 주 저녁 메뉴예요</p>'+
-  wp.days.map((d,i)=>
-   '<div style="display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #e7ebe6;border-radius:15px;padding:13px 15px;margin-bottom:9px">'+
-    '<div style="width:34px;height:34px;border-radius:50%;background:#eef6ee;color:#39774e;font-weight:bold;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none">'+(days[i]||'')+'</div>'+
-    '<div><b style="font-size:14.5px;display:block">'+esc(d.dish)+'</b><span class="tiny">'+esc(d.reason||'')+'</span></div>'+
-   '</div>'
-  ).join('')+
-  '<button class="primary" id="wp-remake" style="background:#f0f3ef;color:#39774e;margin-top:8px">↻ 다시 만들기</button>';
- $('#wp-remake').onclick=makeWeekplan;
+ el.innerHTML='<p class="muted">'+esc(wp.person||'온 가족')+'을 위한 7일 저녁 식단 · 메뉴를 누르면 조리법이 열려요.</p>'+
+ WEEK_DAYS.map((day,i)=>{const d=wp.days[i];return '<button type="button" class="week-menu" data-week-day="'+i+'"><span class="week-day">'+day+'</span><span class="week-copy"><strong>'+esc(d?d.dish:'메뉴 추가하기')+'</strong><small>'+esc(d?(d.reason||'만드는 방법 보기'):'남은 날짜의 메뉴를 추천받아요')+'</small></span><span aria-hidden="true">›</span></button>';}).join('')+
+ '<button class="primary" id="wp-remake">다시 만들기</button>';
+ el.querySelectorAll('[data-week-day]').forEach(btn=>btn.onclick=()=>{const i=Number(btn.dataset.weekDay);if(wp.days[i])openWeekRecipe(i,btn);else makeWeekplan(true);});
+ $('#wp-remake').onclick=()=>makeWeekplan();
 }
-async function makeWeekplan(){
+let weekplanBusy=false;
+async function makeWeekplan(append=false){
+ if(weekplanBusy)return;weekplanBusy=true;
  const el=$('#weekplan-body');
- el.innerHTML='<p class="muted" style="text-align:center;padding:40px 0">AI가 일주일 메뉴를 짜는 중...</p>';
+ const previous=append&&Array.isArray(D.weekplan?.days)?D.weekplan.days.slice(0,7):[];
+ const count=7-previous.length;
+ el.innerHTML='<p class="muted" role="status">월요일부터 일요일까지 메뉴를 준비하고 있어요…</p>';
  try{
-  const days=await ask("월~금 5일치 저녁 메뉴를 짜줘. 가족(성인+아이 포함 가정)이 먹기 좋은 한식 위주,\n"+
-   (D.pantry.length?"냉장고에 있음(우선 활용): "+D.pantry.map(p=>p.name).join(", ")+"\n":"")+
-   (D.allergy?"알레르기·비선호(제외): "+D.allergy+"\n":"")+
-   "- 5일이 서로 겹치지 않게, 국물/구이/볶음 등 조리법도 다양하게.\n"+
-   'JSON만, 백틱 금지:\n{"days":[{"dish":"메뉴명","reason":"한 줄 이유(10자 내외)"}]} (배열 5개)',900);
-  D.weekplan={days:days.days||days,person:person,madeAt:new Date().toISOString()};
-  save();
-  renderWeekplan();
+  const result=await ask('저녁 식단 '+count+'개를 '+WEEK_DAYS.slice(previous.length).join(', ')+' 순서로 짜줘. 가족이 먹기 좋은 다양한 메뉴.\n'+
+   (previous.length?'기존 메뉴와 중복 제외: '+previous.map(d=>d.dish).join(', ')+'\n':'')+
+   (D.pantry.length?'냉장고 재료 우선 활용: '+D.pantry.map(p=>p.name).join(', ')+'\n':'')+
+   (D.allergy?'알레르기·비선호 반드시 제외: '+D.allergy+'\n':'')+
+   'JSON만: {"days":[{"dish":"메뉴명","reason":"짧은 추천 이유"}]} days 배열은 정확히 '+count+'개.',1400);
+  const days=Array.isArray(result)?result:result.days;
+  if(!Array.isArray(days)||days.length!==count||days.some(d=>!d||typeof d.dish!=='string'||!d.dish.trim()))throw new Error('invalid days');
+  D.weekplan={days:[...previous,...days],person:person,madeAt:new Date().toISOString()};save();renderWeekplan();
   if(window.gaEvent)gaEvent('weekplan_made',{});
- }catch(e){
-  el.innerHTML='<p class="muted" style="text-align:center;padding:30px 0 20px">만들지 못했어요. 다시 시도해주세요.</p><button class="primary" id="wp-retry">다시 시도</button>';
-  $('#wp-retry').onclick=makeWeekplan;
- }
+ }catch(e){renderWeekplan();toast('식단을 만들지 못했어요. 다시 시도해주세요.');}
+ finally{weekplanBusy=false;}
+}
+let weekRecipeBusy=false;
+async function openWeekRecipe(index,btn){
+ if(weekRecipeBusy)return;
+ const wp=D.weekplan, day=wp?.days?.[index];if(!day)return;
+ weekRecipeBusy=true;btn.disabled=true;btn.setAttribute('aria-busy','true');
+ const label=btn.querySelector('small'),oldLabel=label.textContent;label.textContent='조리법을 준비하고 있어요…';
+ try{
+  const cacheKey=JSON.stringify([day.dish,D.allergy||'']);
+  let cooking=day.recipeKey===cacheKey?day.recipe:null;
+  if(!cooking){
+   cooking=await ask('다음 식단 전체의 초보용 조리법: '+day.dish+' (2인분). 모든 메뉴의 재료 양과 실제 조리 순서를 포함.\n'+
+    (D.allergy?'알레르기·비선호 반드시 제외: '+D.allergy+'\n':'')+
+    'JSON만: {"total_min":0,"level":"쉬움","ingredients":[{"name":"재료","amt":"분량"}],"basics":["양념"],"steps":[{"do":"구체적인 조리 방법","min":0}],"secret":"요리 팁"}',1800);
+   if(!Array.isArray(cooking.ingredients)||!cooking.ingredients.length||!Array.isArray(cooking.steps)||!cooking.steps.length)throw new Error('invalid recipe');
+   day.recipe=cooking;day.recipeKey=cacheKey;save();
+  }
+  if(D.weekplan!==wp||!document.querySelector('[data-view="weekplan"]').classList.contains('active'))return;
+  renderDetail({name:day.dish,tray:[{item:day.dish}]},cooking);
+  const back=document.querySelector('[data-view="detail"] .back');back.dataset.go='weekplan';
+  const action=$('#detail-eat');action.textContent='식단표로 돌아가기';action.onclick=()=>{go('weekplan');renderWeekplan();};
+  go('detail');
+ }catch(e){toast('조리법을 불러오지 못했어요. 메뉴를 다시 눌러주세요.');}
+ finally{weekRecipeBusy=false;btn.disabled=false;btn.removeAttribute('aria-busy');label.textContent=oldLabel;}
 }
 /* ── 나가서 먹기: 카테고리+룰렛 ── */
 const EATOUT_QUERY={
@@ -1201,7 +1220,9 @@ async function pick(m){
  }catch(e){const msg=e&&e.message&&e.message.startsWith("limit:")?e.message.slice(6):"[진단12] "+String(e&&e.message?e.message:e).slice(0,140)+" ← 이 문구를 알려주세요";toast(msg);mode=null;}
  finally{if(cb){cb.disabled=false;cb.textContent=cookLabel;}if(sb)sb.disabled=false;}
 }
-function renderDetail(){
+function renderDetail(detailResult=res,detailRecipe=recipe){
+ const res=detailResult,recipe=detailRecipe;
+ document.querySelector('[data-view="detail"] .back').dataset.go="home";
  $('#detail-body').innerHTML=
   '<figure class="detail-cover"><img src="'+homePhotoFor(res)+'" alt="선택한 메뉴의 참고 이미지"><figcaption>메뉴 참고 이미지</figcaption></figure>'+
   '<h1 class="detail-title">'+esc(res.name)+'</h1>'+

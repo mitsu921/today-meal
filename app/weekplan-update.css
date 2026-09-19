@@ -1,0 +1,9 @@
+#family-meal-app .week-menu{display:flex;align-items:center;gap:12px;width:100%;padding:16px 14px;margin:10px 0;background:#fff;border:1px solid #e8e1d8;border-radius:14px;color:#302c28;text-align:left;font:inherit;cursor:pointer}
+#family-meal-app .week-day{display:grid;place-items:center;flex:none;width:36px;height:36px;background:#fff0e3;color:#ac491d;border-radius:10px;font-size:15px;font-weight:700}
+#family-meal-app .week-copy{flex:1;min-width:0}
+#family-meal-app .week-copy strong{display:block;font-size:16px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+#family-meal-app .week-copy small{display:block;margin-top:5px;font-size:13px;line-height:1.6;color:#655e57}
+#family-meal-app .week-menu:focus-visible{outline:2px solid #de682c;outline-offset:2px}
+#family-meal-app .week-menu:hover{background:#fff9f2}
+#family-meal-app .week-menu:disabled{opacity:.65;cursor:wait}
+#family-meal-app #weekplan-body>.muted{font-size:14px;line-height:1.7;color:#625b54}
