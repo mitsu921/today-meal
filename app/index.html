@@ -691,6 +691,7 @@ details.fold.sub .body p{font-size:13px!important}
   <div id="toast" class="toast"></div>
 </div>
 
+<script src="./menu-diversity.js?v=20260924-1"></script>
 <script src="./recipe-editor.js?v=20260924-save3"></script>
 <script src="./recipe-sharing.js?v=20260924-2"></script>
 <script>
@@ -710,7 +711,7 @@ const MEAL_SLOTS={기본:["밥","국","메인","곁들임"],간식:["간식","�
 
 let D=JSON.parse(localStorage.getItem('mom-meal')||'null')||{name:"",allergy:"",pantry:[],shop:[],history:[],saved:[]};
 const save=()=>localStorage.setItem('mom-meal',JSON.stringify(D));
-let person="우리 아이",meal="점심",res=null,recipe=null,mode=null,busy=false,seen=[],eaten=false,scrapped=false;
+let person="우리 아이",meal="점심",res=null,recipe=null,mode=null,busy=false,eaten=false,scrapped=false;
 
 function toast(t){const n=$('#toast');n.textContent=t;n.classList.add('show');const dur=Math.min(6000,Math.max(1800,t.length*55));clearTimeout(n._tt);n._tt=setTimeout(()=>n.classList.remove('show'),dur)}
 function go(v){
@@ -1035,21 +1036,21 @@ async function decide(){
  const timeHint=(typeof filterTimeOn!=='undefined'&&filterTimeOn)?"- 조리시간 20분 이내로 끝낼 수 있는 메뉴여야 함(중요)\n":"";
  const budgetHint=(typeof filterBudgetOn!=='undefined'&&filterBudgetOn)?"- 재료비가 1인분 기준 1만원을 넘지 않는 저렴한 메뉴여야 함(중요)\n":"";
  try{
-  res=await askFood("영양사로서 "+(isSnack?"아이 간식":meal+" 식단")+" 한 상을 정해라.\n"+
+  const recommendationPrompt=("영양사로서 "+(isSnack?"아이 간식":meal+" 식단")+" 한 상을 정해라.\n"+
    "- 누구를 위한 상: "+person+" ("+P.who+") — "+(isSnack?"아이 간식 한 상. 설탕·가공은 줄이고 배를 적당히 채우게. tray는 간식(메인)/곁들임(과일·유제품 등)/음료/포인트(영양 포인트 한 줄) 순서.":P.brief)+"\n"+
    catHint+timeHint+budgetHint+
    (selectedHomeDish?"- 원하는 메인 메뉴: "+selectedHomeDish+". 알레르기·비선호 및 위 조건을 우선하고, 불가능하면 가까운 대체 메뉴를 제안해라.\n":"")+
    (D.allergy?"- 알레르기·비선호(반드시 완전히 제외): "+D.allergy+"\n":"")+
    (inv?"- 냉장고: "+inv+"\n- 냉장고 재료를 최대한 쓰되 '오늘까지' 재료를 반드시 우선 사용. 부족한 재료 1~2개는 missing에.\n":"- 냉장고 정보 없음. missing은 빈 배열.\n")+
    (warns.length?"- 보완: "+warns.join(" / ")+"\n":"")+
-   (seen.length?"- 제외: "+seen.join(", ")+"\n":"")+
    "- ingredients에 양념·소스 포함 전체 재료 이름을 문자열 배열로 적어라.\n"+
    "- 현실적 메뉴. tray 4칸은 반드시 이 순서·이 이름으로: "+slots.join("/")+". "+(isSnack?"":"국 없는 식문화면 국 칸을 음료·수프로 대체하되 칸 이름은 유지.")+"\n"+
    "- kcal 1인분, macros(g)와 일치(탄4/단4/지9). emoji는 메뉴를 잘 나타내는 이모지 1개. time은 실제 조리에 걸리는 대략적인 시간(예: '15분').\n"+
    "- urgent: 기한 임박 재료를 쓰면 '우유를 오늘 안에 써요' 식 한 마디, 아니면 빈 문자열.\n"+
-   'JSON만, 백틱 금지:\n{"ingredients":["재료명"],"name":"12자 이내","emoji":"🍲","time":"00분","why":"20자 이내","urgent":"","tray":[{"slot":"'+slots[0]+'","item":"","kcal":0},{"slot":"'+slots[1]+'","item":"","kcal":0},{"slot":"'+slots[2]+'","item":"","kcal":0},{"slot":"'+slots[3]+'","item":"","kcal":0}],"kcal":0,"macros":{"carb":0,"protein":0,"fat":0},"nutrition":"한 문장","missing":[{"name":"","amt":""}]}',1000);
+   'JSON만, 백틱 금지:\n{"ingredients":["재료명"],"name":"실제 메인 음식명 중심 제목","main_dish":"수식어 없이 실제 메인 음식 이름","emoji":"🍲","time":"00분","why":"20자 이내","urgent":"","tray":[{"slot":"'+slots[0]+'","item":"","kcal":0},{"slot":"'+slots[1]+'","item":"","kcal":0},{"slot":"'+slots[2]+'","item":"","kcal":0},{"slot":"'+slots[3]+'","item":"","kcal":0}],"kcal":0,"macros":{"carb":0,"protein":0,"fat":0},"nutrition":"한 문장","missing":[{"name":"","amt":""}]}');
+  if(!window.TodayMealDiversity)throw new Error('limit:추천 기능을 불러오지 못했습니다. 새로고침해주세요.');
+  res=await window.TodayMealDiversity.request({ask:askFood,prompt:recommendationPrompt,tokens:1100,explicit:!!selectedHomeDish,onRetry:()=>{heroBusy('최근 메뉴와 겹쳐 다른 음식을 찾고 있어요…');}});
   res._slots=slots; res._person=person; res._meal=meal;
-  seen=[...seen.slice(-5),res.name];
   if(window.gaEvent)gaEvent('decide_success',{person:person,meal:meal,dish:res.name,category:wheelCategory});
   heroResult();
  }catch(e){
