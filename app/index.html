@@ -344,6 +344,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./weekplan-update.css?v=20260919">
 <link rel="stylesheet" href="./kitchen-clean.css?v=20260919">
 <link rel="stylesheet" href="./trust-update.css?v=20260924">
+<style>#family-meal-app .recipe-controls{flex-wrap:wrap;gap:6px}#family-meal-app .recipe-action{border:1px solid #e9e0d7;background:#fff;border-radius:8px;padding:7px 10px;min-height:36px;font-size:13px;font-weight:700;color:#8e482c;cursor:pointer}</style>
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -681,6 +682,8 @@ details.fold.sub .body p{font-size:13px!important}
   <div id="toast" class="toast"></div>
 </div>
 
+<script src="./recipe-editor.js?v=20260924-2"></script>
+<script src="./recipe-sharing.js?v=20260924-2"></script>
 <script>
 
 (()=>{ 
@@ -1929,7 +1932,8 @@ function renderFeed(){
    '<div class="recipe-author">'+esc(r.profiles?r.profiles.nickname:'맘셰프')+tierBadge(r.user_id)+' · '+esc(r.target||'')+'</div>'+
    '<div class="recipe-nutrition" aria-label="1인분 추정 영양 정보">'+(r.kcal?'<span>'+esc(String(r.kcal))+' kcal</span>':'')+(r.protein!=null?'<span>단백질 '+esc(String(r.protein))+'g</span>':'')+'</div>'+
    '<div class="recipe-controls"><button class="likebtn'+(liked?' on':'')+'" data-like="'+r.id+'" aria-label="좋아요 '+likeCount(r)+'개">'+(liked?'♥':'♡')+' <small>'+likeCount(r)+'</small></button><button class="textbtn" data-cmt="'+r.id+'" aria-label="댓글 '+cmtCount(r)+'개"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5A8.5 8.5 0 0 1 10.5 3h2a8.5 8.5 0 0 1 8.5 8.5Z"/></svg> <small>'+cmtCount(r)+'</small></button>'+
-   '<details class="recipe-more"><summary aria-label="레시피 메뉴">⋯</summary><div class="recipe-more-menu"><a href="/r/'+r.id+'" target="_blank" rel="noopener">공유</a>'+(me&&me.id===r.user_id?'<button class="textbtn warnc" data-del="'+r.id+'">삭제</button>':'<button class="textbtn warnc" data-report="recipe:'+r.id+'">신고</button>')+'</div></details></div></div>'+
+   (me&&me.id===r.user_id?'<button class="recipe-action" data-edit="'+r.id+'">수정</button>':'')+'<button class="recipe-action" data-share="'+r.id+'">공유</button>'+
+   '<details class="recipe-more"><summary aria-label="레시피 메뉴">⋯</summary><div class="recipe-more-menu">'+(me&&me.id===r.user_id?'<button class="textbtn warnc" data-del="'+r.id+'">삭제</button>':'<button class="textbtn warnc" data-report="recipe:'+r.id+'">신고</button>')+'</div></details></div></div>'+
    '<div class="post-body recipe-expanded" id="body-'+r.id+'" style="display:none"><p style="white-space:pre-wrap">'+esc(r.body)+'</p>'+nutriHtml(r)+'</div>'+
    '<div id="cmt-'+r.id+'" style="display:none;margin-top:9px;border-top:1px dashed #e2e8e1;padding-top:9px">'+
    '<div id="cmt-list-'+r.id+'" class="tiny" style="color:#77857d">불러오는 중...</div>'+
@@ -1964,7 +1968,12 @@ function renderHomeFeed(){
  el.innerHTML=html;
  el.querySelectorAll('[data-goexp]').forEach(c=>c.onclick=()=>go('explore'));
 }
+let exploreEditor=null;
 $('#feed-list').onclick=async e=>{
+ const edit=e.target.closest('[data-edit]'),share=e.target.closest('[data-share]');
+ if(edit){if(!me){toast('등록한 계정으로 로그인해주세요.');return go('login');}if(!window.createTodayMealEditor)return toast('수정 화면을 불러오지 못했습니다. 새로고침해주세요.');if(!exploreEditor)exploreEditor=window.createTodayMealEditor({sb,shrinkImage,mount:$('#feed-list'),onSaved:loadFeed});await exploreEditor.open(Number(edit.dataset.edit));return;}
+ if(share){const r=feedData.find(x=>String(x.id)===share.dataset.share);if(r&&window.shareTodayMealRecipe)window.shareTodayMealRecipe(r);else toast('공유 기능을 불러오지 못했습니다. 새로고침해주세요.');return;}
+
  const open=e.target.closest('[data-open]'), like=e.target.closest('[data-like]'), del=e.target.closest('[data-del]'), cmt=e.target.closest('[data-cmt]'), csend=e.target.closest('[data-cmt-send]'), cdel=e.target.closest('[data-cmt-del]'), rept=e.target.closest('[data-report]');
  if(open){
   const b=$('#body-'+open.dataset.open);
