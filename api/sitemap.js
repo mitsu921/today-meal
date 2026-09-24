@@ -11,10 +11,11 @@ export default async function handler(req, res) {
   try {
     const url = `${SB_URL}/rest/v1/recipes?select=id,created_at&order=created_at.desc&limit=5000`;
     const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } });
+    if(!r.ok)throw new Error("sitemap fetch failed");
     recipes = await r.json();
-    if (!Array.isArray(recipes)) recipes = [];
+    if (!Array.isArray(recipes)) throw new Error("invalid sitemap response");
   } catch (e) {
-    recipes = [];
+    res.status(503).send("Sitemap temporarily unavailable");return;
   }
 
   const staticUrls = [
@@ -29,12 +30,13 @@ export default async function handler(req, res) {
     { loc: `${SITE}/privacy.html`, priority: "0.3" },
   ];
 
+  const xmlEscape=value=>String(value).replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","\'":"&apos;"}[c]));
   const recipeUrls = recipes.map(
-    (r) => `  <url>\n    <loc>${SITE}/r/${r.id}</loc>\n    <lastmod>${new Date(r.created_at).toISOString().slice(0, 10)}</lastmod>\n    <priority>0.6</priority>\n  </url>`
+    (r) => `  <url>\n    <loc>${SITE}/r/${xmlEscape(r.id)}</loc>\n    <lastmod>${!isNaN(Date.parse(r.created_at))?new Date(r.created_at).toISOString().slice(0,10):new Date().toISOString().slice(0,10)}</lastmod>\n    <priority>0.6</priority>\n  </url>`
   );
 
   const staticXml = staticUrls.map(
-    (u) => `  <url>\n    <loc>${u.loc}</loc>\n    <priority>${u.priority}</priority>\n  </url>`
+    (u) => `  <url>\n    <loc>${xmlEscape(u.loc)}</loc>\n    <priority>${u.priority}</priority>\n  </url>`
   );
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

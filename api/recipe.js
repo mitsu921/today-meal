@@ -11,8 +11,8 @@ function esc(s) {
 }
 
 export default async function handler(req, res) {
-  const id = (req.query.id || "").toString().replace(/[^0-9]/g, "");
-  if (!id) {
+  const id = String(req.query.id || "");
+  if (!/^\d+$/.test(id)) {
     res.status(404).send("레시피를 찾을 수 없어요");
     return;
   }
@@ -21,10 +21,12 @@ export default async function handler(req, res) {
   try {
     const url = `${SB_URL}/rest/v1/recipes?id=eq.${id}&select=*,profiles(nickname),likes(count),comments(count)`;
     const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } });
+    if(!r.ok)throw new Error("recipe fetch failed");
     const data = await r.json();
     recipe = Array.isArray(data) ? data[0] : null;
   } catch (e) {
-    recipe = null;
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.status(503).send("잠시 후 다시 시도해주세요");return;
   }
 
   if (!recipe) {
@@ -36,15 +38,22 @@ export default async function handler(req, res) {
   const nickname = recipe.profiles ? recipe.profiles.nickname : "맘셰프";
   const likeCount = recipe.likes && recipe.likes[0] ? recipe.likes[0].count : 0;
   const cmtCount = recipe.comments && recipe.comments[0] ? recipe.comments[0].count : 0;
-  const bodyText = (recipe.body || "").slice(0, 2000);
+  const bodyText = recipe.body || "";
   const desc = bodyText.slice(0, 90).replace(/\n/g, " ") + (bodyText.length > 90 ? "…" : "");
   const img = recipe.image_url || "https://todaymeal.co.kr/og.jpg";
-  const created = recipe.created_at ? new Date(recipe.created_at).toISOString() : new Date().toISOString();
+  const created = recipe.created_at && !isNaN(Date.parse(recipe.created_at)) ? new Date(recipe.created_at).toISOString() : undefined;
 
-  // 재료를 본문에서 대략 추출(줄 단위, "재료" 섹션 우선) — 구조화 데이터용
-  const lines = bodyText.split("\n").map((l) => l.trim()).filter(Boolean);
-  const ingredientLines = lines.filter((l) => /^[-•·]|^\d+\s*(g|ml|개|큰술|작은술|컵|모|단|줌)/.test(l)).slice(0, 20);
-  const ingredients = ingredientLines.length ? ingredientLines : lines.slice(0, 8);
+  // Parse explicit sections only; never label arbitrary prose as ingredients.
+  const ingredients=[],instructions=[];
+  let section='';
+  for(const raw of bodyText.split('\n')){
+    const line=raw.trim();if(!line)continue;
+    if(/^[\[【]?\s*재료(?:\s|[·:：\]】]|$)/.test(line)){section='ingredients';continue;}
+    if(/^[\[【]?\s*(만드는\s*법|조리\s*(방법|순서)|만들기)(?:\s|[:：\]】]|$)/.test(line)){section='steps';continue;}
+    if(/^[\[【]|^(우리 집 팁|요리 팁|보관|주의)/.test(line)){section='';continue;}
+    if(section==='ingredients')ingredients.push(line.replace(/^[-•·]\s*/,''));
+    if(section==='steps')instructions.push({"@type":"HowToStep",text:line.replace(/^\d+[.)]\s*/, '')});
+  }
 
   const jsonLd = {
     "@context": "https://schema.org/",
@@ -54,25 +63,11 @@ export default async function handler(req, res) {
     author: { "@type": "Person", name: nickname },
     datePublished: created,
     description: desc,
-    recipeIngredient: ingredients,
-    recipeInstructions: bodyText ? [{ "@type": "HowToStep", text: bodyText.slice(0, 1500) }] : undefined,
-    ...(recipe.kcal ? {
-      nutrition: {
-        "@type": "NutritionInformation",
-        calories: `${recipe.kcal} kcal`,
-        ...(recipe.carb ? { carbohydrateContent: `${recipe.carb}g` } : {}),
-        ...(recipe.protein ? { proteinContent: `${recipe.protein}g` } : {}),
-        ...(recipe.fat ? { fatContent: `${recipe.fat}g` } : {}),
-      },
-    } : {}),
-    ...(likeCount ? {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.7",
-        ratingCount: String(Math.max(likeCount, 1)),
-      },
-    } : {}),
+    ...(ingredients.length?{recipeIngredient:ingredients}:{}),
+    ...(instructions.length?{recipeInstructions:instructions}:{}),
   };
+
+  const schema = ingredients.length && instructions.length && recipe.image_url ? jsonLd : {"@context":"https://schema.org", "@type":"Article", headline:title, author:jsonLd.author, datePublished:created, description:desc};
 
   const nutriHtml = recipe.kcal
     ? `<div style="background:#f7f4ee;border-radius:11px;padding:14px;margin:16px 0"><b>AI 영양 분석</b> · ${recipe.kcal}kcal (탄 ${recipe.carb || 0}g · 단 ${recipe.protein || 0}g · 지 ${recipe.fat || 0}g)${recipe.nutri_note ? `<p style="margin:8px 0 0;color:#555">${esc(recipe.nutri_note)}</p>` : ""}</div>`
@@ -93,7 +88,7 @@ export default async function handler(req, res) {
 <meta property="og:url" content="https://todaymeal.co.kr/r/${id}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/icon-192.png">
-<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script type="application/ld+json">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script>
 <style>
 body{margin:0;background:#fffefc;color:#2b241d;font-family:Arial,"Noto Sans KR",sans-serif;line-height:1.75}
 .wrap{max-width:720px;margin:auto;padding:24px}
