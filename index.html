@@ -263,11 +263,20 @@ async function refreshAuth(){
  renderPoints();
 }
 function watchAuth(){
- sb.auth.onAuthStateChange(async(ev,s)=>{
+ let authEventVersion=0;
+ sb.auth.onAuthStateChange((ev,s)=>{
+  const version=++authEventVersion;
   me=s?s.user:null;
+  // Release Supabase's auth lock before calling other Supabase APIs.
+  setTimeout(()=>{
+   if(version!==authEventVersion)return;
+   (async()=>{
   if(me)await ensureProfile();
+  if(version!==authEventVersion)return;
   renderAuthSlot(); renderPoints();
   if(ev==='SIGNED_IN'){ if(location.search.includes('code='))history.replaceState(null,'',location.pathname); }
+   })().catch(()=>{if(version===authEventVersion)toast('로그인은 확인됐지만 프로필을 불러오지 못했어요. 잠시 후 다시 시도해주세요.');});
+  },0);
  });
 }
 function setAuthMode(m){
