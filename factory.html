@@ -37,7 +37,7 @@ button:disabled{opacity:.55}
     하루 1~3개, 검수한 것만 올리는 걸 권장해요 — 애드센스 심사 중엔 특히!
   </div>
 
-  <div id="auth-state" class="msg">로그인 확인 중...</div>
+  <div id="auth-state" class="msg" role="status">로그인 확인 중...</div><p><a href="/app/?go=login" target="_blank" rel="noopener">메인 앱에서 로그인</a> · <button id="auth-recheck" type="button">로그인 다시 확인</button></p>
 
   <label>음식 이름 (AI 초안용)</label>
   <div class="row">
@@ -88,7 +88,7 @@ button:disabled{opacity:.55}
   </label>
 
   <button class="go" id="submit">등록하기</button>
-  <div class="msg" id="msg"></div>
+  <div class="msg" id="msg" role="status"></div>
 </div>
 
 <script>
@@ -100,14 +100,27 @@ let sb=null, me=null, target="온 가족", photoFile=null;
 
 function msg(t,ok){const m=$('#msg');m.textContent=t;m.className='msg'+(ok?' ok':'');}
 
+function setUser(user){
+ me=user;$('#auth-state').textContent=me?'로그인됨 — 등록하면 내 계정 글로 공개됩니다.':'로그인이 필요합니다. 위 링크에서 로그인한 뒤 로그인 다시 확인을 눌러주세요.';
+ $('#auth-state').className='msg'+(me?' ok':'');
+}
+async function checkLogin(){
+ if(!sb){$('#auth-state').textContent='로그인 모듈을 불러오지 못했습니다. 인터넷 연결 또는 콘텐츠 차단 설정을 확인하고 새로고침해 주세요.';return;}
+ $('#auth-state').textContent='로그인 확인 중…';
+ let timer;
+ try{
+ const result=await Promise.race([sb.auth.getSession(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('로그인 확인 시간이 초과되었습니다. 다시 확인을 눌러주세요.')),12000);})]);
+ if(result.error)throw result.error;setUser(result.data?.session?.user||null);
+ }catch(e){me=null;$('#auth-state').textContent='로그인 확인 실패: '+e.message;}
+ finally{clearTimeout(timer);}
+}
 try{
-  sb=window.supabase.createClient(SB_URL,SB_KEY);
-  sb.auth.getSession().then(({data:{session}})=>{
-    me=session?session.user:null;
-    $('#auth-state').textContent=me?'✅ 로그인됨 — 등록하면 내 계정 글로 올라갑니다':'⚠️ 로그인이 안 돼 있어요. 메인 사이트에서 로그인한 뒤 이 페이지를 새로고침하세요.';
-    $('#auth-state').className='msg'+(me?' ok':'');
-  });
-}catch(e){$('#auth-state').textContent='연결 실패: 새로고침해 주세요';}
+ if(!window.supabase)throw new Error('로그인 모듈 로드 실패');
+ sb=window.supabase.createClient(SB_URL,SB_KEY);
+ sb.auth.onAuthStateChange((event,session)=>setUser(session?.user||null));
+ checkLogin();
+}catch(e){$('#auth-state').textContent=e.message+' — 인터넷 연결 또는 콘텐츠 차단 설정을 확인하고 새로고침해 주세요.';}
+$('#auth-recheck').onclick=checkLogin;
 
 document.querySelectorAll('#f-target .chip').forEach(c=>c.onclick=()=>{
   document.querySelectorAll('#f-target .chip').forEach(x=>x.classList.remove('on'));
@@ -138,12 +151,20 @@ async function shrinkImage(file){
  }catch(e){ return file; } // 압축 실패 시 원본 그대로
 }
 async function ask(prompt,maxTokens){
-  const r=await fetch(PROXY_URL,{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:maxTokens||700,messages:[{role:"user",content:prompt}]})});
-  const d=await r.json();
-  if(r.status===429)throw new Error(d.message||'요청 한도');
-  const txt=(d.content||[]).map(i=>i.type==="text"?i.text:"").filter(Boolean).join("\n");
-  return JSON.parse(txt.replace(/```json|```/g,"").trim());
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),35000);
+ try{
+  const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,
+   body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:maxTokens||1400,messages:[{role:'user',content:prompt}]})});
+  const raw=await r.text();let d;
+  try{d=JSON.parse(raw);}catch{throw new Error('AI 서버가 JSON 대신 다른 내용을 반환했습니다 (HTTP '+r.status+').');}
+  if(!r.ok)throw new Error(d.message||d.error?.message||'AI 연결 실패 (HTTP '+r.status+')');
+  if(d.stop_reason==='max_tokens')throw new Error('초안이 너무 길어 중간에 잘렸습니다. 음식 한 가지로 다시 시도해주세요.');
+  const txt=(d.content||[]).filter(i=>i.type==='text').map(i=>i.text).join('\n').replace(/```(?:json)?/g,'').trim();
+  let result;try{result=JSON.parse(txt);}catch{throw new Error('AI 응답 형식이 올바르지 않습니다. 다시 시도해주세요.');}
+  if(!result||!Array.isArray(result.ingredients)||!result.ingredients.length||!Array.isArray(result.steps)||!result.steps.length||result.ingredients.some(x=>typeof x!=='string')||result.steps.some(x=>typeof x!=='string'))throw new Error('초안에 재료 또는 조리 단계가 빠졌습니다. 다시 시도해주세요.');
+  return result;
+ }catch(e){if(e.name==='AbortError')throw new Error('AI 응답이 35초를 넘었습니다. 잠시 후 다시 시도해주세요.');throw e;}
+ finally{clearTimeout(timer);}
 }
 
 $('#draft').onclick=async()=>{
@@ -174,7 +195,9 @@ JSON만, 백틱 금지:
 };
 
 $('#submit').onclick=async()=>{
-  if(!me)return msg('로그인이 필요해요 — 메인 사이트에서 로그인 후 새로고침');
+  await checkLogin();
+  if($('#submit').disabled)return;
+  if(!me)return msg('로그인이 필요해요. 메인 앱에서 로그인한 뒤 다시 확인해주세요.');
   const title=$('#f-title').value.trim();
   if(!title)return msg('제목을 적어주세요');
   const ing=$('#f-ing').value.trim(), steps=$('#f-steps').value.trim();
@@ -185,7 +208,8 @@ $('#submit').onclick=async()=>{
     if(photoFile){
       const path=me.id+'/'+Date.now()+'.'+(photoFile.name.split('.').pop()||'jpg');
       const {error:se}=await sb.storage.from('photos').upload(path,photoFile);
-      if(!se)image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;
+      if(se)throw new Error('사진 업로드 실패: '+se.message);
+      image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;
     }
     const body=['⏱️ 조리시간: '+($('#f-time').value||'?')+'분 · 👨‍👩‍👧 '+($('#f-serv').value||'?')+'인분 · 🔥 '+$('#f-level').value,
       '','🥬 재료',ing,'','🔪 만드는 법',steps,
@@ -199,7 +223,7 @@ $('#submit').onclick=async()=>{
     if(error)return msg('등록 실패: '+error.message);
     msg('등록 완료! 탐색 탭에서 확인하세요 🎉',1);
     ['#dish','#f-title','#f-time','#f-ing','#f-steps','#f-tip','#f-kcal','#f-carb','#f-prot','#f-fat','#f-note'].forEach(s=>$(s).value='');
-    photoFile=null;$('#photo-btn').textContent='📷 사진 선택';
+    photoFile=null;$('#f-photo').value='';$('#photo-btn').textContent='📷 사진 선택';
   }catch(e){msg('오류: '+String(e).slice(0,100));}
   finally{$('#submit').disabled=false;$('#submit').textContent='등록하기';}
 };
