@@ -343,6 +343,7 @@ details.fold.sub .body p{font-size:13px!important}
 <link rel="stylesheet" href="./simple-recipe.css?v=20260919">
 <link rel="stylesheet" href="./weekplan-update.css?v=20260919">
 <link rel="stylesheet" href="./kitchen-clean.css?v=20260919">
+<link rel="stylesheet" href="./trust-update.css?v=20260924">
 </head>
 <body style="margin:0;background:#efe9df">
 
@@ -374,7 +375,7 @@ details.fold.sub .body p{font-size:13px!important}
       <!-- 히어로 -->
       <section class="greeting-hero">
         <div class="hero-copy">
-          <p class="eyebrow" id="greet">오늘도 좋은 저녁이에요! 👋</p>
+          <p class="eyebrow" id="greet">오늘도 맛있는 하루 보내세요</p>
           <h1>오늘 뭐 먹지?</h1><p class="home-intro">우리 가족 한 끼, 가볍게 골라요</p>
         </div>
 
@@ -412,7 +413,7 @@ details.fold.sub .body p{font-size:13px!important}
         <button class="chip" data-meal="저녁">저녁밥</button>
         <button class="chip" data-meal="간식">아이 간식</button>
       </div>
-      <div class="pref-inline-footer"><span>다음 메뉴 추천부터 적용돼요</span><button type="button" id="pref-inline-done">선택 완료</button></div>
+      <div class="pref-inline-footer"><span>조건을 고른 뒤 추천받기를 눌러주세요</span><button type="button" id="pref-inline-done">이 조건으로 추천받기</button></div>
     </div>
   </div>
       <button type="button" class="home-pantry-link" data-go="fridge"><span>냉장고에 <b id="pantry-count-home">0</b>개 보관 중</span><span>재료 관리 ›</span></button>
@@ -649,8 +650,8 @@ details.fold.sub .body p{font-size:13px!important}
 </section></div>
 <details class="kitchen-panel"><summary>알레르기 · 안 먹는 것</summary><div class="kitchen-panel-body">
 
-<p class="muted" style="margin-bottom:8px">적어두면 모든 추천에서 자동으로 뺍니다 (예: 새우, 땅콩, 오이)</p>
-<input aria-label="알레르기 및 안 먹는 재료" id="allergy-input" placeholder="쉼표로 구분해서 입력"/>
+<p class="muted" style="margin-bottom:8px">입력한 재료를 제외하도록 AI 추천에 반영합니다. 사용자 레시피에는 적용되지 않으며, 조리 전 전체 재료와 제품 표시를 확인해 주세요.</p>
+<div id="allergy-options" class="allergy-options" aria-label="자주 선택하는 제외 재료"></div><p class="muted">아래 항목은 예시입니다. 다른 재료도 직접 입력하세요.</p><input aria-label="알레르기 및 안 먹는 재료" id="allergy-input" placeholder="쉼표로 구분해서 입력"/>
 <button class="b-green" id="allergy-save" style="border-radius:11px;padding:10px 16px;font-weight:800;margin-top:8px">저장</button>
 </div></details>
 <details class="kitchen-panel"><summary>포인트 · 영수증 인증</summary><div class="kitchen-panel-body">
@@ -802,7 +803,7 @@ function analyze(){
 
 /* ── 홈 렌더 ── */
 function renderTop(){
- $('#greet').textContent=(myNick?myNick+'님, ':'')+'좋은 저녁이에요! 👋';
+ $('#greet').textContent=(myNick?myNick+'님, ':'')+'오늘도 맛있는 하루 보내세요';
  const pc=$('#pantry-count-home'); if(pc)pc.textContent=D.pantry.length;
  const u=D.pantry.filter(p=>p.exp==="오늘까지");
  $('#urgent-slot').innerHTML=u.length?'<button class="urgentbar" data-go="fridge">⏰ 오늘까지! '+u.map(p=>p.name).join(", ")+' — 이것부터 써드릴게요</button>':"";
@@ -982,6 +983,32 @@ function renderExtra(){
  if(tc)tc.onclick=()=>{let n=0;miss.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++}});save();renderTop();tc.textContent="✓ "+(n?n+"개 담았어요":"이미 담겨 있어요");tc.disabled=true;toast("장보기 목록에 담았어요")};
 }
 
+// Additional ingredient-text screening; not a guarantee of allergy safety.
+const EXCLUSION_GROUPS=[['달걀','계란','난류','마요네즈'],['우유','유제품','치즈','버터','요거트','요구르트','생크림'],['밀','밀가루','빵','파스타','스파게티','소면','우동'],['대두','콩','두부','된장','간장','두유'],['땅콩','피넛'],['새우','새우젓'],['게','꽃게'],['호두'],['돼지고기','돼지','돈육','베이컨','햄'],['쇠고기','소고기','우육'],['닭고기','닭','치킨'],['고등어'],['오징어'],['조개류','조개','굴','홍합','전복','바지락'],['복숭아'],['토마토'],['메밀'],['잣']];
+function exclusionTerms(value){return String(value||'').split(/[,，\n]+/).map(x=>x.trim()).filter(Boolean);}
+function checkFood(value){
+ const terms=exclusionTerms(D.allergy);if(!terms.length)return;
+ const words=[];
+ function visit(v){if(Array.isArray(v)){v.forEach(visit);return;}if(v&&typeof v==='object'){Object.entries(v).forEach(([k,x])=>{if(['name','item','dish','ingredients','basics','tray','days','steps','do'].includes(k))visit(x);});}else if(typeof v==='string')words.push(v);}
+ visit(value);const content=words.join(' ').replace(/\s/g,'').toLowerCase();
+ const hit=terms.find(t=>{const clean=t.replace(/\s/g,'').toLowerCase();const group=EXCLUSION_GROUPS.find(g=>g.includes(clean));return (group||[clean]).some(x=>content.includes(x));});
+ if(hit)throw new Error('limit:제외 재료('+hit+')가 포함될 가능성이 있어 결과를 표시하지 않았어요. 다른 메뉴로 다시 추천받아 주세요.');
+}
+async function askFood(prompt,tokens){
+ const setting=D.allergy||'';const answer=await ask(prompt,tokens);
+ if(!answer||typeof answer!=="object")throw new Error("limit:추천 내용을 확인할 수 없어 표시하지 않았어요. 다시 시도해주세요.");
+ if(!Array.isArray(answer.days)&&(!Array.isArray(answer.ingredients)||!answer.ingredients.length))throw new Error("limit:재료 목록이 빠져 결과를 표시하지 않았어요. 다시 추천받아 주세요.");
+ if(setting!==(D.allergy||''))throw new Error('limit:제외 재료 설정이 바뀌었어요. 다시 추천받아 주세요.');
+ checkFood(answer);return answer;
+}
+function renderAllergyOptions(){
+ const el=$('#allergy-options');if(!el)return;
+ const selected=exclusionTerms($('#allergy-input').value);
+ el.innerHTML=['달걀','우유','밀','대두','땅콩','새우','게','호두','복숭아','토마토','메밀','조개류'].map(x=>'<button type="button" aria-pressed="'+selected.includes(x)+'" data-exclude="'+x+'">'+x+'</button>').join('');
+ el.querySelectorAll('[data-exclude]').forEach(b=>b.onclick=()=>{const list=exclusionTerms($('#allergy-input').value),term=b.dataset.exclude;$('#allergy-input').value=(list.includes(term)?list.filter(x=>x!==term):[...list,term]).join(', ');renderAllergyOptions();});
+}
+$('#allergy-input').addEventListener('input',renderAllergyOptions);
+
 /* ── 추천 ── */
 async function decide(){
  if(busy)return; busy=true; recipe=null; mode=null; eaten=false; scrapped=false;
@@ -996,7 +1023,7 @@ async function decide(){
  const timeHint=(typeof filterTimeOn!=='undefined'&&filterTimeOn)?"- 조리시간 20분 이내로 끝낼 수 있는 메뉴여야 함(중요)\n":"";
  const budgetHint=(typeof filterBudgetOn!=='undefined'&&filterBudgetOn)?"- 재료비가 1인분 기준 1만원을 넘지 않는 저렴한 메뉴여야 함(중요)\n":"";
  try{
-  res=await ask("영양사로서 "+(isSnack?"아이 간식":meal+" 식단")+" 한 상을 정해라.\n"+
+  res=await askFood("영양사로서 "+(isSnack?"아이 간식":meal+" 식단")+" 한 상을 정해라.\n"+
    "- 누구를 위한 상: "+person+" ("+P.who+") — "+(isSnack?"아이 간식 한 상. 설탕·가공은 줄이고 배를 적당히 채우게. tray는 간식(메인)/곁들임(과일·유제품 등)/음료/포인트(영양 포인트 한 줄) 순서.":P.brief)+"\n"+
    catHint+timeHint+budgetHint+
    (selectedHomeDish?"- 원하는 메인 메뉴: "+selectedHomeDish+". 알레르기·비선호 및 위 조건을 우선하고, 불가능하면 가까운 대체 메뉴를 제안해라.\n":"")+
@@ -1004,17 +1031,18 @@ async function decide(){
    (inv?"- 냉장고: "+inv+"\n- 냉장고 재료를 최대한 쓰되 '오늘까지' 재료를 반드시 우선 사용. 부족한 재료 1~2개는 missing에.\n":"- 냉장고 정보 없음. missing은 빈 배열.\n")+
    (warns.length?"- 보완: "+warns.join(" / ")+"\n":"")+
    (seen.length?"- 제외: "+seen.join(", ")+"\n":"")+
+   "- ingredients에 양념·소스 포함 전체 재료 이름을 문자열 배열로 적어라.\n"+
    "- 현실적 메뉴. tray 4칸은 반드시 이 순서·이 이름으로: "+slots.join("/")+". "+(isSnack?"":"국 없는 식문화면 국 칸을 음료·수프로 대체하되 칸 이름은 유지.")+"\n"+
    "- kcal 1인분, macros(g)와 일치(탄4/단4/지9). emoji는 메뉴를 잘 나타내는 이모지 1개. time은 실제 조리에 걸리는 대략적인 시간(예: '15분').\n"+
    "- urgent: 기한 임박 재료를 쓰면 '우유를 오늘 안에 써요' 식 한 마디, 아니면 빈 문자열.\n"+
-   'JSON만, 백틱 금지:\n{"name":"12자 이내","emoji":"🍲","time":"00분","why":"20자 이내","urgent":"","tray":[{"slot":"'+slots[0]+'","item":"","kcal":0},{"slot":"'+slots[1]+'","item":"","kcal":0},{"slot":"'+slots[2]+'","item":"","kcal":0},{"slot":"'+slots[3]+'","item":"","kcal":0}],"kcal":0,"macros":{"carb":0,"protein":0,"fat":0},"nutrition":"한 문장","missing":[{"name":"","amt":""}]}',650);
+   'JSON만, 백틱 금지:\n{"ingredients":["재료명"],"name":"12자 이내","emoji":"🍲","time":"00분","why":"20자 이내","urgent":"","tray":[{"slot":"'+slots[0]+'","item":"","kcal":0},{"slot":"'+slots[1]+'","item":"","kcal":0},{"slot":"'+slots[2]+'","item":"","kcal":0},{"slot":"'+slots[3]+'","item":"","kcal":0}],"kcal":0,"macros":{"carb":0,"protein":0,"fat":0},"nutrition":"한 문장","missing":[{"name":"","amt":""}]}',1000);
   res._slots=slots; res._person=person; res._meal=meal;
   seen=[...seen.slice(-5),res.name];
   if(window.gaEvent)gaEvent('decide_success',{person:person,meal:meal,dish:res.name,category:wheelCategory});
   heroResult();
  }catch(e){
   const msg=e.message&&e.message.startsWith("limit:")?e.message.slice(6):"메뉴를 못 받아왔어요. 다시 눌러주세요!";
-  $('#hero').innerHTML='<article class="recommend-card card"><div class="meal-copy"><span class="pill">오늘 추천 메뉴</span><h2>오늘 저녁,<br>다시 골라볼까요?</h2><p class="meal-meta">잠시 연결이 원활하지 않아요.</p></div><div class="meal-image-wrap"><img class="meal-image" src="./assets/meal_bowl-clean.png" alt="추천 메뉴 예시"></div><div class="meal-actions"><button class="primary-button" id="retry-menu">다시 추천받기</button></div></article>'; $('#retry-menu').onclick=decide; toast(msg);
+  $('#hero').innerHTML='<article class="recommend-card card"><div class="meal-copy"><span class="pill">오늘 추천 메뉴</span><h2>다시<br>골라볼까요?</h2><p class="meal-meta">'+esc(msg)+'</p></div><div class="meal-image-wrap"><img class="meal-image" src="./assets/meal_bowl-clean.png" alt="추천 메뉴 예시"></div><div class="meal-actions"><button class="primary-button" id="retry-menu">다시 추천받기</button></div></article>'; $('#retry-menu').onclick=decide; toast(msg);
  }
  clearInterval(t); busy=false;
 }
@@ -1044,7 +1072,7 @@ async function makeWeekplan(append=false){
  const count=7-previous.length;
  el.innerHTML='<p class="muted" role="status">월요일부터 일요일까지 메뉴를 준비하고 있어요…</p>';
  try{
-  const result=await ask('저녁 식단 '+count+'개를 '+WEEK_DAYS.slice(previous.length).join(', ')+' 순서로 짜줘. 가족이 먹기 좋은 다양한 메뉴.\n'+
+  const result=await askFood('저녁 식단 '+count+'개를 '+WEEK_DAYS.slice(previous.length).join(', ')+' 순서로 짜줘. 가족이 먹기 좋은 다양한 메뉴.\n'+
    (previous.length?'기존 메뉴와 중복 제외: '+previous.map(d=>d.dish).join(', ')+'\n':'')+
    (D.pantry.length?'냉장고 재료 우선 활용: '+D.pantry.map(p=>p.name).join(', ')+'\n':'')+
    (D.allergy?'알레르기·비선호 반드시 제외: '+D.allergy+'\n':'')+
@@ -1053,7 +1081,7 @@ async function makeWeekplan(append=false){
   if(!Array.isArray(days)||days.length!==count||days.some(d=>!d||typeof d.dish!=='string'||!d.dish.trim()))throw new Error('invalid days');
   D.weekplan={days:[...previous,...days],person:person,madeAt:new Date().toISOString()};save();renderWeekplan();
   if(window.gaEvent)gaEvent('weekplan_made',{});
- }catch(e){renderWeekplan();toast('식단을 만들지 못했어요. 다시 시도해주세요.');}
+ }catch(e){renderWeekplan();toast(e.message?.startsWith('limit:')?e.message.slice(6):'식단을 만들지 못했어요. 다시 시도해주세요.');}
  finally{weekplanBusy=false;}
 }
 let weekRecipeBusy=false;
@@ -1066,7 +1094,7 @@ async function openWeekRecipe(index,btn){
   const cacheKey=JSON.stringify([day.dish,D.allergy||'']);
   let cooking=day.recipeKey===cacheKey?day.recipe:null;
   if(!cooking){
-   cooking=await ask('다음 식단 전체의 초보용 조리법: '+day.dish+' (2인분). 모든 메뉴의 재료 양과 실제 조리 순서를 포함.\n'+
+   cooking=await askFood('다음 식단 전체의 초보용 조리법: '+day.dish+' (2인분). 모든 메뉴의 재료 양과 실제 조리 순서를 포함.\n'+
     (D.allergy?'알레르기·비선호 반드시 제외: '+D.allergy+'\n':'')+
     'JSON만: {"total_min":0,"level":"쉬움","ingredients":[{"name":"재료","amt":"분량"}],"basics":["양념"],"steps":[{"do":"구체적인 조리 방법","min":0}],"secret":"요리 팁"}',1800);
    if(!Array.isArray(cooking.ingredients)||!cooking.ingredients.length||!Array.isArray(cooking.steps)||!cooking.steps.length)throw new Error('invalid recipe');
@@ -1077,7 +1105,7 @@ async function openWeekRecipe(index,btn){
   const back=document.querySelector('[data-view="detail"] .back');back.dataset.go='weekplan';
   const action=$('#detail-eat');action.textContent='식단표로 돌아가기';action.onclick=()=>{go('weekplan');renderWeekplan();};
   go('detail');
- }catch(e){toast('조리법을 불러오지 못했어요. 메뉴를 다시 눌러주세요.');}
+ }catch(e){toast(e.message?.startsWith('limit:')?e.message.slice(6):'조리법을 불러오지 못했어요. 메뉴를 다시 눌러주세요.');}
  finally{weekRecipeBusy=false;btn.disabled=false;btn.removeAttribute('aria-busy');label.textContent=oldLabel;}
 }
 /* ── 나가서 먹기: 카테고리+룰렛 ── */
@@ -1210,7 +1238,7 @@ async function pick(m){
   if(cb){cb.disabled=true;cb.textContent="🍳 레시피 만드는 중...";}
   if(sb)sb.disabled=true;
   if(!recipe){
-   recipe=await ask("초보용 요리법: "+menu+" (2인분)\n"+
+   recipe=await askFood("초보용 요리법: "+menu+" (2인분)\n"+
     (D.pantry.length?"냉장고에 있음: "+D.pantry.map(p=>p.name).join(", ")+"\n":"")+
     (D.allergy?"알레르기·비선호(완전 제외): "+D.allergy+"\n":"")+
     "- 재료 양 표기, 기본 양념은 basics에. step은 실제 순서(기다리는 건 앞에), 분 단위.\n"+
@@ -1221,12 +1249,14 @@ async function pick(m){
  finally{if(cb){cb.disabled=false;cb.textContent=cookLabel;}if(sb)sb.disabled=false;}
 }
 function renderDetail(detailResult=res,detailRecipe=recipe){
+ checkFood(detailRecipe);
  const res=detailResult,recipe=detailRecipe;
  document.querySelector('[data-view="detail"] .back').dataset.go="home";
  $('#detail-body').innerHTML=
   '<figure class="detail-cover"><img src="'+homePhotoFor(res)+'" alt="선택한 메뉴의 참고 이미지"><figcaption>메뉴 참고 이미지</figcaption></figure>'+
   '<h1 class="detail-title">'+esc(res.name)+'</h1>'+
   '<div class="stats"><span>'+esc(String(recipe.total_min))+'분</span><span>'+esc(recipe.level)+'</span><span>2인분 기준</span></div>'+
+  '<p class="food-check-note">AI 조리법은 재료 누락이나 오류가 있을 수 있습니다. 조리 전 전체 재료와 제품의 알레르기 표시를 확인하세요.</p>'+
   '<section class="recipe-section"><h3>재료 <small>2인분</small></h3><div class="ingredient-list">'+
   recipe.ingredients.map(g=>{const have=D.pantry.some(p=>g.name.includes(p.name)||p.name.includes(g.name));
    return '<div class="ingredient"><div class="ingredient-name">'+esc(g.name)+(have?'<small class="have">보유</small>':'')+'</div><span class="ingredient-amount">'+esc(g.amt||'')+'</span></div>'}).join('')+'</div>'+
@@ -1364,7 +1394,7 @@ $('#clear-done').onclick=()=>{D.shop=D.shop.filter(s=>!s.done);save();renderShop
 function renderKitchen(){
  $('#theme-saved').textContent=D.saved.length;$('#theme-history').textContent=D.history.length;$('#theme-pantry').textContent=D.pantry.length;
  $('#kitchen-title').textContent=(D.name?D.name+"님의 주방":"내 주방");
- $('#allergy-input').value=D.allergy||"";
+ $('#allergy-input').value=D.allergy||"";renderAllergyOptions();
  $('#saved-count').textContent=D.saved.length?D.saved.length+"개":"";
  const sl=$('#saved-list');
  sl.innerHTML=D.saved.length?"":'<p class="muted">추천 카드의 ♡를 누르면 여기 저장돼요.</p>';
@@ -1387,12 +1417,12 @@ function renderKitchen(){
   c.querySelector('[data-del]').onclick=()=>{D.history.splice(idx,1);save();renderKitchen();renderTop()};
   hl.appendChild(c);});
 }
-$('#allergy-save').onclick=()=>{D.allergy=$('#allergy-input').value.trim();save();toast(D.allergy?"저장했어요 — 모든 추천에서 뺄게요":"알레르기 정보를 비웠어요");renderTop();heroIdle();};
+$('#allergy-save').onclick=()=>{D.allergy=$('#allergy-input').value.trim();save();toast(D.allergy?"저장했어요. 새 AI 추천에 반영합니다":"알레르기 정보를 비웠어요");recipe=null;res=null;renderAllergyOptions();renderTop();heroIdle();};
 
 /* ── 기타 ── */
 
-app.querySelectorAll('#families .family').forEach(x=>x.onclick=()=>{app.querySelectorAll('.family').forEach(y=>y.classList.remove('selected'));x.classList.add('selected');person=x.dataset.person;if(!res)heroIdle();else $('#hero-tag')&&($('#hero-tag').textContent=person+" 맞춤 · AI가 골랐어요");updatePrefSummary();});
-app.querySelectorAll('#meal-chips .chip').forEach(x=>x.onclick=()=>{app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.remove('active'));x.classList.add('active');meal=x.dataset.meal;if(!res)heroIdle();updatePrefSummary();});
+app.querySelectorAll('#families .family').forEach(x=>x.onclick=()=>{if(busy)return;app.querySelectorAll('.family').forEach(y=>y.classList.remove('selected'));x.classList.add('selected');person=x.dataset.person;if(!res)heroIdle();else $('#hero-tag')&&($('#hero-tag').textContent=person+" 맞춤 · AI가 골랐어요");updatePrefSummary();});
+app.querySelectorAll('#meal-chips .chip').forEach(x=>x.onclick=()=>{if(busy)return;app.querySelectorAll('#meal-chips .chip').forEach(y=>y.classList.remove('active'));x.classList.add('active');meal=x.dataset.meal;if(!res)heroIdle();updatePrefSummary();});
 function updatePrefSummary(){
  const t=$('#pref-summary-text'); if(t)t.textContent=person+' · '+(meal==='간식'?'간식':meal+'밥');
  $('#home-tab-family').setAttribute('aria-pressed',String(person!=='우리 아이'));
@@ -1401,9 +1431,10 @@ function updatePrefSummary(){
  app.querySelectorAll('#meal-chips .chip').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.meal===meal)));
 }
 function setHomePerson(next){
+ if(busy)return toast("추천이 끝난 뒤 조건을 바꿔주세요");
  person=next;
  app.querySelectorAll('#families .family').forEach(x=>x.classList.toggle('selected',x.dataset.person===person));
- updatePrefSummary();toast(person+' 선택 · 다음 추천부터 적용돼요');
+ updatePrefSummary();openPrefSheet();
 }
 $('#home-tab-family').onclick=()=>setHomePerson('온 가족');
 $('#home-tab-kids').onclick=()=>setHomePerson('우리 아이');
@@ -1425,7 +1456,7 @@ function closePrefSheet(restoreFocus=true){
 }
 $('#pref-summary').onclick=()=>{if($('#pref-sheet-bg').hidden)openPrefSheet();else closePrefSheet();};
 $('#pref-sheet-close').onclick=()=>closePrefSheet();
-$('#pref-inline-done').onclick=()=>closePrefSheet();
+$('#pref-inline-done').onclick=()=>{if(busy)return toast('추천이 끝난 뒤 다시 눌러주세요');closePrefSheet();decide();};
 document.addEventListener('click',e=>{
  const panel=$('#pref-sheet-bg');
  if(!panel.hidden&&!panel.contains(e.target)&&!$('#pref-summary').contains(e.target))closePrefSheet(false);
