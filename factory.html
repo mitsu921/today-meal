@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>레시피 공장 — 오늘뭐먹지 운영자용</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 body{margin:0;background:#fffdf8;color:#26392d;font-family:"Apple SD Gothic Neo",Arial,sans-serif}
 .wrap{max-width:520px;margin:auto;padding:22px 18px 60px}
@@ -41,10 +41,11 @@ button:disabled{opacity:.55}
 
   <label>음식 이름 (AI 초안용)</label>
   <div class="row">
-    <div><input id="dish" placeholder="예: 두부 계란 덮밥"></div>
-    <button class="ai" style="width:130px;margin:0" id="draft">🤖 AI 초안</button>
+    <div><input id="dish" aria-describedby="draft-msg" placeholder="예: 두부 계란 덮밥"></div>
+    <button class="ai" style="width:140px;margin:0;flex-shrink:0;touch-action:manipulation" id="draft" type="button">AI 초안 만들기</button>
   </div>
 
+  <div class="msg" id="draft-msg" role="status" aria-live="polite">음식 이름을 입력한 뒤 초안 만들기를 눌러주세요.</div>
   <label>제목</label>
   <input id="f-title" placeholder="예: 아이도 잘 먹는 두부 계란 덮밥">
 
@@ -119,12 +120,15 @@ async function checkLogin(){
  }catch(e){if(revision===factoryAuthRevision){me=null;$('#auth-state').textContent='로그인 확인 실패: '+e.message+' 열려 있는 TodayMeal 탭을 모두 닫은 뒤 다시 열어주세요.';}}
  finally{clearTimeout(timer);loginCheckRunning=false;}
 }
+function initFactoryAuth(){
 try{
  if(!window.supabase)throw new Error('로그인 모듈 로드 실패');
  sb=window.supabase.createClient(SB_URL,SB_KEY);
  sb.auth.onAuthStateChange((event,session)=>setUser(session?.user||null));
  checkLogin();
 }catch(e){$('#auth-state').textContent=e.message+' — 인터넷 연결 또는 콘텐츠 차단 설정을 확인하고 새로고침해 주세요.';}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initFactoryAuth,{once:true});else initFactoryAuth();
 $('#auth-recheck').onclick=checkLogin;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkLogin();});
 
@@ -173,13 +177,15 @@ async function ask(prompt,maxTokens){
  finally{clearTimeout(timer);}
 }
 
-$('#draft').onclick=async()=>{
+function draftMessage(text,ok=false){const el=$('#draft-msg');el.textContent=text;el.className='msg'+(ok?' ok':'');}
+async function generateDraft(){
+  if($('#draft').disabled)return;
   const dish=$('#dish').value.trim();
-  if(!dish)return msg('음식 이름을 먼저 적어주세요');
-  $('#draft').disabled=true;$('#draft').textContent='생성 중...';msg('');
+  if(!dish){draftMessage('음식 이름을 먼저 입력해주세요.');$('#dish').focus();return;}
+  $('#draft').disabled=true;$('#draft').textContent='생성 중...';draftMessage('AI가 초안을 작성하고 있습니다. 최대 35초 정도 기다려주세요.');
   try{
     const d=await ask(`요리 콘텐츠 에디터이자 영양사로서 "${dish}" 레시피를 작성하라.
-대상: ${target}. 한국 가정식 기준, 초보도 따라할 수 있게 구체적으로.
+대상: ${target}. 한국 가정식 기준. 주요 재료 12개 이내, 조리 단계 6개 이내로 간결하고 구체적으로 작성.
 1인분 기준 영양 추정(탄4/단4/지9 kcal 일치).
 JSON만, 백틱 금지:
 {"title":"매력적인 제목(15자 내)","time_min":0,"servings":2,"level":"쉬움|보통|손이 감",
@@ -195,10 +201,13 @@ JSON만, 백틱 금지:
     $('#f-kcal').value=Math.round(d.kcal||0);$('#f-carb').value=Math.round(d.carb||0);
     $('#f-prot').value=Math.round(d.protein||0);$('#f-fat').value=Math.round(d.fat||0);
     $('#f-note').value=d.note||'';
-    msg('초안 완성! 꼭 직접 읽고 고친 뒤 등록하세요 ✍️',1);
-  }catch(e){msg('초안 실패: '+e.message);}
-  finally{$('#draft').disabled=false;$('#draft').textContent='🤖 AI 초안';}
+    draftMessage('초안이 완성됐습니다. 아래 내용을 확인하고 수정해주세요.',true);
+  }catch(e){draftMessage('초안 실패: '+e.message);}
+  finally{$('#draft').disabled=false;$('#draft').textContent='AI 초안 만들기';}
 };
+
+$('#draft').onclick=generateDraft;
+$('#dish').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();generateDraft();}});
 
 $('#submit').onclick=async()=>{
   await checkLogin();
