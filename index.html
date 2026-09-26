@@ -1,6 +1,6 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ff6b00">
 <title>TodayMeal | 오늘 뭐 먹지?</title>
-<meta name="description" content="AI 가족 식단 추천과 엄마들의 진짜 집밥 레시피, 밥테크(포인트) 리워드까지. 오늘의 식사 TodayMeal.">
+<meta name="description" content="음식과 재료로 찾는 집밥 레시피, 메뉴 룰렛, 식탁 옆 읽을거리. 오늘의 한 끼를 TodayMeal에서 준비해요.">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
 <meta name="google-adsense-account" content="ca-pub-7169767076437690">
 <meta name="naver-site-verification" content="54c8d199d46a247d450b39054a1283351cab796c" />
@@ -51,78 +51,24 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 .c-modal{display:none;position:fixed;inset:0;background:rgba(25,21,18,.5);z-index:80;align-items:center;justify-content:center;padding:20px}.c-modal.open{display:flex}.c-sheet{background:#fff;width:100%;max-width:440px;border-radius:20px;padding:24px;position:relative;max-height:86vh;overflow-y:auto}.c-close{position:absolute;top:14px;right:16px;background:#fff1e4;border-radius:50%;width:30px;height:30px;font-size:14px;border:0;cursor:pointer}.c-chip{padding:8px 14px;border-radius:18px;background:#fff1e4;color:var(--muted);font-size:12.5px;font-weight:700;border:0;cursor:pointer}.c-chip.active{background:var(--o);color:#fff}.c-input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit}.kakao-btn{width:100%;padding:13px;border-radius:13px;background:#FEE500;color:#191919;font-size:14px;font-weight:800;border:0;cursor:pointer}
 @media(max-width:900px){.top{gap:20px}.nav{gap:14px}.hero{grid-template-columns:1fr}.side{display:none}.cards{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.wrap{padding:0 15px}.top{height:62px}.logo{font-size:23px}.nav{display:none}.cert{padding:9px}.heroBox{height:auto;display:flex;flex-direction:column}.heroPhoto{position:relative;width:100%;height:230px;order:-1}.heroText{width:100%;height:auto;background:#fff8f0;padding:24px 20px}.hero h1{font-size:29px}.mission,.write{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.quick button{flex:1;padding:10px 5px}.foot{display:block}.apps{margin-top:12px}}
-</style></head><body>
-<header><div class="wrap top">
-  <a class="logo" href="/">TodayMeal <img class="ico" style="width:24px;height:24px" src="/icons/rice.png"></a>
-  <nav class="nav"><a href="#today">오늘 뭐 먹지</a><a href="#community">진짜집밥</a><a href="/category.html">레시피</a><a href="#pay">밥테크</a><a href="/news.html">뉴스</a></nav>
-  <div class="right">
-    <span id="auth-slot" style="font-size:13px;font-weight:800;color:var(--muted)"></span>
-    <button class="point" id="points-badge"><img class="ico" src="/icons/coin.png"> <span id="points-num">0</span>P</button>
-    <button class="cert" id="cert-btn"><img class="ico" style="filter:brightness(0) invert(1)" src="/icons/camera.png"> 밥 인증 +30P</button>
-  </div>
-</div></header>
-
+</style><link rel="stylesheet" href="/homepage.css?v=20260926-1"></head><body>
+<header class="site-header"><div class="wrap top">
+<a class="logo" href="/">TodayMeal</a>
+<nav class="nav" aria-label="주 메뉴"><a class="active" href="#community" id="nav-recipes">레시피</a><a href="#stories">식생활 이야기</a><button id="saved-toggle" aria-pressed="false">저장한 레시피</button></nav>
+<div class="right"><span id="auth-slot">로그인 연결 중</span><a class="app-link" href="/app/">앱 열기 ↗</a></div></div></header>
 <main class="wrap" id="home-view">
-<section class="hero" id="today">
-  <div>
-    <div class="heroBox">
-      <img class="heroPhoto" id="feat-photo" src="/home-hero.jpg">
-      <div class="heroText">
-        <div class="eyebrow"><img class="ico" src="/icons/dish_stew.png"> 오늘의 인기 메뉴</div>
-        <h1>오늘 저녁은<br>이렇게 골라보세요 😊</h1>
-        <div class="dish" id="feat-dish">불러오는 중...</div>
-        <div class="taste" id="feat-sub"></div>
-        <div class="stats" id="feat-stats"></div>
-        <a class="cta" href="/app/"><img class="ico" style="filter:brightness(0) invert(1)" src="/icons/forkknife.png"> 앱에서 AI 추천받기　+100P</a>
-      </div>
-    </div>
-    <div class="quick">
-      <a href="/category.html?t=아이"><button type="button"><img class="ico" style="width:20px;height:20px" src="/icons/cat-kid.png"> 아이반찬</button></a>
-      <a href="/category.html?sort=popular"><button type="button"><img class="ico" style="width:20px;height:20px" src="/icons/fire.png"> 인기레시피</button></a>
-      <a href="/app/"><button type="button"><img class="ico" style="width:20px;height:20px" src="/icons/fridge.png"> 냉장고 털기</button></a>
-    </div>
-  </div>
-  <aside class="side" id="pay">
-    <h2>이번 달 밥테크 현황 ⓘ</h2>
-    <div class="save"><span class="emoji"><img class="ico" style="width:26px;height:26px" src="/icons/piggybank.png"></span><div>절약한 식비<b>187,400원</b><small>배달 대신 집밥으로!</small></div></div>
-    <div class="save"><span class="emoji"><img class="ico" style="width:26px;height:26px" src="/icons/basket.png"></span><div>받은 혜택<b>12,400원</b><small>포인트·쿠폰 합계</small></div></div>
-    <div class="save"><span class="emoji"><img class="ico" style="width:26px;height:26px" src="/icons/trash.png"></span><div>버리지 않은 식재료<b>7개</b><small>약 37,500원 아꼈어요!</small></div></div>
-    <div style="text-align:right;font-weight:800;margin-top:8px"><a href="/app/">자세히 보기 ›</a></div>
-  </aside>
-</section>
-
-<section class="section"><div class="head"><h2><img class="ico" src="/icons/fire.png"> 오늘의 밥테크 미션</h2><a href="/app/"><span class="more">모든 미션 보기 ›</span></a></div>
-  <div class="mission">
-    <div class="challenge"><h3>15분 집밥 챌린지</h3><p>조리시간 15분 이하로<br>저녁 만들고 인증해보세요!</p><div class="reward"><img class="ico" src="/icons/star.png"> 성공 시 200P</div><div class="art"><img class="ico" style="width:60px;height:60px" src="/icons/dish_stew.png"></div></div>
-    <div class="tasks">
-      <div class="task"><img class="ico" src="/icons/calendar.png"><span>출석체크 하기</span><b>+5P</b><button id="mission-checkin">하기</button></div>
-      <div class="task"><img class="ico" src="/icons/pencil.png"><span>레시피 저장하기</span><b>+10P</b><button onclick="toast('레시피에서 하트 버튼을 눌러 저장해보세요!')">하기</button></div>
-      <div class="task"><img class="ico" src="/icons/camera.png"><span>오늘 밥 인증하기</span><b>+30P</b><button id="mission-photo">하기</button>
-        <input id="meal-photo-input" type="file" accept="image/*" capture="environment" style="display:none">
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section community" id="community"><div class="head"><h2><img class="ico" src="/icons/fire.png"> 지금 엄마들이 해먹는 저녁</h2><a href="/category.html"><span class="more">더보기 ›</span></a></div>
-  <div class="cards" id="recipes"><p style="grid-column:1/-1;color:var(--muted)">불러오는 중...</p></div>
-</section>
-
-<section class="section write">
-  <div class="panel" id="fridge"><div class="head"><h2>인기 레시피 모아보기</h2><a href="/category.html"><span class="more">전체 보기 ›</span></a></div>
-    <div class="chips">
-      <a href="/category.html?t=아이"><button type="button" class="chip"><img class="ico" style="width:24px;height:24px" src="/icons/cat-kid.png"><span>아이반찬</span></button></a>
-      <a href="/category.html?t=다이어트"><button type="button" class="chip"><img class="ico" style="width:24px;height:24px" src="/icons/cat-leaf.png"><span>다이어트</span></button></a>
-      <a href="/category.html?t=남편"><button type="button" class="chip"><img class="ico" style="width:24px;height:24px" src="/icons/rice.png"><span>남편밥</span></button></a>
-      <a href="/category.html?t=온 가족"><button type="button" class="chip"><img class="ico" style="width:24px;height:24px" src="/icons/cat-family.png"><span>온가족</span></button></a>
-    </div>
-  </div>
-  <div class="panel writeBox"><h2>진짜집밥 레시피 쓰고 포인트 받기</h2><p style="color:#756b63">레시피 작성 +50P · 요리 인증 +30P · 좋아요 +1P</p><button id="write-open-btn"><img class="ico" style="filter:brightness(0) invert(1)" src="/icons/pencil.png"> 레시피 쓰러 가기</button></div>
-</section>
-
-<div class="shop"><div class="shopIcon"><img class="ico" style="width:34px;height:34px" src="/icons/gift.png"></div><div><b>포인트로 다양한 혜택을 받아보세요!</b><small>준비 중이에요 — 곧 상품권·쿠폰으로 교환할 수 있게 열릴 예정입니다.</small></div><button onclick="toast('포인트몰은 곧 열립니다')">›</button></div>
+<section class="intro" aria-labelledby="home-heading"><div class="search-intro"><h1 id="home-heading">오늘은 무엇을 만들어볼까요?</h1><p>재료로 찾고, 레시피를 읽고, 나만의 한 끼를 준비해요.</p>
+<form id="recipe-search" role="search"><label class="sr-only" for="search-input">음식 이름이나 재료 검색</label><div class="search-field"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="음식 이름이나 재료를 검색해보세요" autocomplete="off"></div><button class="search-submit">검색</button></form>
+<div class="keywords"><span>자주 찾는 검색어</span><button data-keyword="두부">두부</button><button data-keyword="계란">계란</button><button data-keyword="아이">아이 반찬</button><button data-keyword="볶음">간단한 저녁</button></div></div>
+<aside class="roulette-card"><div><h2>오늘 뭐 먹지?</h2><p>고민될 땐, 룰렛으로 골라요.</p><button id="open-roulette" class="orange-button">메뉴 룰렛 돌리기 →</button></div><div class="mini-wheel" aria-hidden="true"><i></i></div></aside></section>
+<div class="recipe-filters" aria-label="레시피 분류"><div id="category-filters"><button class="selected" data-category="전체" aria-pressed="true">전체</button><button data-category="밥·면" aria-pressed="false">밥·면</button><button data-category="국·찌개" aria-pressed="false">국·찌개</button><button data-category="반찬" aria-pressed="false">반찬</button><button data-category="간식" aria-pressed="false">간식</button></div><label>주재료 <select id="ingredient-filter"><option value="">전체</option><option>두부</option><option>계란</option><option>닭</option><option>소고기</option><option>돼지고기</option><option>감자</option></select></label></div>
+<div class="content-grid"><section id="community" aria-labelledby="recipes-heading"><div class="list-heading"><h2 id="recipes-heading">오늘 둘러볼 레시피</h2><a href="/category.html">전체 보기 →</a></div><p id="search-status" class="search-status" aria-live="polite"></p><div id="recipes" aria-busy="true"><p class="empty-state">등록된 레시피를 불러오고 있어요.</p></div><button id="more-recipes" hidden>레시피 더 보기</button><div class="contribute"><span>우리 집 한 끼를 나눠보세요.</span><button id="write-open-btn">레시피 쓰기 →</button></div></section>
+<aside class="stories" id="stories"><p class="eyeline">잠깐 읽어보세요</p><h2>식탁 옆 이야기</h2><button data-story="0"><span>재료 활용</span><h3>두부 한 모, 남김없이 쓰는 법</h3><p>한 가지 재료로 다르게 차리는 두 끼</p></button><button data-story="1"><span>식사 준비</span><h3>일주일 식단을 가볍게 짜는 순서</h3><p>매일의 고민을 조금 덜어보세요</p></button><button data-story="2"><span>아이 밥상</span><h3>아이 반찬이 고민되는 날</h3><p>익숙한 재료로 다르게 준비하기</p></button><a href="/news.html">이야기 더 보기 →</a></aside></div>
+<section class="ingredient-links"><h2>재료가 남았다면</h2><div><button data-keyword="두부">두부로 만드는 요리 →</button><button data-keyword="계란">계란으로 만드는 요리 →</button><button data-keyword="감자">감자 활용 레시피 →</button><a href="/app/">냉장고 재료로 추천받기 →</a></div></section>
+<noscript><p>검색과 메뉴 룰렛은 자바스크립트를 켜면 사용할 수 있어요. <a href="/sitemap.xml">등록된 페이지 보기</a></p></noscript>
 </main>
-
+<dialog id="roulette-dialog" class="home-dialog" aria-labelledby="roulette-title"><button class="dialog-close" data-close aria-label="닫기">×</button><h2 id="roulette-title">오늘의 메뉴, 돌려서 골라요</h2><p>등록된 레시피 중에서 한 가지를 골라드려요.</p><div class="large-wheel mini-wheel" id="home-wheel" aria-hidden="true"><i></i></div><div id="roulette-result" aria-live="polite">어떤 메뉴가 나올까요?</div><button id="spin-roulette" class="orange-button">룰렛 돌리기</button></dialog>
+<dialog id="story-dialog" class="home-dialog article-dialog" aria-labelledby="story-title"><button class="dialog-close" data-close aria-label="닫기">×</button><article id="story-content"></article></dialog>
 <main class="wrap write-view" id="write-view" style="display:none">
   <button class="write-back" id="write-back-btn">‹ 홈으로 돌아가기</button>
 
@@ -177,7 +123,7 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
   </div>
 </main>
 
-<footer><div class="wrap foot"><b>오늘의식사 APP 다운받고 더 많은 혜택 받기!</b><div class="apps"><a href="/app/"><span class="app"><img class="ico" style="filter:brightness(0) invert(1)" src="/icons/home.png"> 앱으로 열기</span></a></div></div></footer>
+<footer><div class="wrap foot"><a class="logo" href="/">TodayMeal</a><a href="/privacy.html">개인정보처리방침</a><a href="/terms.html">이용약관</a><a href="/app/">앱 열기 ↗</a></div></footer>
 
 <div class="c-modal" id="c-login-modal"><div class="c-sheet">
   <button class="c-close" id="c-login-close">✕</button>
@@ -205,42 +151,58 @@ function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&l
 function likeCount(r){return r.likes&&r.likes[0]?r.likes[0].count:0}
 function cmtCount(r){return r.comments&&r.comments[0]?r.comments[0].count:0}
 
-const DEMO_CARDS=[
- {img:'/home-r1.jpg',title:'제육볶음',tag:'인기',like:328,cmt:21,meta:'15분'},
- {img:'/home-r2.jpg',title:'두부김치찌개',tag:'인기',like:217,cmt:14,meta:'18분'},
- {img:'/home-r3.jpg',title:'계란말이',tag:'HOT',like:191,cmt:8,meta:'10분'},
- {img:'/home-r4.jpg',title:'참치마요덮밥',tag:'추천',like:176,cmt:11,meta:'15분'},
- {img:'/home-r5.jpg',title:'숙주베이컨볶음',tag:'신규',like:153,cmt:7,meta:'12분'}
-];
-function demoCardHtml(d){
- return '<article class="card"><img src="'+d.img+'"><div class="cbody"><span class="tag">'+d.tag+'</span><div class="name">'+esc(d.title)+' · 예시</div><div class="meta"><b><img class="ico" src="/icons/heart-fill.png"> '+d.like+'</b><span><img class="ico" src="/icons/comment.png"> '+d.cmt+' · '+d.meta+'</span></div></div></article>';
-}
+let homeQuery='', homeCategory='전체', homeIngredient='', savedOnly=false, visibleCount=6, homeLoaded=false, homeFailed=false, rouletteBusy=false, lastChoice='';
+let homeSaved=[];try{const x=JSON.parse(localStorage.getItem('todaymeal-home-saved-v1')||'[]');if(Array.isArray(x))homeSaved=x.filter(v=>typeof v==='string');}catch(e){}
+const normalizeHome=s=>String(s||'').replace(/달걀/g,'계란').replace(/쇠고기/g,'소고기').replace(/\s/g,'').toLowerCase();
+function homeCategoryOf(r){const t=r.title||'';if(/국|찌개|탕|전골/.test(t))return '국·찌개';if(/밥|면|국수|파스타|우동|수제비/.test(t))return '밥·면';if(/쿠키|빵|케이크|토스트|샌드위치|떡|팬케이크|간식/.test(t))return '간식';return '반찬';}
+function filteredHome(){return feedData.filter(r=>{const text=normalizeHome([r.title,r.body,r.target].join(' '));return (!homeQuery||text.includes(normalizeHome(homeQuery)))&&(!homeIngredient||text.includes(normalizeHome(homeIngredient)))&&(homeCategory==='전체'||homeCategoryOf(r)===homeCategory)&&(!savedOnly||homeSaved.includes(String(r.id)));});}
+function safeHomePhoto(url){try{const u=new URL(url,location.origin);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch(e){return '';}}
+function homeImage(r){const src=r.image_url&&safeHomePhoto(r.image_url);return src?'<img src="'+esc(src)+'" alt="'+esc(r.title)+'" loading="lazy">':'<span class="photo-placeholder">사진 준비 중</span>';}
+function feedError(){homeFailed=true;homeLoaded=false;$('#recipes').setAttribute('aria-busy','false');$('#recipes').innerHTML='<div class="empty-state">레시피를 불러오지 못했어요.<br><button id="retry-home">다시 불러오기</button></div>';$('#retry-home').onclick=()=>loadFeed();}
 async function loadFeed(){
- if(!sb)return;
- const {data,error}=await sb.from('recipes').select('id,title,target,image_url,emoji,created_at,likes(count),comments(count)').order('created_at',{ascending:false}).limit(30);
- if(error){ $('#recipes').innerHTML='<p style="grid-column:1/-1;color:var(--muted)">불러오지 못했어요</p>'; return; }
- feedData=(data||[]).sort((a,b)=>likeCount(b)-likeCount(a));
- renderCards();
- renderFeatured();
+ if(!sb){feedError();return;}homeFailed=false;$('#recipes').setAttribute('aria-busy','true');
+ try{let rows=[];for(let start=0;;start+=100){const {data,error}=await sb.from('recipes').select('id,title,body,target,image_url,created_at,likes(count),comments(count)').order('created_at',{ascending:false}).order('id',{ascending:false}).range(start,start+99);if(error)throw error;rows.push(...(data||[]));if(!data||data.length<100)break;}
+ feedData=rows;homeLoaded=true;renderCards();}catch(e){feedError();}
 }
 function renderCards(){
- const el=$('#recipes'); const top=feedData.slice(0,5);
- let html=top.map(r=>'<article class="card" data-open="'+r.id+'">'+
-  (r.image_url?'<img src="'+esc(r.image_url)+'">':(r.emoji?'<div class="ph">'+esc(r.emoji)+'</div>':'<div class="ph"><img class="ico" style="width:34px;height:34px" src="/icons/forkknife.png"></div>'))+
-  '<div class="cbody"><span class="tag">인기</span><div class="name">'+esc(r.title)+'</div><div class="meta"><b><img class="ico" src="/icons/heart-fill.png"> '+likeCount(r)+'</b><span><img class="ico" src="/icons/comment.png"> '+cmtCount(r)+'</span></div></div></article>').join('');
- if(top.length<5) html+=DEMO_CARDS.slice(0,5-top.length).map(demoCardHtml).join('');
- el.innerHTML=html;
- el.querySelectorAll('[data-open]').forEach(c=>c.onclick=()=>{ location.href='/category.html'; });
+ const rows=filteredHome();const el=$('#recipes');el.setAttribute('aria-busy','false');
+ $('#recipes-heading').textContent=savedOnly?'저장한 레시피':(homeQuery||homeCategory!=='전체'||homeIngredient?'검색한 레시피':'오늘 둘러볼 레시피');
+ $('#search-status').textContent=(homeQuery?'“'+homeQuery+'” · ':'')+rows.length+'개의 레시피'+(savedOnly?' · 이 브라우저에 저장돼요':'');
+ el.innerHTML=rows.slice(0,visibleCount).map(r=>'<article class="recipe-row"><a class="recipe-photo" href="/r/'+encodeURIComponent(r.id)+'">'+homeImage(r)+'</a><div class="recipe-copy"><a href="/r/'+encodeURIComponent(r.id)+'"><h3>'+esc(r.title)+'</h3></a><p>'+esc(r.target||'집에서 만드는 한 끼')+'</p><small>'+esc(homeCategoryOf(r))+' · 추천 '+likeCount(r)+'</small></div><button class="bookmark '+(homeSaved.includes(String(r.id))?'is-saved':'')+'" data-save="'+esc(r.id)+'" aria-label="'+esc(r.title)+' 저장" aria-pressed="'+homeSaved.includes(String(r.id))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></article>').join('')||'<div class="empty-state">'+(savedOnly?'저장한 레시피가 없어요. 레시피 옆 저장 버튼을 눌러보세요.':'조건에 맞는 레시피가 없어요. 다른 재료로 찾아보세요.')+'<br><button id="clear-home">전체 레시피 보기</button></div>';
+ el.querySelectorAll('img').forEach(img=>img.onerror=()=>{const span=document.createElement('span');span.className='photo-placeholder';span.textContent='사진 준비 중';img.replaceWith(span);});
+ el.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{const id=b.dataset.save;homeSaved=homeSaved.includes(id)?homeSaved.filter(x=>x!==id):[...homeSaved,id];try{localStorage.setItem('todaymeal-home-saved-v1',JSON.stringify(homeSaved));}catch(e){toast('브라우저 저장이 제한되어 이번 화면에서만 보관돼요.');}renderCards();});
+ if($('#clear-home'))$('#clear-home').onclick=resetHome;
+ $('#more-recipes').hidden=rows.length<=visibleCount;
 }
-function renderFeatured(){
- if(!feedData.length)return;
- const top=feedData[0];
- $('#feat-dish').textContent=top.title;
- $('#feat-sub').textContent=likeCount(top)+'명 추천 · 지금 가장 인기있는 레시피예요';
- $('#feat-stats').innerHTML='<span class="pill"><img class="ico" src="/icons/heart-fill.png"> '+likeCount(top)+'</span><span class="pill"><img class="ico" src="/icons/comment.png"> '+cmtCount(top)+'</span>';
- const photo=$('#feat-photo');
- if(photo&&top.image_url) photo.src=top.image_url;
-}
+function updateHome(){visibleCount=6;$('#saved-toggle').setAttribute('aria-pressed',savedOnly);if(homeLoaded)renderCards();}
+function resetHome(){homeQuery='';homeCategory='전체';homeIngredient='';savedOnly=false;$('#search-input').value='';$('#ingredient-filter').value='';document.querySelectorAll('[data-category]').forEach(b=>{b.classList.toggle('selected',b.dataset.category==='전체');b.setAttribute('aria-pressed',b.dataset.category==='전체');});updateHome();}
+$('#recipe-search').onsubmit=e=>{e.preventDefault();homeQuery=$('#search-input').value.trim();savedOnly=false;updateHome();};
+$('#search-input').addEventListener('search',()=>{homeQuery=$('#search-input').value.trim();updateHome();});
+document.querySelectorAll('[data-keyword]').forEach(b=>b.onclick=()=>{resetHome();homeQuery=b.dataset.keyword;$('#search-input').value=homeQuery;updateHome();$('#community').scrollIntoView({behavior:'smooth',block:'start'});});
+document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{homeCategory=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});updateHome();});
+$('#ingredient-filter').onchange=e=>{homeIngredient=e.target.value;updateHome();};
+$('#saved-toggle').onclick=()=>{const next=!savedOnly;resetHome();savedOnly=next;updateHome();$('#community').scrollIntoView({behavior:'smooth'});};
+$('#nav-recipes').onclick=resetHome;
+$('#more-recipes').onclick=()=>{visibleCount+=6;renderCards();};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
+document.querySelectorAll('.home-dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
+$('#open-roulette').onclick=()=>$('#roulette-dialog').showModal();
+$('#spin-roulette').onclick=async()=>{
+ if(rouletteBusy)return;if(!homeLoaded){toast(homeFailed?'레시피를 다시 불러온 뒤 돌려주세요.':'레시피를 불러오는 중이에요. 잠시 후 돌려주세요.');return;}
+ if(!feedData.length){$('#roulette-result').textContent='등록된 레시피가 아직 없어요.';return;}
+ const pool=feedData.length>1?feedData.filter(r=>String(r.id)!==lastChoice):feedData;const r=pool[Math.floor(Math.random()*pool.length)];lastChoice=String(r.id);
+ rouletteBusy=true;$('#spin-roulette').disabled=true;$('#roulette-result').textContent='오늘의 메뉴를 고르고 있어요…';
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;const wheel=$('#home-wheel');wheel.classList.add('spinning');
+ await new Promise(resolve=>setTimeout(resolve,reduced?0:1400));wheel.classList.remove('spinning');
+ $('#roulette-result').innerHTML='<strong>'+esc(r.title)+'</strong><a class="result-link" href="/r/'+encodeURIComponent(r.id)+'">이 메뉴 만드는 법 →</a>';
+ $('#spin-roulette').disabled=false;$('#spin-roulette').textContent='다시 돌리기';rouletteBusy=false;
+};
+const homeStories=[
+ {title:'두부 한 모, 남김없이 쓰는 법',tag:'재료 활용',parts:[['두 끼를 먼저 정해두세요','두부를 사기 전에 국에 넣을지, 부쳐 먹을지 먼저 골라보세요. 한 모로 두 끼를 준비한다면 처음부터 쓸 만큼 나누어 두면 편해요.'],['같은 재료도 모양을 바꾸면 새로워요','첫 끼에는 깍둑썰기해 국에 넣고, 다음 끼에는 으깨서 달걀과 함께 부쳐보세요. 양념을 바꾸기보다 조리 방식을 바꾸면 장보기 목록도 간단해져요.'],['남은 재료부터 확인하세요','포장에 적힌 보관 방법과 개봉 후 안내를 따르세요. 남은 두부는 날짜를 표시해 냉장고에서 잘 보이는 곳에 두고, 다음 식사에 활용할 메뉴를 미리 정해두세요.']],keyword:'두부'},
+ {title:'일주일 식단을 가볍게 짜는 순서',tag:'식사 준비',parts:[['일정부터 적어보세요','늦게 들어오는 날, 함께 먹는 날, 외식하는 날을 먼저 표시하세요. 모든 끼니를 꽉 채우기보다 실제로 집에서 먹을 날부터 정하면 부담이 줄어요.'],['냉장고 안에서 주재료를 고르세요','먼저 써야 할 재료를 중심으로 메뉴를 정하고, 같은 재료를 두 가지 요리에 활용해보세요. 양배추는 볶음밥과 달걀 부침에, 감자는 국과 볶음에 나누어 쓸 수 있어요.'],['한 끼는 비워두세요','일정이 바뀌거나 음식이 남을 수 있으니 한 끼 정도는 유동적으로 두세요. 메뉴를 정한 뒤 집에 없는 재료만 장보기 목록에 적으면 중복 구매를 줄이기 좋아요.']],keyword:'볶음'},
+ {title:'아이 반찬이 고민되는 날',tag:'아이 밥상',parts:[['익숙한 재료에서 시작하세요','매번 새로운 반찬을 만들 필요는 없어요. 자주 먹는 달걀, 두부, 감자로 조리 방법을 조금씩 바꿔보세요.'],['한 번에 한 가지만 바꿔보세요','달걀말이에 잘게 썬 채소를 조금 넣거나, 감자볶음을 작은 감자전으로 바꾸는 식이에요. 아이가 재료를 고르거나 섞는 과정에 함께해도 좋아요.'],['먹는 사람에게 맞춰 준비하세요','아이의 나이와 씹는 정도에 맞춰 크기와 질감을 조절하고, 알레르기가 있는 재료는 조리 전에 확인하세요. 많은 반찬보다 편안하게 먹을 수 있는 한 끼를 준비해보세요.']],keyword:'계란'}
+];
+document.querySelectorAll('[data-story]').forEach(b=>b.onclick=()=>{const s=homeStories[Number(b.dataset.story)];$('#story-content').innerHTML='<p class="story-tag">'+esc(s.tag)+'</p><h2 id="story-title">'+esc(s.title)+'</h2>'+s.parts.map(([h,p])=>'<h3>'+esc(h)+'</h3><p>'+esc(p)+'</p>').join('')+'<button id="story-find" class="orange-button">관련 레시피 찾아보기 →</button>';$('#story-find').onclick=()=>{$('#story-dialog').close();resetHome();homeQuery=s.keyword;$('#search-input').value=homeQuery;updateHome();$('#community').scrollIntoView({behavior:'smooth'});};$('#story-dialog').showModal();});
 
 /* ── 인증 ── */
 async function ensureProfile(){
@@ -310,22 +272,7 @@ $('#c-auth-go').onclick=async()=>{
  }finally{$('#c-auth-go').disabled=false;}
 };
 
-/* ── 포인트 ── */
-async function fetchMyPoints(){
- if(!sb||!me)return 0;
- const {data}=await sb.from('points_ledger').select('amount').eq('user_id',me.id);
- return (data||[]).reduce((s,r)=>s+r.amount,0);
-}
-async function renderPoints(){
- const n=$('#points-num'); if(!n)return;
- n.textContent = me ? await fetchMyPoints() : 0;
-}
-$('#points-badge').onclick=()=>{ if(!me){$('#c-login-modal').classList.add('open');return;} location.href='/app/'; };
-
-async function sha256Hex(buf){
- const digest=await crypto.subtle.digest('SHA-256',buf);
- return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
+function renderPoints(){}
 async function shrinkImage(file){
  try{
   const img=await createImageBitmap(file);
@@ -340,66 +287,6 @@ async function shrinkImage(file){
   return new File([blob], (file.name.replace(/\.[^.]+$/,'')||'photo')+'.jpg', {type:'image/jpeg'});
  }catch(e){ return file; }
 }
-async function askVision(prompt,base64,mediaType,maxTokens){
- const r=await fetch(PROXY_URL,{method:"POST",headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:maxTokens||300,messages:[{role:"user",content:[
-   {type:"image",source:{type:"base64",media_type:mediaType,data:base64}},{type:"text",text:prompt}
-  ]}]})});
- if(!r.ok)throw new Error("분석에 실패했어요");
- const d=await r.json();
- const txt=(d.content||[]).map(i=>i.type==="text"?i.text:"").filter(Boolean).join("\n");
- return JSON.parse(txt.replace(/```json|```/g,"").trim());
-}
-
-/* ── 미션 ── */
-async function refreshMissionButtons(){
- if(!sb||!me)return;
- const todayStart=new Date(); todayStart.setHours(0,0,0,0);
- const {data}=await sb.from('points_ledger').select('reason').eq('user_id',me.id).gte('created_at',todayStart.toISOString());
- const reasons=(data||[]).map(r=>r.reason);
- const ci=$('#mission-checkin'); if(ci&&reasons.includes('출석체크')){ci.textContent='완료';ci.classList.add('done');ci.disabled=true;}
- const ph=$('#mission-photo'); if(ph&&reasons.includes('밥 인증')){ph.textContent='완료';ph.classList.add('done');ph.disabled=true;}
-}
-$('#mission-checkin').onclick=async()=>{
- if(!me){toast('로그인이 필요해요');$('#c-login-modal').classList.add('open');return;}
- const btn=$('#mission-checkin'); btn.disabled=true;
- try{
-  const d=new Date(); const key=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-  await sb.from('points_ledger').insert({user_id:me.id,amount:5,reason:'출석체크',ref_id:key});
-  btn.textContent='완료'; btn.classList.add('done');
-  toast('출석체크 완료! +5P 🎉'); renderPoints();
- }catch(e){ btn.disabled=false; toast('오늘은 이미 하셨어요'); }
-};
-function openPhotoPicker(){
- if(!me){toast('로그인이 필요해요');$('#c-login-modal').classList.add('open');return;}
- $('#meal-photo-input').click();
-}
-$('#mission-photo').onclick=openPhotoPicker;
-$('#cert-btn').onclick=openPhotoPicker;
-$('#meal-photo-input').onchange=async e=>{
- const file=e.target.files[0]; e.target.value='';
- if(!file)return;
- const btn=$('#mission-photo');
- btn.disabled=true; btn.textContent='확인 중...';
- try{
-  const arrBuf=await file.arrayBuffer();
-  const hash=await sha256Hex(arrBuf);
-  const {data:dupe}=await sb.from('receipt_hashes').select('hash').eq('hash',hash).maybeSingle();
-  if(dupe) throw new Error('이미 인증한 사진이에요');
-  const shrunk=await shrinkImage(file);
-  const b64=await new Promise((res2,rej)=>{ const r=new FileReader(); r.onload=()=>res2(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(shrunk); });
-  const result=await askVision('이 사진이 실제로 만들었거나 차려진 집밥·요리 음식 사진처럼 보이는지 판단해줘. 음식이 아니거나 인터넷에서 퍼온 것처럼 보이면 거부해줘. JSON만, 백틱 금지: {"is_valid":true/false,"reason":"짧은 이유"}', b64, shrunk.type||'image/jpeg', 200);
-  if(!result.is_valid) throw new Error(result.reason||'음식 사진으로 확인되지 않았어요');
-  await sb.from('receipt_hashes').insert({hash,user_id:me.id});
-  await sb.from('points_ledger').insert({user_id:me.id,amount:30,reason:'밥 인증',ref_id:hash.slice(0,16)});
-  btn.textContent='완료'; btn.classList.add('done');
-  toast('오늘 밥 인증 완료! +30P 🎉'); renderPoints();
- }catch(err){
-  btn.disabled=false; btn.textContent='하기';
-  toast(String(err.message||err).slice(0,80));
- }
-};
-
 /* ── 글쓰기 (전체화면 전환) ── */
 function openWriteView(){
  if(!me){$('#c-login-modal').classList.add('open');return;}
@@ -495,8 +382,8 @@ try{
  if(!window.supabase) throw new Error("연결 프로그램을 못 불러왔어요");
  sb=window.supabase.createClient(SB_URL,SB_KEY);
  watchAuth();
- refreshAuth().then(()=>refreshMissionButtons());
+ refreshAuth().catch(()=>toast("로그인 상태를 확인하지 못했어요. 다시 시도해 주세요."));
  loadFeed();
-}catch(e){ console.error(e); }
+}catch(e){ console.error(e); feedError(); renderAuthSlot(); }
 </script>
 </body></html>
