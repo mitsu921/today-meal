@@ -97,3 +97,68 @@ body[data-page="saved"] .intro{grid-template-columns:1fr;max-width:780px;padding
  body[data-page="home"] #recipes{max-height:406px}
  body[data-page="home"] .stories{padding:24px}
 }
+/* Larger celebration-style roulette, preserving the existing selection logic. */
+#roulette-dialog{max-width:600px;width:calc(100% - 24px);padding:36px 36px 25px;border:1px solid #f3c17a;border-radius:30px;background:radial-gradient(ellipse at 50% 35%,#fff0c9 0%,#fff8ec 42%,#fffdf8 80%);box-shadow:0 32px 110px #51260040,0 0 0 5px #ffffff45;max-height:90dvh}
+#roulette-dialog::backdrop{background:#30201387;backdrop-filter:blur(5px)}
+#roulette-dialog .roulette-eyebrow{color:#bd711a;letter-spacing:2.6px;font-size:11px;margin-bottom:11px}
+#roulette-dialog h2{font-size:30px;letter-spacing:-1.2px;color:#472c16}
+#roulette-dialog .roulette-intro{font-size:15px;color:#92734f}
+#roulette-dialog .dialog-close{background:#f3e7d5;top:16px;right:16px;width:34px;height:34px}
+#roulette-dialog .roulette-stage{width:min(100%,400px);margin:27px auto 23px;padding:10px;filter:drop-shadow(0 13px 17px #b864192b)}
+#roulette-dialog .roulette-rim{padding:18px;border:2px solid #c98728;background:linear-gradient(145deg,#fff0b6 3%,#e6b150 28%,#d49634 55%,#f6cf72 80%,#f9e5a4);box-shadow:inset 0 0 0 4px #ffedb0,inset 0 0 0 7px #dfa144,0 0 0 3px #ffefcd,0 0 0 5px #dcad65}
+#roulette-dialog .roulette-rim::before{content:'';position:absolute;inset:7px;border:6px dotted #fffbd3;border-radius:50%;pointer-events:none;filter:drop-shadow(0 0 3px #fff5ae);z-index:2}
+#roulette-dialog .roulette-pointer{top:0;left:calc(50% - 16px);width:32px;height:40px;background:linear-gradient(90deg,#b55d11,#ffe5a2 48%,#ce7c19);filter:drop-shadow(0 3px 2px #8e461c45);z-index:5}
+#roulette-dialog .menu-wheel{border:2px solid #fff2c6;box-shadow:inset 0 0 18px #d78d3620}
+#roulette-dialog .wheel-hub{width:80px;height:80px;border:5px solid #fff4d8;background:linear-gradient(145deg,#ff983f,#e85e1b);box-shadow:0 5px 12px #8e451b38,0 0 0 2px #ebac50;line-height:1.3}
+#roulette-dialog .wheel-hub span{font-size:13px;color:#fff5dd}
+#roulette-dialog .wheel-hub b{font-size:23px;letter-spacing:-1px}
+#roulette-dialog .wheel-menu{width:98px;gap:6px}
+#roulette-dialog .wheel-menu img{width:57px;height:57px;border:3px solid #fffdfa;box-shadow:0 3px 8px #794b2930}
+#roulette-dialog .wheel-menu-name{max-width:96px;font-size:12px;font-weight:800;color:#674220;line-height:1.3}
+#roulette-dialog .wheel-menu-mark{width:38px;height:38px;background:#fff9e9;border:1px solid #e0b780;font-size:13px;font-weight:700;box-shadow:0 2px 4px #8a522514}
+#roulette-dialog .wheel-menu.chosen img{border-color:#ff9a36;box-shadow:0 0 0 3px #fff7dc,0 0 16px #ffac42a6}
+#roulette-dialog .wheel-menu.chosen .wheel-menu-name{color:#b24812;background:#fffcf0;border-radius:5px;padding:2px 4px;box-shadow:0 1px 4px #7d4b1724}
+#roulette-dialog #roulette-result{border:1px solid #f1d5a9;background:#fffaf0;border-radius:16px;min-height:102px;padding:16px 20px;margin-bottom:16px;box-shadow:0 3px 12px #a46c2510}
+#roulette-dialog .pick-kicker{font-size:13px;color:#bc7028}
+#roulette-dialog #roulette-result strong{font-size:22px}
+#roulette-dialog .picked-photo{width:78px;height:78px;border-radius:14px}
+#roulette-dialog #spin-roulette{min-height:58px;border:1px solid #ee7e27;background:linear-gradient(100deg,#ff9832,#f0661b);border-radius:14px;box-shadow:0 6px 0 #bc521e,0 10px 20px #d8732a30;font-size:18px;transition:transform .15s,box-shadow .15s}
+#roulette-dialog #spin-roulette:hover:not(:disabled){filter:brightness(1.04);transform:translateY(-1px)}
+#roulette-dialog #spin-roulette:active:not(:disabled){transform:translateY(3px);box-shadow:0 3px 0 #bc521e,0 5px 12px #d8732a30}
+#roulette-dialog #spin-roulette:disabled{opacity:.8}
+#roulette-dialog .roulette-footnote{margin-top:18px;color:#a38a6b;font-size:11px}
+#roulette-dialog:has(#spin-roulette:disabled) .roulette-rim::before{animation:roulette-lights 1.6s ease-in-out infinite alternate}
+@keyframes roulette-lights{from{filter:drop-shadow(0 0 2px #fff3a3);opacity:.7}to{filter:drop-shadow(0 0 8px #fff5bd);opacity:1}}
+/* The homepage entry card echoes the larger wheel. */
+body[data-page="home"] .roulette-card{background:linear-gradient(120deg,#fff6e9,#ffeccf);border-color:#f0c389;box-shadow:0 5px 16px #b67b2520}
+body[data-page="home"] .roulette-card .mini-wheel{border:4px solid #dba449;box-shadow:0 0 0 5px #fff3cf,0 0 0 7px #eac48d,0 8px 14px #9a5d2024}
+@media(min-width:1351px){body[data-page="home"] .roulette-card .mini-wheel{width:152px;height:152px}body[data-page="home"] .roulette-card{min-height:248px}}
+@media(max-width:600px){
+ #roulette-dialog{padding:31px 21px 21px;border-radius:25px}
+ #roulette-dialog h2{font-size:24px}
+ #roulette-dialog .roulette-intro{font-size:13px}
+ #roulette-dialog .roulette-stage{width:min(100%,340px);padding:9px;margin:25px auto 20px}
+ #roulette-dialog .roulette-rim{padding:14px}
+ #roulette-dialog .roulette-rim::before{inset:5px;border-width:5px}
+ #roulette-dialog .roulette-pointer{width:27px;height:34px;left:calc(50% - 13.5px)}
+ #roulette-dialog .wheel-hub{width:64px;height:64px;border-width:4px}
+ #roulette-dialog .wheel-hub span{font-size:11px}#roulette-dialog .wheel-hub b{font-size:18px}
+ #roulette-dialog .wheel-menu{width:78px;gap:4px}
+ #roulette-dialog .wheel-menu img{width:44px;height:44px;border-width:2px}
+ #roulette-dialog .wheel-menu-name{font-size:10px;max-width:76px}
+ #roulette-dialog .wheel-menu-mark{width:29px;height:29px;font-size:11px}
+ #roulette-dialog #roulette-result{padding:13px;min-height:92px}
+ #roulette-dialog #roulette-result strong{font-size:19px}
+ #roulette-dialog .picked-photo{width:63px;height:63px}
+ #roulette-dialog #spin-roulette{min-height:53px;font-size:16px}
+}
+@media(max-width:370px){
+ #roulette-dialog{padding-left:15px;padding-right:15px}
+ #roulette-dialog h2{font-size:21px}
+ #roulette-dialog .wheel-menu{width:62px}
+ #roulette-dialog .wheel-menu img{width:33px;height:33px}
+ #roulette-dialog .wheel-menu-name{max-width:61px;font-size:9px}
+ #roulette-dialog .wheel-hub{width:53px;height:53px}
+ #roulette-dialog .wheel-hub b{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){#roulette-dialog .roulette-rim::before{animation:none!important}#roulette-dialog #spin-roulette{transition:none}}
