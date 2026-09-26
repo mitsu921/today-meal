@@ -354,7 +354,8 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .recipe-more-menu>button:hover,#family-meal-app .recipe-more-menu>button:focus-visible{background:#f7f3ef}
 #family-meal-app .recipe-more-menu>[data-del]{color:#ad4d32;border-top:1px solid #f2ece6;border-radius:0 0 7px 7px}
 </style>
-<link rel="stylesheet" href="./shopping-polish.css?v=20260926-2"></head>
+<link rel="stylesheet" href="./shopping-polish.css?v=20260926-2"><link rel="stylesheet" href="./recipe-shopping.css?v=20260926-1">
+</head>
 <body style="margin:0;background:#efe9df">
 
 <div id="family-meal-app">
@@ -692,6 +693,7 @@ details.fold.sub .body p{font-size:13px!important}
   <div id="toast" class="toast"></div>
 </div>
 
+<script src="./recipe-shopping.js?v=20260926-1"></script>
 <script src="./menu-diversity.js?v=20260924-1"></script>
 <script src="./recipe-editor.js?v=20260924-save3"></script>
 <script src="./recipe-sharing.js?v=20260924-2"></script>
@@ -1271,6 +1273,12 @@ async function pick(m){
  }catch(e){const msg=e&&e.message&&e.message.startsWith("limit:")?e.message.slice(6):"[진단12] "+String(e&&e.message?e.message:e).slice(0,140)+" ← 이 문구를 알려주세요";toast(msg);mode=null;}
  finally{if(cb){cb.disabled=false;cb.textContent=cookLabel;}if(sb)sb.disabled=false;}
 }
+let recipeShoppingPicker=null;
+function openRecipeShopping(title,ingredients){
+ if(!window.TodayMealRecipeShopping)return toast('재료 선택 화면을 불러오지 못했습니다. 새로고침해주세요.');
+ if(!recipeShoppingPicker)recipeShoppingPicker=window.TodayMealRecipeShopping.create({getPantry:()=>D.pantry,getShop:()=>D.shop,onAdd:items=>{D.shop.push(...items);save();renderTop();},onGo:()=>go('shop')});
+ recipeShoppingPicker.open(title,ingredients);
+}
 function renderDetail(detailResult=res,detailRecipe=recipe){
  checkFood(detailRecipe);
  const res=detailResult,recipe=detailRecipe;
@@ -1283,11 +1291,12 @@ function renderDetail(detailResult=res,detailRecipe=recipe){
   '<section class="recipe-section"><h3>재료 <small>2인분</small></h3><div class="ingredient-list">'+
   recipe.ingredients.map(g=>{const have=D.pantry.some(p=>g.name.includes(p.name)||p.name.includes(g.name));
    return '<div class="ingredient"><div class="ingredient-name">'+esc(g.name)+(have?'<small class="have">보유</small>':'')+'</div><span class="ingredient-amount">'+esc(g.amt||'')+'</span></div>'}).join('')+'</div>'+
-  (recipe.basics&&recipe.basics.length?'<p class="recipe-basics"><strong>기본 양념</strong>'+esc(recipe.basics.join(', '))+'</p>':'')+'</section>'+
+  (recipe.basics&&recipe.basics.length?'<p class="recipe-basics"><strong>기본 양념</strong>'+esc(recipe.basics.join(', '))+'</p>':'')+'<button type="button" class="recipe-shop-button" id="detail-shop">필요한 재료 장보기에 담기</button></section>'+
   '<section class="recipe-section"><h3>만드는 법</h3><ol class="recipe-steps">'+
   recipe.steps.map((s,i)=>'<li class="step"><span class="number" aria-hidden="true">'+(i+1)+'</span><div class="step-copy">'+esc(s.do)+(s.min>0?' <span class="step-time">'+esc(String(s.min))+'분</span>':'')+'</div></li>').join('')+'</ol></section>'+
   (recipe.secret?'<aside class="recipe-tip"><strong>맛있게 만드는 팁</strong><p>'+esc(recipe.secret)+'</p></aside>':'')+
   '<button class="primary" id="detail-eat">'+(eaten?'기록했어요':'이거 먹었어요')+'</button>';
+ $('#detail-shop').onclick=()=>openRecipeShopping(res.name,[...(recipe.ingredients||[]),...(recipe.basics||[])]);
  const photo=$('#detail-body .detail-cover img');
  photo.onerror=()=>{photo.closest('figure').hidden=true;};
  $('#detail-eat').onclick=()=>{eat();$('#detail-eat').textContent='기록했어요'};
@@ -1963,7 +1972,7 @@ function renderFeed(){
    (me&&me.id===r.user_id?'<button type="button" data-edit="'+r.id+'">수정</button>':'')+
    '<button type="button" data-share="'+r.id+'">공유</button>'+
    (me&&me.id===r.user_id?'<button type="button" class="textbtn warnc" data-del="'+r.id+'">삭제</button>':'<button type="button" class="textbtn warnc" data-report="recipe:'+r.id+'">신고</button>')+'</div></details></div></div>'+
-   '<div class="post-body recipe-expanded" id="body-'+r.id+'" style="display:none"><p style="white-space:pre-wrap">'+esc(r.body)+'</p>'+nutriHtml(r)+'</div>'+
+   '<div class="post-body recipe-expanded" id="body-'+r.id+'" style="display:none"><p style="white-space:pre-wrap">'+esc(r.body)+'</p>'+'<button type="button" class="recipe-shop-button" data-recipe-shop="'+r.id+'">필요한 재료 장보기에 담기</button>'+nutriHtml(r)+'</div>'+
    '<div id="cmt-'+r.id+'" style="display:none;margin-top:9px;border-top:1px dashed #e2e8e1;padding-top:9px">'+
    '<div id="cmt-list-'+r.id+'" class="tiny" style="color:#77857d">불러오는 중...</div>'+
    '<div style="display:flex;gap:6px;margin-top:8px">'+
@@ -2005,6 +2014,8 @@ app.addEventListener('click',e=>{
 document.addEventListener('click',e=>{if(!app.contains(e.target))app.querySelectorAll('.recipe-more[open]').forEach(menu=>menu.open=false);});
 app.addEventListener('keydown',e=>{if(e.key==='Escape'){const menu=e.target.closest('.recipe-more[open]');if(menu){menu.open=false;menu.querySelector('summary').focus();}}});
 $('#feed-list').onclick=async e=>{
+ const shopRecipe=e.target.closest('[data-recipe-shop]');if(shopRecipe){const r=feedData.find(x=>String(x.id)===shopRecipe.dataset.recipeShop);if(r&&window.TodayMealRecipeShopping)openRecipeShopping(r.title,window.TodayMealRecipeShopping.parseBody(r.body));return;}
+
  const action=e.target.closest('.recipe-more-menu button');if(action)action.closest('.recipe-more').open=false;
  const edit=e.target.closest('[data-edit]'),share=e.target.closest('[data-share]');
  if(edit){if(!me){toast('등록한 계정으로 로그인해주세요.');return go('login');}if(!window.createTodayMealEditor)return toast('수정 화면을 불러오지 못했습니다. 새로고침해주세요.');if(!exploreEditor)exploreEditor=window.createTodayMealEditor({sb,shrinkImage,mount:$('#feed-list'),onSaved:loadFeed});await exploreEditor.open(Number(edit.dataset.edit));return;}
