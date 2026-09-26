@@ -1,6 +1,6 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ff6b00">
-<title>TodayMeal | 오늘 뭐 먹지?</title>
-<meta name="description" content="음식과 재료로 찾는 집밥 레시피, 메뉴 룰렛, 식탁 옆 읽을거리. 오늘의 한 끼를 TodayMeal에서 준비해요.">
+<title>식생활 이야기 | TodayMeal</title>
+<meta name="description" content="두부 활용부터 일주일 식단과 아이 반찬까지, 매일의 식사를 편하게 준비하는 이야기.">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7169767076437690" crossorigin="anonymous"></script>
 <meta name="google-adsense-account" content="ca-pub-7169767076437690">
 <meta name="naver-site-verification" content="54c8d199d46a247d450b39054a1283351cab796c" />
@@ -14,8 +14,7 @@ window.gaEvent = function(name, params){ try{ gtag('event', name, params||{}); }
 </script>
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icon-192.png">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>if(!window.supabase)document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>')</script>
+
 <style>
 :root{--o:#ff6900;--ink:#191512;--muted:#756b63;--line:#eee6de;--cream:#fff8f0;--soft:#fff1e4}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Arial,"Noto Sans KR",sans-serif}button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}.ico{width:1.1em;height:1.1em;vertical-align:-0.18em;object-fit:contain}.wrap{max-width:1180px;margin:auto;padding:0 26px}.top{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:46px}.logo{font-size:28px;font-weight:900;color:var(--o);letter-spacing:-1.5px}.nav{display:flex;gap:30px;font-size:15px;font-weight:800}.nav a:hover{color:var(--o)}.right{margin-left:auto;display:flex;gap:10px;align-items:center}.point,.cert{border-radius:11px;padding:11px 16px;font-weight:900;border:0}.point{background:#fff;border:1px solid #ffd8bd;color:var(--o)}.cert{background:var(--o);color:#fff}
 .write-view{padding-top:28px;padding-bottom:60px}
@@ -51,93 +50,7 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 .c-modal{display:none;position:fixed;inset:0;background:rgba(25,21,18,.5);z-index:80;align-items:center;justify-content:center;padding:20px}.c-modal.open{display:flex}.c-sheet{background:#fff;width:100%;max-width:440px;border-radius:20px;padding:24px;position:relative;max-height:86vh;overflow-y:auto}.c-close{position:absolute;top:14px;right:16px;background:#fff1e4;border-radius:50%;width:30px;height:30px;font-size:14px;border:0;cursor:pointer}.c-chip{padding:8px 14px;border-radius:18px;background:#fff1e4;color:var(--muted);font-size:12.5px;font-weight:700;border:0;cursor:pointer}.c-chip.active{background:var(--o);color:#fff}.c-input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit}.kakao-btn{width:100%;padding:13px;border-radius:13px;background:#FEE500;color:#191919;font-size:14px;font-weight:800;border:0;cursor:pointer}
 @media(max-width:900px){.top{gap:20px}.nav{gap:14px}.hero{grid-template-columns:1fr}.side{display:none}.cards{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.wrap{padding:0 15px}.top{height:62px}.logo{font-size:23px}.nav{display:none}.cert{padding:9px}.heroBox{height:auto;display:flex;flex-direction:column}.heroPhoto{position:relative;width:100%;height:230px;order:-1}.heroText{width:100%;height:auto;background:#fff8f0;padding:24px 20px}.hero h1{font-size:29px}.mission,.write{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.quick button{flex:1;padding:10px 5px}.foot{display:block}.apps{margin-top:12px}}
-</style><link rel="stylesheet" href="/homepage.css?v=20260926-2"></head><body data-page="home">
-<header class="site-header"><div class="wrap top">
+</style><link rel="stylesheet" href="/homepage.css?v=20260926-2"></head><body data-page="stories"><header class="site-header"><div class="wrap top">
 <a class="logo" href="/">TodayMeal</a>
-<nav class="nav" aria-label="주 메뉴"><a class="active" aria-current="page" href="/category.html" id="nav-recipes">레시피</a><a href="/stories.html" id="nav-stories">식생활 이야기</a><a href="/saved.html" id="nav-saved">저장한 레시피</a></nav>
-<div class="right"><span id="auth-slot">로그인 연결 중</span><a class="app-link" href="/app/">앱 열기 ↗</a></div></div></header>
-<main class="wrap" id="home-view">
-<section class="intro" aria-labelledby="home-heading"><div class="search-intro"><h1 id="home-heading">오늘은 무엇을 만들어볼까요?</h1><p>재료로 찾고, 레시피를 읽고, 나만의 한 끼를 준비해요.</p>
-<form id="recipe-search" role="search"><label class="sr-only" for="search-input">음식 이름이나 재료 검색</label><div class="search-field"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="음식 이름이나 재료를 검색해보세요" autocomplete="off"></div><button class="search-submit">검색</button></form>
-<div class="keywords"><span>자주 찾는 검색어</span><button data-keyword="두부">두부</button><button data-keyword="계란">계란</button><button data-keyword="아이">아이 반찬</button><button data-keyword="볶음">간단한 저녁</button></div></div>
-<aside class="roulette-card"><div><h2>오늘 뭐 먹지?</h2><p>고민될 땐, 룰렛으로 골라요.</p><button id="open-roulette" class="orange-button">메뉴 룰렛 돌리기 →</button></div><div class="mini-wheel" aria-hidden="true"><i></i></div></aside></section>
-<div class="recipe-filters" aria-label="레시피 분류"><div id="category-filters"><button class="selected" data-category="전체" aria-pressed="true">전체</button><button data-category="밥·면" aria-pressed="false">밥·면</button><button data-category="국·찌개" aria-pressed="false">국·찌개</button><button data-category="반찬" aria-pressed="false">반찬</button><button data-category="간식" aria-pressed="false">간식</button></div><label>주재료 <select id="ingredient-filter"><option value="">전체</option><option>두부</option><option>계란</option><option>닭</option><option>소고기</option><option>돼지고기</option><option>감자</option></select></label></div>
-<div class="content-grid"><section id="community" aria-labelledby="recipes-heading"><div class="list-heading"><h2 id="recipes-heading">오늘 둘러볼 레시피</h2><a href="/category.html">전체 보기 →</a></div><p id="search-status" class="search-status" aria-live="polite"></p><p class="scroll-hint" id="scroll-hint">목록 안에서 스크롤해 더 둘러보세요 ↓</p><div id="recipes" aria-busy="true" tabindex="0" role="region" aria-label="레시피 목록"><p class="empty-state">등록된 레시피를 불러오고 있어요.</p></div><div class="contribute"><span>우리 집 한 끼를 나눠보세요.</span><button id="write-open-btn">레시피 쓰기 →</button></div></section>
-<aside class="stories" id="stories"><p class="eyeline">잠깐 읽어보세요</p><h2>식탁 옆 이야기</h2><a class="story-link" href="/stories.html#tofu"><span>재료 활용</span><h3>두부 한 모, 남김없이 쓰는 법</h3><p>한 가지 재료로 다르게 차리는 두 끼</p></a><a class="story-link" href="/stories.html#weekly-plan"><span>식사 준비</span><h3>일주일 식단을 가볍게 짜는 순서</h3><p>매일의 고민을 조금 덜어보세요</p></a><a class="story-link" href="/stories.html#kids-table"><span>아이 밥상</span><h3>아이 반찬이 고민되는 날</h3><p>익숙한 재료로 다르게 준비하기</p></a><a href="/stories.html">이야기 더 보기 →</a></aside></div>
-<section class="ingredient-links"><h2>재료가 남았다면</h2><div><button data-keyword="두부">두부로 만드는 요리 →</button><button data-keyword="계란">계란으로 만드는 요리 →</button><button data-keyword="감자">감자 활용 레시피 →</button><a href="/app/">냉장고 재료로 추천받기 →</a></div></section>
-<noscript><p>검색과 메뉴 룰렛은 자바스크립트를 켜면 사용할 수 있어요. <a href="/sitemap.xml">등록된 페이지 보기</a></p></noscript>
-</main>
-<dialog id="roulette-dialog" class="home-dialog" aria-labelledby="roulette-title"><button class="dialog-close" data-close aria-label="닫기">×</button><h2 id="roulette-title">오늘의 메뉴, 돌려서 골라요</h2><p>등록된 레시피 중에서 한 가지를 골라드려요.</p><div class="large-wheel mini-wheel" id="home-wheel" aria-hidden="true"><i></i></div><div id="roulette-result" aria-live="polite">어떤 메뉴가 나올까요?</div><button id="spin-roulette" class="orange-button">룰렛 돌리기</button></dialog>
-
-<main class="wrap write-view" id="write-view" style="display:none">
-  <button class="write-back" id="write-back-btn">‹ 홈으로 돌아가기</button>
-
-  <div class="write-mode-tabs">
-    <button class="wmt active" id="wmt-direct">✏️ 직접 쓰기</button>
-    <button class="wmt" id="wmt-import">🔗 블로그에서 가져오기</button>
-  </div>
-
-  <div class="import-panel" id="import-panel" style="display:none">
-    <p class="import-notice">
-      ⚠️ <b>네이버 블로그 · 티스토리</b> 글 주소만 가져올 수 있어요.<br>
-      <b>본인이 직접 쓴 글</b>만 가져와 주세요 — 다른 사람 글을 무단으로 가져오면 저작권 문제가 될 수 있고,
-      <b>그에 대한 법적 책임은 가져온 분 본인에게 있습니다.</b>
-    </p>
-    <div style="display:flex;gap:8px">
-      <input class="c-input" id="import-url" placeholder="https://blog.naver.com/..." style="flex:1">
-      <button class="cert" id="import-go-btn" style="padding:0 20px">가져오기</button>
-    </div>
-    <p id="import-status" style="font-size:12.5px;color:var(--muted);margin-top:8px"></p>
-  </div>
-
-  <div class="write-layout">
-    <div class="write-main">
-      <input class="write-title" id="w-title" placeholder="레시피 제목을 적어주세요 (예: 제육볶음)">
-      <div class="write-target-row">
-        <span class="write-label">누구에게 좋은가요?</span>
-        <div id="w-target">
-          <button class="w-chip active" data-t="온 가족">온 가족</button>
-          <button class="w-chip" data-t="아이">아이</button>
-          <button class="w-chip" data-t="아이 간식">아이 간식</button>
-          <button class="w-chip" data-t="다이어트">다이어트</button>
-          <button class="w-chip" data-t="남편">남편</button>
-        </div>
-      </div>
-      <textarea class="write-body" id="w-body" placeholder="재료와 만드는 법을 자유롭게 적어주세요.
-
-재료: 돼지고기 300g, 양파 1개, 대파 1대 ...
-
-만드는 법:
-1) ...
-2) ..."></textarea>
-    </div>
-    <aside class="write-side">
-      <div class="write-photo-box" id="w-photo-box">
-        <img id="w-photo-preview" style="display:none">
-        <span id="w-photo-hint"><img class="ico" style="width:34px;height:34px" src="/icons/camera.png"><br>대표 사진 추가하기</span>
-      </div>
-      <input id="w-photo" type="file" accept="image/*" style="display:none">
-      <div class="write-tip">📸 사진이 있으면 커뮤니티 목록에서 훨씬 눈에 잘 띄어요!</div>
-      <button class="write-submit" id="w-submit">등록하고 +50P 받기</button>
-    </aside>
-  </div>
-</main>
-
-<footer><div class="wrap foot"><a class="logo" href="/">TodayMeal</a><a href="/privacy.html">개인정보처리방침</a><a href="/terms.html">이용약관</a><a href="/app/">앱 열기 ↗</a></div></footer>
-
-<div class="c-modal" id="c-login-modal"><div class="c-sheet">
-  <button class="c-close" id="c-login-close">✕</button>
-  <button class="kakao-btn" id="c-kakao-btn"><img class="ico" src="/icons/comment.png"> 카카오로 3초 만에 시작하기</button>
-  <div style="display:flex;align-items:center;gap:10px;margin:16px 0 2px;color:var(--muted);font-size:11.5px;font-weight:700"><div style="flex:1;height:1px;background:var(--line)"></div>또는 이메일로<div style="flex:1;height:1px;background:var(--line)"></div></div>
-  <div style="display:flex;gap:6px;margin:12px 0"><button class="c-chip active" id="c-tab-login">로그인</button><button class="c-chip" id="c-tab-signup">회원가입</button></div>
-  <div id="c-nick-wrap" style="display:none;margin-bottom:8px"><input class="c-input" id="c-f-nick" placeholder="닉네임" style="width:100%"></div>
-  <input class="c-input" id="c-f-email" type="email" placeholder="이메일" style="width:100%;margin-bottom:8px">
-  <input class="c-input" id="c-f-pw" type="password" placeholder="비밀번호(6자 이상)" style="width:100%;margin-bottom:12px">
-  <button class="cert" id="c-auth-go" style="width:100%;padding:12px">로그인</button>
-  <p id="c-auth-msg" style="font-size:12.5px;color:#c0654a;margin-top:8px"></p>
-</div></div>
-
-<div class="toast" id="toast"></div>
-
-<script src="/homepage.js?v=20260926-2"></script>
-</body></html>
+<nav class="nav" aria-label="주 메뉴"><a href="/category.html" id="nav-recipes">레시피</a><a class="active" aria-current="page" href="/stories.html" id="nav-stories">식생활 이야기</a><a href="/saved.html" id="nav-saved">저장한 레시피</a></nav>
+<div class="right"><a class="app-link" href="/app/">앱 열기 ↗</a></div></div></header><main class="wrap reading-page"><a class="back-link" href="/">← 메인으로</a><h1>식생활 이야기</h1><p class="page-lead">오늘의 한 끼를 조금 더 편하게 준비하는 방법.</p><nav class="article-index" aria-label="글 목록"><a href="#tofu"><span>재료 활용</span><strong>두부 한 모, 남김없이 쓰는 법</strong><span aria-hidden="true">읽기 →</span></a><a href="#weekly-plan"><span>식사 준비</span><strong>일주일 식단을 가볍게 짜는 순서</strong><span aria-hidden="true">읽기 →</span></a><a href="#kids-table"><span>아이 밥상</span><strong>아이 반찬이 고민되는 날</strong><span aria-hidden="true">읽기 →</span></a></nav><div class="reading-articles"><article id="tofu" class="reading-article"><p class="story-tag">재료 활용</p><h2>두부 한 모, 남김없이 쓰는 법</h2><h3>두 끼를 먼저 정해두세요</h3><p>두부를 사기 전에 국에 넣을지, 부쳐 먹을지 먼저 골라보세요. 한 모로 두 끼를 준비한다면 처음부터 쓸 만큼 나누어 두면 편해요.</p><h3>같은 재료도 모양을 바꾸면 새로워요</h3><p>첫 끼에는 깍둑썰기해 국에 넣고, 다음 끼에는 으깨서 달걀과 함께 부쳐보세요. 양념을 바꾸기보다 조리 방식을 바꾸면 장보기 목록도 간단해져요.</p><h3>남은 재료부터 확인하세요</h3><p>포장에 적힌 보관 방법과 개봉 후 안내를 따르세요. 남은 두부는 날짜를 표시해 냉장고에서 잘 보이는 곳에 두고, 다음 식사에 활용할 메뉴를 미리 정해두세요.</p><a class="orange-button" href="/?q=%EB%91%90%EB%B6%80#community">관련 레시피 찾아보기 →</a><a class="article-top" href="#">목록으로 ↑</a></article><article id="weekly-plan" class="reading-article"><p class="story-tag">식사 준비</p><h2>일주일 식단을 가볍게 짜는 순서</h2><h3>일정부터 적어보세요</h3><p>늦게 들어오는 날, 함께 먹는 날, 외식하는 날을 먼저 표시하세요. 모든 끼니를 꽉 채우기보다 실제로 집에서 먹을 날부터 정하면 부담이 줄어요.</p><h3>냉장고 안에서 주재료를 고르세요</h3><p>먼저 써야 할 재료를 중심으로 메뉴를 정하고, 같은 재료를 두 가지 요리에 활용해보세요. 양배추는 볶음밥과 달걀 부침에, 감자는 국과 볶음에 나누어 쓸 수 있어요.</p><h3>한 끼는 비워두세요</h3><p>일정이 바뀌거나 음식이 남을 수 있으니 한 끼 정도는 유동적으로 두세요. 메뉴를 정한 뒤 집에 없는 재료만 장보기 목록에 적으면 중복 구매를 줄이기 좋아요.</p><a class="orange-button" href="/?q=%EB%B3%B6%EC%9D%8C#community">관련 레시피 찾아보기 →</a><a class="article-top" href="#">목록으로 ↑</a></article><article id="kids-table" class="reading-article"><p class="story-tag">아이 밥상</p><h2>아이 반찬이 고민되는 날</h2><h3>익숙한 재료에서 시작하세요</h3><p>매번 새로운 반찬을 만들 필요는 없어요. 자주 먹는 달걀, 두부, 감자로 조리 방법을 조금씩 바꿔보세요.</p><h3>한 번에 한 가지만 바꿔보세요</h3><p>달걀말이에 잘게 썬 채소를 조금 넣거나, 감자볶음을 작은 감자전으로 바꾸는 식이에요. 아이가 재료를 고르거나 섞는 과정에 함께해도 좋아요.</p><h3>먹는 사람에게 맞춰 준비하세요</h3><p>아이의 나이와 씹는 정도에 맞춰 크기와 질감을 조절하고, 알레르기가 있는 재료는 조리 전에 확인하세요. 많은 반찬보다 편안하게 먹을 수 있는 한 끼를 준비해보세요.</p><a class="orange-button" href="/?q=%EA%B3%84%EB%9E%80#community">관련 레시피 찾아보기 →</a><a class="article-top" href="#">목록으로 ↑</a></article></div></main><footer><div class="wrap foot"><a class="logo" href="/">TodayMeal</a><a href="/privacy.html">개인정보처리방침</a><a href="/terms.html">이용약관</a><a href="/app/">앱 열기 ↗</a></div></footer></body></html>
