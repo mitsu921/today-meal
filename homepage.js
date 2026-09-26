@@ -41,19 +41,43 @@ $('#search-input').addEventListener('search',()=>{homeQuery=$('#search-input').v
 document.querySelectorAll('[data-keyword]').forEach(b=>b.onclick=()=>{resetHome();homeQuery=b.dataset.keyword;$('#search-input').value=homeQuery;updateHome();$('#community').scrollIntoView({behavior:'smooth',block:'start'});});
 document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{homeCategory=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});updateHome();});
 $('#ingredient-filter').onchange=e=>{homeIngredient=e.target.value;updateHome();};
+const rouletteDialog=$('#roulette-dialog');
+rouletteDialog.innerHTML='<button class="dialog-close" data-close aria-label="닫기">×</button><span class="roulette-eyebrow">TODAYMEAL MENU PICK</span><h2 id="roulette-title">오늘의 한 끼를 골라볼까요?</h2><p class="roulette-intro">고민은 잠시 내려두고, 가볍게 돌려보세요.</p><div class="roulette-stage"><span class="roulette-pointer" aria-hidden="true"></span><div class="roulette-rim"><div id="home-wheel" class="menu-wheel" aria-hidden="true"></div><div class="wheel-hub" aria-hidden="true"><span>오늘의</span><b>한 끼</b></div></div></div><div id="roulette-result" class="pick-result" aria-live="polite"><span class="pick-kicker">오늘은 어떤 메뉴가 나올까요?</span><p>마음에 드는 메뉴가 나오면 만드는 법을 확인해요.</p></div><button id="spin-roulette" class="orange-button"><span aria-hidden="true">↻</span> 메뉴 골라보기</button><p class="roulette-footnote">등록된 레시피에서 후보를 무작위로 골라요.</p>';
+let wheelCandidates=[],wheelAngle=0;
+function prepareHomeWheel(){
+ const list=feedData.filter(r=>feedData.length<2||String(r.id)!==lastChoice).slice();
+ for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}
+ wheelCandidates=list.slice(0,6);const wheel=$('#home-wheel');const n=wheelCandidates.length;wheelAngle=0;wheel.style.transform='rotate(0deg)';
+ const colors=['#fff4df','#f6d7ad','#fff9ed','#f9e4c6','#ffedce','#f3cf9f'];
+ wheel.style.background=n?'conic-gradient('+wheelCandidates.map((r,i)=>colors[i]+' '+i*360/n+'deg '+(i+1)*360/n+'deg').join(',')+')':'#fff2df';
+ wheel.innerHTML=wheelCandidates.map((r,i)=>{const angle=(i+.5)*360/n,rad=angle*Math.PI/180;const x=50+Math.sin(rad)*31,y=50-Math.cos(rad)*31;const src=r.image_url&&safeHomePhoto(r.image_url);return '<span class="wheel-menu" style="left:'+x+'%;top:'+y+'%">'+(src?'<img src="'+esc(src)+'" alt="">':'<span class="wheel-menu-mark" aria-hidden="true">'+String(i+1).padStart(2,'0')+'</span>')+'<span class="wheel-menu-name">'+esc(r.title)+'</span></span>';}).join('');
+ wheel.querySelectorAll('img').forEach(img=>img.onerror=()=>{img.hidden=true;});
+}
+function openHomeWheel(){if(!rouletteBusy)prepareHomeWheel();rouletteDialog.showModal();}
+$('#open-roulette').onclick=openHomeWheel;
+$('#spin-roulette').onclick=async()=>{
+ if(rouletteBusy)return;
+ if(!homeLoaded){toast(homeFailed?'레시피를 다시 불러온 뒤 돌려주세요.':'레시피를 불러오는 중이에요. 잠시 후 돌려주세요.');return;}
+ if(!feedData.length){$('#roulette-result').textContent='등록된 레시피가 아직 없어요.';return;}
+ prepareHomeWheel();const idx=Math.floor(Math.random()*wheelCandidates.length),r=wheelCandidates[idx];
+ const target=1440+360-(idx+.5)*360/wheelCandidates.length;
+ rouletteBusy=true;const btn=$('#spin-roulette');btn.disabled=true;btn.textContent='오늘의 메뉴를 고르고 있어요…';
+ $('#roulette-result').innerHTML='<span class="pick-kicker">두근두근, 오늘의 한 끼는?</span><p>룰렛이 멈추면 메뉴를 확인할 수 있어요.</p>';
+ const wheel=$('#home-wheel');const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ try{
+  if(!reduced&&typeof wheel.animate==='function'){const animation=wheel.animate([{transform:'rotate(0deg)'},{transform:'rotate('+target+'deg)'}],{duration:2400,easing:'cubic-bezier(.16,.65,.12,1)',fill:'forwards'});await animation.finished;wheel.style.transform='rotate('+target+'deg)';animation.cancel();}
+  else{wheel.style.transform='rotate('+target+'deg)';if(!reduced)await new Promise(resolve=>setTimeout(resolve,2400));}
+  wheelAngle=target;lastChoice=String(r.id);
+  wheel.querySelectorAll(".wheel-menu").forEach((label,i)=>{label.style.transform="translate(-50%,-50%) rotate("+(-target)+"deg)";label.classList.toggle("chosen",i===idx);});
+  const src=r.image_url&&safeHomePhoto(r.image_url);
+  $('#roulette-result').innerHTML='<div class="picked-menu">'+(src?'<img class="picked-photo" src="'+esc(src)+'" alt="'+esc(r.title)+'">':'')+'<div><span class="pick-kicker">오늘의 메뉴로 어때요?</span><strong>'+esc(r.title)+'</strong><a class="result-link" href="/r/'+encodeURIComponent(r.id)+'">이 메뉴 만드는 법 <span aria-hidden="true">→</span></a></div></div>';
+  const photo=$('#roulette-result img');if(photo)photo.onerror=()=>photo.remove();
+ }finally{rouletteBusy=false;btn.disabled=false;btn.innerHTML='<span aria-hidden="true">↻</span> 다른 메뉴 골라보기';}
+};
+
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
 document.querySelectorAll('.home-dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
-$('#open-roulette').onclick=()=>$('#roulette-dialog').showModal();
-$('#spin-roulette').onclick=async()=>{
- if(rouletteBusy)return;if(!homeLoaded){toast(homeFailed?'레시피를 다시 불러온 뒤 돌려주세요.':'레시피를 불러오는 중이에요. 잠시 후 돌려주세요.');return;}
- if(!feedData.length){$('#roulette-result').textContent='등록된 레시피가 아직 없어요.';return;}
- const pool=feedData.length>1?feedData.filter(r=>String(r.id)!==lastChoice):feedData;const r=pool[Math.floor(Math.random()*pool.length)];lastChoice=String(r.id);
- rouletteBusy=true;$('#spin-roulette').disabled=true;$('#roulette-result').textContent='오늘의 메뉴를 고르고 있어요…';
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;const wheel=$('#home-wheel');wheel.classList.add('spinning');
- await new Promise(resolve=>setTimeout(resolve,reduced?0:1400));wheel.classList.remove('spinning');
- $('#roulette-result').innerHTML='<strong>'+esc(r.title)+'</strong><a class="result-link" href="/r/'+encodeURIComponent(r.id)+'">이 메뉴 만드는 법 →</a>';
- $('#spin-roulette').disabled=false;$('#spin-roulette').textContent='다시 돌리기';rouletteBusy=false;
-};
+
 $('#search-input').value=homeQuery;
 window.addEventListener('storage',e=>{if(e.key!=='todaymeal-home-saved-v1')return;try{const x=JSON.parse(e.newValue||'[]');homeSaved=Array.isArray(x)?x.filter(v=>typeof v==='string'):[];}catch(err){homeSaved=[];}if(homeLoaded)renderCards();});
 
