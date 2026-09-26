@@ -354,7 +354,17 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .recipe-more-menu>button:hover,#family-meal-app .recipe-more-menu>button:focus-visible{background:#f7f3ef}
 #family-meal-app .recipe-more-menu>[data-del]{color:#ad4d32;border-top:1px solid #f2ece6;border-radius:0 0 7px 7px}
 </style>
-</head>
+<style>
+#family-meal-app .recommend-shopping-card{margin:12px 0;padding:16px;border:1px solid #eadfd5;border-radius:15px;background:#fff}
+#family-meal-app .recommend-shopping-card h3{font-size:16px;margin:0 0 7px;color:#29241f}
+#family-meal-app .recommend-shopping-card p{font-size:13px;line-height:1.6;color:#756e66;margin:6px 0}
+#family-meal-app .recommend-shopping-card summary{padding:10px 0;font-size:14px;cursor:pointer}
+#family-meal-app .shopping-picks label{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:14px}
+#family-meal-app .shopping-picks input{width:18px;height:18px;accent-color:#bd5b33}
+#family-meal-app .shopping-picks small{margin-left:auto;color:#756e66}
+#family-meal-app .shopping-add{width:100%;padding:13px;border:0;border-radius:10px;background:#bc5b35;color:white;font-size:15px;font-weight:700;margin-top:8px}
+#family-meal-app .shopping-open{display:block;margin:10px auto 0;padding:8px;background:none;border:0;color:#77573e;font-size:13px}
+</style></head>
 <body style="margin:0;background:#efe9df">
 
 <div id="family-meal-app">
@@ -431,6 +441,7 @@ details.fold.sub .body p{font-size:13px!important}
       <!-- 오늘 추천 메뉴 -->
       <section class="recommend">
         <section class="v2-hero" id="hero"></section>
+        <div id="recommend-shopping"></div>
         <details class="meal-detail-toggle"><summary>메뉴 구성 · 만드는 법 보기</summary><div id="result-extra" style="margin-top:12px"></div></details>
       </section>
 
@@ -915,21 +926,33 @@ $('#verify-quick-btn').onclick=()=>{
 function inPantry(name){
  return D.pantry.some(p=>name.includes(p.name)||p.name.includes(name));
 }
-function addMissingToShop(){
- if(!res)return;
- const map={};
- (res.missing||[]).forEach(x=>{if(x.name)map[x.name]={name:x.name,amt:x.amt||""};});
- res.tray.filter(t=>t.item).forEach(t=>{if(!map[t.item])map[t.item]={name:t.item,amt:""};});
- const items=Object.values(map).filter(x=>!inPantry(x.name));
- if(!items.length){toast("필요한 재료가 이미 냉장고에 다 있어요! 👍");return;}
- let n=0;
- items.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++;}});
- save();renderTop();
+function shoppingKey(name){return String(name||'').replace(/\s/g,'').replace(/달걀/g,'계란');}
+function recommendationIngredients(result,pantry){
+ const items=new Map();
+ const put=x=>{const name=String(typeof x==='string'?x:x?.name||'').trim();if(!name)return;const key=shoppingKey(name);const prev=items.get(key);items.set(key,{name,amt:(typeof x==='object'&&x?.amt)||prev?.amt||''});};
+ (result.ingredients||[]).forEach(put);(result.missing||[]).forEach(put);
+ const have=new Set((pantry||[]).map(p=>shoppingKey(p.name)));
+ return [...items.values()].filter(x=>!have.has(shoppingKey(x.name)));
+}
+function addMissingToShop(items){
+ if(!res||busy)return;
+ if(!Array.isArray(items))items=recommendationIngredients(res,D.pantry);
+ if(!items.length){toast('담을 재료를 선택해주세요.');return;}
+ let n=0;items.forEach(x=>{if(!D.shop.some(s=>shoppingKey(s.name)===shoppingKey(x.name)&&!s.done)){D.shop.push({name:x.name,amt:x.amt||'',from:res.name,done:false});n++;}});
+ save();renderTop();toast(n?n+'개를 장보기에 담았어요.':'이미 장보기에 담겨 있어요.');
  if(window.gaEvent)gaEvent('shop_add',{dish:res.name,count:n});
- toast(n?n+"개를 장보기에 담았어요! 🛒":"이미 장보기에 담겨 있어요");
- go("shop");
+}
+function renderRecommendationShopping(){
+ const box=$('#recommend-shopping');if(!res){box.innerHTML='';return;}
+ const items=recommendationIngredients(res,D.pantry);
+ box.innerHTML='<div class="recommend-shopping-card"><h3>필요한 재료 장보기</h3><p>'+ (D.pantry.length?'냉장고에 등록된 재료를 제외했어요. 보유량과 필요한 분량을 확인해주세요.':'냉장고에 등록된 재료가 없어요. 집에 있는 재료는 선택을 해제해주세요.')+'</p>'+
+ (items.length?'<details><summary>담을 재료 확인 · '+items.length+'개</summary><div class="shopping-picks">'+items.map((x,i)=>'<label><input type="checkbox" data-shop-pick="'+i+'" checked><span>'+esc(x.name)+'</span><small>'+esc(x.amt)+'</small></label>').join('')+'</div></details><button type="button" class="shopping-add" id="to-cart">선택한 재료 장보기에 담기</button>':'<p>추가할 재료가 없어요. 필요한 분량은 만드는 법에서 확인해주세요.</p>')+
+ '<button type="button" class="shopping-open" id="open-shopping">장보기 목록 보기 ›</button><p id="shopping-add-status" role="status" aria-live="polite"></p></div>';
+ const button=$('#to-cart');if(button)button.onclick=()=>{const chosen=[...box.querySelectorAll('[data-shop-pick]:checked')].map(input=>items[Number(input.dataset.shopPick)]);addMissingToShop(chosen);$('#shopping-add-status').textContent=chosen.length?'선택한 재료를 장보기 목록에서 확인할 수 있어요.':'담을 재료를 하나 이상 선택해주세요.';};
+ $('#open-shopping').onclick=()=>go('shop');
 }
 function heroBusy(msg){
+ $('#recommend-shopping').innerHTML="";
  $('#hero').innerHTML='<article class="recommend-card card"><div class="meal-copy" style="width:100%;text-align:center;padding:40px 10px"><span class="pill">고르는 중</span><p class="loadmsg" style="margin-top:14px;font-weight:800">'+msg+'</p></div></article>';
 }
 /* Home photo treatment: keep the existing AI result, storage and recipe flow. */
@@ -983,17 +1006,12 @@ function renderExtra(){
   '<div class="macrobar"><div style="width:'+(kc.c/tot*100)+'%"></div><div style="width:'+(kc.p/tot*100)+'%"></div><div style="width:'+(kc.f/tot*100)+'%"></div></div>'+
   '<div class="mlegend"><span>탄수화물 '+m.carb+'g</span><span>단백질 '+m.protein+'g</span><span>지방 '+m.fat+'g</span></div>'+
   (res.nutrition?'<p class="muted" style="margin-top:8px">'+res.nutrition+'</p>':"")+'</div>';
- const miss=(res.missing||[]).filter(x=>x.name);
- if(miss.length){h+='<div class="missbox"><h3>🛒 없는 재료 '+miss.length+'개</h3>'+
-  miss.map(x=>'<div class="ingline"><span>'+x.name+'</span><span class="muted">'+(x.amt||"")+'</span></div>').join("")+
-  '<button class="b-green" id="to-cart" style="width:100%;border-radius:11px;padding:11px;margin-top:9px;font-weight:800">장보기에 담기</button></div>';}
  h+='<div id="deliv-slot"></div>';
  h+='<button type="button" class="home-photo-record" id="eat-btn-main">'+(eaten?'✓ 식사 기록 완료':'오늘 이거 먹었어요')+'</button>';
  $('#result-extra').innerHTML=h;
  $('#eat-btn-main').onclick=eat;
  const ck=$('#btn-cook'); if(ck)ck.onclick=()=>pick("cook");
- const tc=$('#to-cart');
- if(tc)tc.onclick=()=>{let n=0;miss.forEach(x=>{if(!D.shop.some(s=>s.name===x.name&&!s.done)){D.shop.push({name:x.name,amt:x.amt||"",from:res.name,done:false});n++}});save();renderTop();tc.textContent="✓ "+(n?n+"개 담았어요":"이미 담겨 있어요");tc.disabled=true;toast("장보기 목록에 담았어요")};
+ renderRecommendationShopping();
 }
 
 // Additional ingredient-text screening; not a guarantee of allergy safety.
@@ -1041,7 +1059,7 @@ async function decide(){
    catHint+timeHint+budgetHint+
    (selectedHomeDish?"- 원하는 메인 메뉴: "+selectedHomeDish+". 알레르기·비선호 및 위 조건을 우선하고, 불가능하면 가까운 대체 메뉴를 제안해라.\n":"")+
    (D.allergy?"- 알레르기·비선호(반드시 완전히 제외): "+D.allergy+"\n":"")+
-   (inv?"- 냉장고: "+inv+"\n- 냉장고 재료를 최대한 쓰되 '오늘까지' 재료를 반드시 우선 사용. 부족한 재료 1~2개는 missing에.\n":"- 냉장고 정보 없음. missing은 빈 배열.\n")+
+   (inv?"- 냉장고: "+inv+"\n- 냉장고 재료를 최대한 쓰되 '오늘까지' 재료를 반드시 우선 사용. 부족한 재료는 missing에 재료명과 필요한 양을 적어라.\n":"- 냉장고 정보 없음. ingredients에는 전체 재료명, missing에는 주요 재료명과 필요한 양을 적어라. 완성 음식 이름을 재료로 넣지 마라.\n")+
    (warns.length?"- 보완: "+warns.join(" / ")+"\n":"")+
    "- ingredients에 양념·소스 포함 전체 재료 이름을 문자열 배열로 적어라.\n"+
    "- 현실적 메뉴. tray 4칸은 반드시 이 순서·이 이름으로: "+slots.join("/")+". "+(isSnack?"":"국 없는 식문화면 국 칸을 음료·수프로 대체하되 칸 이름은 유지.")+"\n"+
