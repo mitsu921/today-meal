@@ -354,7 +354,7 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .recipe-more-menu>button:hover,#family-meal-app .recipe-more-menu>button:focus-visible{background:#f7f3ef}
 #family-meal-app .recipe-more-menu>[data-del]{color:#ad4d32;border-top:1px solid #f2ece6;border-radius:0 0 7px 7px}
 </style>
-<link rel="stylesheet" href="./shopping-polish.css?v=20260926-1"></head>
+<link rel="stylesheet" href="./shopping-polish.css?v=20260926-2"></head>
 <body style="margin:0;background:#efe9df">
 
 <div id="family-meal-app">
@@ -599,7 +599,7 @@ details.fold.sub .body p{font-size:13px!important}
   <!-- ══ 장보기 ══ -->
   <section class="view" data-view="shop">
     <header class="head"><h1>장보기</h1><p class="muted">추천 메뉴에서 없는 재료를 담으면 여기 모여요</p></header>
-    <div class="section"><div class="line"><h2>장보기 목록</h2><p id="shop-progress" role="status"></p></div><p class="shop-help">쿠팡에서 상품을 골라 담고, 구매한 재료는 체크하세요.</p><button type="button" id="copy-shopping-list" class="shopping-copy-list">남은 재료 목록 복사</button><p id="shopping-copy-status" role="status" aria-live="polite"></p><textarea id="shopping-copy-text" aria-label="복사할 장보기 목록" readonly hidden></textarea><div class="shop-actions"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">구매 완료 지우기</button></div><div id="shop-list"></div></div>
+    <div class="section"><div class="line"><h2>장보기 목록</h2><p id="shop-progress" role="status"></p></div><p class="shop-help"><strong>구매한 것 체크</strong><br>왼쪽 체크는 구매 완료 표시예요. 상품은 오른쪽에서 찾아보세요.</p><button type="button" id="copy-shopping-list" class="shopping-copy-list">남은 재료 목록 복사</button><p id="shopping-copy-status" role="status" aria-live="polite"></p><textarea id="shopping-copy-text" aria-label="복사할 장보기 목록" readonly hidden></textarea><div class="shop-actions"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">구매 완료 지우기</button></div><div id="shop-list"></div></div>
     <div class="section shop-search">
       <div style="background:#fff;border:1px solid #eef1ee;border-radius:16px;padding:14px 14px 10px;overflow:hidden">
         <p style="font-size:14px;font-weight:800;color:#39774e;margin:0 0 10px;line-height:1.4">재료 더 찾기</p>
@@ -1381,7 +1381,7 @@ function renderShop(){
  el.innerHTML="";
  D.shop.map((s,i)=>({s,i})).sort((a,b)=>Number(!!a.s.done)-Number(!!b.s.done)).forEach(({s,i})=>{
   const row=document.createElement('div');row.className="ingline shop-item"+(s.done?" is-done":"");row.style.alignItems="center";row.style.gap="10px";
-  const cb=document.createElement('button');cb.className="cb"+(s.done?" done":"");cb.textContent=s.done?"✓":"";cb.setAttribute("aria-label",s.name+" 구매 완료");cb.setAttribute("aria-pressed",String(!!s.done));
+  const cb=document.createElement('button');cb.className="cb"+(s.done?" done":"");cb.textContent=s.done?"✓":"";cb.setAttribute("aria-label",s.name+(s.done?" 구매 완료 해제":" 구매한 것으로 체크"));cb.setAttribute("aria-pressed",String(!!s.done));
   cb.onclick=()=>{s.done=!s.done;save();renderShop();renderTop()};
   const nm=document.createElement('span');nm.style.flex="1";nm.style.fontWeight="700";
   nm.style.textDecoration=s.done?"line-through":"none";nm.style.color=s.done?"#9aa79b":"#26392d";
@@ -1394,7 +1394,7 @@ function renderShop(){
   const buy=document.createElement('a');buy.href="https://www.coupang.com/np/search?q="+encodeURIComponent(s.name);
   buy.target="_blank";buy.rel="noopener";buy.className="shop-product";buy.textContent="쿠팡에서 찾기 ↗";buy.setAttribute("aria-label",s.name+" 쿠팡 상품 보기, 새 창");buy.title="쿠팡에서 "+s.name+" 찾기";
   buy.style.cssText="text-decoration:none;font-size:11.5px;font-weight:800;color:#39774e;background:#eef6ee;border-radius:10px;padding:6px 9px;flex:0 0 auto;white-space:nowrap";
-  nm.appendChild(fr);row.appendChild(cb);row.appendChild(nm);row.appendChild(buy);el.appendChild(row);
+  nm.appendChild(fr);const checkWrap=document.createElement('div');checkWrap.className='shop-purchase-check';const checkLabel=document.createElement('span');checkLabel.textContent=s.done?'구매 완료':'구매 체크';checkWrap.append(cb,checkLabel);row.appendChild(checkWrap);row.appendChild(nm);row.appendChild(buy);el.appendChild(row);
   const code=findKamisCode(s.name);
   if(code){
    fetchPrice(code).then(p=>{
