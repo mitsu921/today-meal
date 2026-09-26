@@ -1,0 +1,34 @@
+#family-meal-app .shopping-mini{margin:14px 0 8px;padding:20px;background:#fffaf5;border:1px solid #f0e1d4;border-radius:20px}
+#family-meal-app .shopping-mini-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#family-meal-app .shopping-eyebrow{display:block;color:#b3623a;font-size:11px;font-weight:700;letter-spacing:.3px;margin-bottom:5px}
+#family-meal-app .shopping-mini h3{font-size:19px;line-height:1.4;letter-spacing:-.6px;color:#30271f;margin:0}
+#family-meal-app .shopping-mini-link{border:0;background:transparent;color:#806b5b;font-size:12px;padding:10px 0 10px 8px;white-space:nowrap;cursor:pointer}
+#family-meal-app .shopping-mini-help{color:#827165;font-size:13px;line-height:1.65;margin:10px 0 16px}
+#family-meal-app .shopping-mini-tools{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;font-size:12px;color:#a04f2b;font-weight:700}
+#family-meal-app #shopping-select-toggle{background:none;border:0;color:#86796e;font-size:12px;padding:8px 0 8px 10px;cursor:pointer}
+#family-meal-app .shopping-chips{display:flex;flex-wrap:wrap;gap:8px}
+#family-meal-app .shopping-chip{position:relative;cursor:pointer;margin:0;max-width:100%}
+#family-meal-app .shopping-chip[hidden]{display:none!important}
+#family-meal-app .shopping-chip input{position:absolute;opacity:0;width:1px;height:1px}
+#family-meal-app .shopping-chip>span{display:flex;align-items:center;gap:7px;min-height:42px;box-sizing:border-box;padding:9px 12px;border:1px solid #e6ded6;border-radius:12px;background:#fff;color:#8c837b;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+#family-meal-app .shopping-chip b{font-size:11px;font-weight:700;opacity:.25}
+#family-meal-app .shopping-chip small{font-size:11px;color:inherit;font-weight:400;opacity:.8}
+#family-meal-app .shopping-chip input:checked+span{border-color:#edc3a5;background:#fff0e2;color:#854a29;font-weight:650}
+#family-meal-app .shopping-chip input:checked+span b{opacity:1;color:#cb622d}
+#family-meal-app .shopping-chip input:focus-visible+span{outline:2px solid #b95324;outline-offset:3px}
+#family-meal-app .shopping-more{display:block;width:100%;background:transparent;border:0;color:#8b7766;font-size:12px;padding:12px;margin:2px 0;cursor:pointer}
+#family-meal-app .shopping-mini-primary{display:block;width:100%;min-height:48px;padding:13px 10px;border:0;border-radius:13px;background:#e86c2c;color:#fff!important;font-size:15px;font-weight:750;letter-spacing:-.2px;margin-top:16px;cursor:pointer;box-shadow:0 4px 10px #bd591514}
+#family-meal-app .shopping-mini-primary:disabled{background:#e6ddd4;color:#80766d!important;box-shadow:none;cursor:default}
+#family-meal-app .shopping-ready{font-size:14px;color:#675646;padding-top:10px}
+#family-meal-app .shopping-ready small{display:block;color:#8b8076;font-size:12px;margin-top:6px}
+#family-meal-app .shop-product{color:#a04e28!important;background:#fff0e3!important;font-size:12px!important;padding:11px 10px!important;border-radius:10px!important;min-height:40px;box-sizing:border-box;display:inline-flex;align-items:center}
+#family-meal-app .shop-item{padding:14px 0;border-bottom:1px solid #f0e9e3}
+#family-meal-app .shop-copy{min-width:0}
+#family-meal-app .shop-name{font-size:16px;overflow-wrap:anywhere}
+#family-meal-app .shop-item.is-done .shop-product{display:none}
+#family-meal-app .shopping-copy-list{display:block;width:100%;border:1px solid #e8ded5;border-radius:11px;background:#fffaf5;color:#795e48;padding:12px;font-size:13px;font-weight:650;margin:12px 0;cursor:pointer}
+#family-meal-app #shopping-copy-status{font-size:12px;line-height:1.6;color:#826b57;margin:5px 0}
+#family-meal-app #shopping-copy-status:empty{display:none}
+#family-meal-app #shopping-copy-text{width:100%;box-sizing:border-box;min-height:100px;padding:12px;border:1px solid #ddd;border-radius:10px}
+#family-meal-app #shopping-copy-text[hidden]{display:none!important}
+@media(max-width:360px){#family-meal-app .shopping-mini{padding:16px}#family-meal-app .shopping-mini h3{font-size:18px}#family-meal-app .shop-product{font-size:11px!important;padding:10px 7px!important}}

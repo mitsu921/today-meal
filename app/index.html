@@ -354,17 +354,7 @@ details.fold.sub .body p{font-size:13px!important}
 #family-meal-app .recipe-more-menu>button:hover,#family-meal-app .recipe-more-menu>button:focus-visible{background:#f7f3ef}
 #family-meal-app .recipe-more-menu>[data-del]{color:#ad4d32;border-top:1px solid #f2ece6;border-radius:0 0 7px 7px}
 </style>
-<style>
-#family-meal-app .recommend-shopping-card{margin:12px 0;padding:16px;border:1px solid #eadfd5;border-radius:15px;background:#fff}
-#family-meal-app .recommend-shopping-card h3{font-size:16px;margin:0 0 7px;color:#29241f}
-#family-meal-app .recommend-shopping-card p{font-size:13px;line-height:1.6;color:#756e66;margin:6px 0}
-#family-meal-app .recommend-shopping-card summary{padding:10px 0;font-size:14px;cursor:pointer}
-#family-meal-app .shopping-picks label{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:14px}
-#family-meal-app .shopping-picks input{width:18px;height:18px;accent-color:#bd5b33}
-#family-meal-app .shopping-picks small{margin-left:auto;color:#756e66}
-#family-meal-app .shopping-add{width:100%;padding:13px;border:0;border-radius:10px;background:#bc5b35;color:white;font-size:15px;font-weight:700;margin-top:8px}
-#family-meal-app .shopping-open{display:block;margin:10px auto 0;padding:8px;background:none;border:0;color:#77573e;font-size:13px}
-</style></head>
+<link rel="stylesheet" href="./shopping-polish.css?v=20260926-1"></head>
 <body style="margin:0;background:#efe9df">
 
 <div id="family-meal-app">
@@ -609,7 +599,7 @@ details.fold.sub .body p{font-size:13px!important}
   <!-- ══ 장보기 ══ -->
   <section class="view" data-view="shop">
     <header class="head"><h1>장보기</h1><p class="muted">추천 메뉴에서 없는 재료를 담으면 여기 모여요</p></header>
-    <div class="section"><div class="line"><h2>장보기 목록</h2><p id="shop-progress" role="status"></p></div><p class="shop-help">산 재료는 체크해 주세요.</p><div class="shop-actions"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">구매 완료 지우기</button></div><div id="shop-list"></div></div>
+    <div class="section"><div class="line"><h2>장보기 목록</h2><p id="shop-progress" role="status"></p></div><p class="shop-help">쿠팡에서 상품을 골라 담고, 구매한 재료는 체크하세요.</p><button type="button" id="copy-shopping-list" class="shopping-copy-list">남은 재료 목록 복사</button><p id="shopping-copy-status" role="status" aria-live="polite"></p><textarea id="shopping-copy-text" aria-label="복사할 장보기 목록" readonly hidden></textarea><div class="shop-actions"><button class="back" id="select-all-shop" style="font-size:12px;color:#39774e">전체선택</button><button class="back" id="clear-done" style="font-size:12px;color:#78877d">구매 완료 지우기</button></div><div id="shop-list"></div></div>
     <div class="section shop-search">
       <div style="background:#fff;border:1px solid #eef1ee;border-radius:16px;padding:14px 14px 10px;overflow:hidden">
         <p style="font-size:14px;font-weight:800;color:#39774e;margin:0 0 10px;line-height:1.4">재료 더 찾기</p>
@@ -945,10 +935,12 @@ function addMissingToShop(items){
 function renderRecommendationShopping(){
  const box=$('#recommend-shopping');if(!res){box.innerHTML='';return;}
  const items=recommendationIngredients(res,D.pantry);
- box.innerHTML='<div class="recommend-shopping-card"><h3>필요한 재료 장보기</h3><p>'+ (D.pantry.length?'냉장고에 등록된 재료를 제외했어요. 보유량과 필요한 분량을 확인해주세요.':'냉장고에 등록된 재료가 없어요. 집에 있는 재료는 선택을 해제해주세요.')+'</p>'+
- (items.length?'<details><summary>담을 재료 확인 · '+items.length+'개</summary><div class="shopping-picks">'+items.map((x,i)=>'<label><input type="checkbox" data-shop-pick="'+i+'" checked><span>'+esc(x.name)+'</span><small>'+esc(x.amt)+'</small></label>').join('')+'</div></details><button type="button" class="shopping-add" id="to-cart">선택한 재료 장보기에 담기</button>':'<p>추가할 재료가 없어요. 필요한 분량은 만드는 법에서 확인해주세요.</p>')+
- '<button type="button" class="shopping-open" id="open-shopping">장보기 목록 보기 ›</button><p id="shopping-add-status" role="status" aria-live="polite"></p></div>';
- const button=$('#to-cart');if(button)button.onclick=()=>{const chosen=[...box.querySelectorAll('[data-shop-pick]:checked')].map(input=>items[Number(input.dataset.shopPick)]);addMissingToShop(chosen);$('#shopping-add-status').textContent=chosen.length?'선택한 재료를 장보기 목록에서 확인할 수 있어요.':'담을 재료를 하나 이상 선택해주세요.';};
+ box.innerHTML='<div class="shopping-mini"><div class="shopping-mini-head"><div><span class="shopping-eyebrow">오늘 메뉴 준비</span><h3>필요한 재료만 쏙</h3></div><button type="button" id="open-shopping" class="shopping-mini-link">장보기 보기 ›</button></div><p class="shopping-mini-help">'+(D.pantry.length?'등록된 냉장고 재료는 뺐어요. 집에 있는 재료는 눌러서 해제하세요.':'집에 있는 재료는 눌러서 해제하세요.')+'</p>'+
+ (items.length?'<div class="shopping-mini-tools"><span id="shopping-selected-count"></span><button type="button" id="shopping-select-toggle">전체 해제</button></div><div class="shopping-chips">'+items.map((x,i)=>'<label class="shopping-chip"'+(i>=6?' data-extra-ingredient hidden':'')+'><input type="checkbox" data-shop-pick="'+i+'" checked><span><b aria-hidden="true">✓</b><span>'+esc(x.name)+'</span>'+(x.amt?'<small>'+esc(x.amt)+'</small>':'')+'</span></label>').join('')+'</div>'+(items.length>6?'<button type="button" id="shopping-show-more" class="shopping-more" aria-expanded="false">재료 '+(items.length-6)+'개 더 보기 ⌄</button>':'')+'<button type="button" class="shopping-mini-primary" id="to-cart"></button>':'<div class="shopping-ready">등록된 재료로 준비할 수 있어요.<small>필요한 분량은 만드는 법에서 확인해주세요.</small></div>')+'</div>';
+ const inputs=[...box.querySelectorAll('[data-shop-pick]')];
+ const update=()=>{const n=inputs.filter(x=>x.checked).length;$('#shopping-selected-count').textContent=n+'개 선택';$('#to-cart').textContent=n?'선택한 '+n+'개 담고 장보기':'담을 재료를 선택하세요';$('#to-cart').disabled=n===0;$('#shopping-select-toggle').textContent=n===items.length?'전체 해제':'전체 선택';};
+ if(items.length){inputs.forEach(x=>x.onchange=update);$('#shopping-select-toggle').onclick=()=>{const check=!inputs.every(x=>x.checked);inputs.forEach(x=>x.checked=check);update();};$('#to-cart').onclick=()=>{if(busy)return;const chosen=inputs.filter(x=>x.checked).map(x=>items[Number(x.dataset.shopPick)]);if(!chosen.length)return;addMissingToShop(chosen);go('shop');};update();}
+ const more=$('#shopping-show-more');if(more)more.onclick=()=>{const expanded=more.getAttribute('aria-expanded')!=='true';box.querySelectorAll('[data-extra-ingredient]').forEach(x=>x.hidden=!expanded);more.setAttribute('aria-expanded',String(expanded));more.textContent=expanded?'간단히 보기 ⌃':'재료 '+(items.length-6)+'개 더 보기 ⌄';};
  $('#open-shopping').onclick=()=>go('shop');
 }
 function heroBusy(msg){
@@ -1381,12 +1373,13 @@ function renderShop(){
  const el=$('#shop-list');
  const sa=$('#select-all-shop');
  const done=D.shop.filter(s=>s.done).length;
+ $('#copy-shopping-list').disabled=!D.shop.some(s=>!s.done);
  $('#shop-progress').textContent=D.shop.length?'남은 재료 '+(D.shop.length-done)+'개 · 구매 완료 '+done+'개':'0개';
  $('#clear-done').disabled=done===0;if(sa)sa.disabled=D.shop.length===0;
- if(sa)sa.textContent=(D.shop.length&&D.shop.every(s=>s.done))?"전체해제":"전체선택";
+ if(sa)sa.textContent=(D.shop.length&&D.shop.every(s=>s.done))?"구매 완료 모두 해제":"모두 구매 완료";
  if(!D.shop.length){el.innerHTML='<p class="muted">아직 담은 재료가 없어요.<br>추천 메뉴에서 부족한 재료를 담아보세요.</p>';return;}
  el.innerHTML="";
- D.shop.forEach((s,i)=>{
+ D.shop.map((s,i)=>({s,i})).sort((a,b)=>Number(!!a.s.done)-Number(!!b.s.done)).forEach(({s,i})=>{
   const row=document.createElement('div');row.className="ingline shop-item"+(s.done?" is-done":"");row.style.alignItems="center";row.style.gap="10px";
   const cb=document.createElement('button');cb.className="cb"+(s.done?" done":"");cb.textContent=s.done?"✓":"";cb.setAttribute("aria-label",s.name+" 구매 완료");cb.setAttribute("aria-pressed",String(!!s.done));
   cb.onclick=()=>{s.done=!s.done;save();renderShop();renderTop()};
@@ -1399,7 +1392,7 @@ function renderShop(){
   const price=document.createElement('small');price.id=priceId;price.className='shop-price';nm.appendChild(price);
   const fr=document.createElement('small');fr.className="shop-from";fr.textContent=s.from?"사용할 요리 · "+s.from:"";
   const buy=document.createElement('a');buy.href="https://www.coupang.com/np/search?q="+encodeURIComponent(s.name);
-  buy.target="_blank";buy.rel="noopener";buy.className="shop-product";buy.textContent="상품 보기 ↗";buy.setAttribute("aria-label",s.name+" 쿠팡 상품 보기, 새 창");buy.title="쿠팡에서 "+s.name+" 찾기";
+  buy.target="_blank";buy.rel="noopener";buy.className="shop-product";buy.textContent="쿠팡에서 찾기 ↗";buy.setAttribute("aria-label",s.name+" 쿠팡 상품 보기, 새 창");buy.title="쿠팡에서 "+s.name+" 찾기";
   buy.style.cssText="text-decoration:none;font-size:11.5px;font-weight:800;color:#39774e;background:#eef6ee;border-radius:10px;padding:6px 9px;flex:0 0 auto;white-space:nowrap";
   nm.appendChild(fr);row.appendChild(cb);row.appendChild(nm);row.appendChild(buy);el.appendChild(row);
   const code=findKamisCode(s.name);
@@ -1418,6 +1411,12 @@ $('#select-all-shop').onclick=()=>{
  const allDone=D.shop.length&&D.shop.every(s=>s.done);
  D.shop.forEach(s=>s.done=!allDone);
  save();renderShop();renderTop();
+};
+$('#copy-shopping-list').onclick=async()=>{
+ const text=D.shop.filter(x=>!x.done).map(x=>x.name+(x.amt?' '+x.amt:'')).join('\n');if(!text)return;
+ const status=$('#shopping-copy-status'),area=$('#shopping-copy-text');
+ try{if(!navigator.clipboard?.writeText)throw new Error();await navigator.clipboard.writeText(text);area.hidden=true;status.textContent='남은 재료 목록을 복사했어요.';}
+ catch{area.value=text;area.hidden=false;area.focus();area.select();status.textContent='아래 목록을 길게 누르거나 Ctrl+C / Command+C로 복사해주세요.';}
 };
 $('#clear-done').onclick=()=>{D.shop=D.shop.filter(s=>!s.done);save();renderShop();renderTop();};
 
