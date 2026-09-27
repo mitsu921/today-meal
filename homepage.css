@@ -162,3 +162,65 @@ body[data-page="home"] .roulette-card .mini-wheel{border:4px solid #dba449;box-s
  #roulette-dialog .wheel-hub b{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){#roulette-dialog .roulette-rim::before{animation:none!important}#roulette-dialog #spin-roulette{transition:none}}
+
+/* TodayMeal roulette: photo-led layout, readable result, restrained decoration. */
+#roulette-dialog{
+ box-sizing:border-box;max-width:600px;width:calc(100% - 24px);
+ padding:36px 32px 24px;border:1px solid #e7e2db;border-radius:26px;
+ background:#fffdfa;box-shadow:0 20px 70px #20180f33;
+ max-height:92dvh;overflow:auto;overscroll-behavior:contain;
+}
+#roulette-dialog::backdrop{background:#25232180;backdrop-filter:blur(3px)}
+#roulette-dialog .dialog-close{width:40px;height:40px;top:12px;right:12px;background:#f1efeb;color:#555;font-size:26px}
+#roulette-dialog .roulette-eyebrow{display:none}
+#roulette-dialog h2{font-size:28px;line-height:1.45;letter-spacing:-.8px;color:#252525;margin:8px 20px 10px}
+#roulette-dialog .roulette-intro{font-size:16px;line-height:1.6;color:#62605c;margin:0}
+#roulette-dialog .roulette-stage{box-sizing:border-box;width:min(100%,420px);padding:10px;margin:24px auto;filter:none}
+#roulette-dialog .roulette-rim{box-sizing:border-box;padding:9px;border:2px solid #ea8135;background:#fff2e4;box-shadow:none}
+#roulette-dialog .roulette-rim::before{content:none;display:none;animation:none}
+#roulette-dialog .roulette-pointer{top:0;left:calc(50% - 13px);width:26px;height:34px;background:#dc651f;filter:none}
+#roulette-dialog .menu-wheel{box-sizing:border-box;border:1px solid #fff;box-shadow:none}
+#roulette-dialog .wheel-hub{box-sizing:border-box;width:82px;height:82px;border:5px solid #fffdfa;background:#eb7026;box-shadow:none}
+#roulette-dialog .wheel-hub span{font-size:14px;color:#fff;line-height:1.5}
+#roulette-dialog .wheel-hub b{font-size:23px;color:#fff;letter-spacing:-.6px}
+#roulette-dialog .wheel-menu{width:auto;gap:0;line-height:1}
+#roulette-dialog .wheel-menu img{box-sizing:border-box;width:clamp(48px,14vw,82px);height:clamp(48px,14vw,82px);border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px #24170918;object-fit:cover}
+/* Long dish names are presented at full size in the result, not squeezed into sectors. */
+#roulette-dialog .wheel-menu-name{display:none}
+#roulette-dialog .wheel-menu-mark{box-sizing:border-box;width:clamp(48px,14vw,82px);height:clamp(48px,14vw,82px);font-size:22px;color:#8e461d;border:2px solid #fff;background:#fff8ef;box-shadow:none}
+#roulette-dialog .wheel-menu.chosen img{border-color:#de5b16;box-shadow:0 0 0 4px #fff}
+#roulette-dialog #roulette-result{box-sizing:border-box;min-height:110px;margin:0 0 16px;padding:20px;background:#f5f2ec;border:0;border-radius:16px;box-shadow:none;text-align:left}
+#roulette-dialog .picked-menu{justify-content:flex-start;gap:16px}
+#roulette-dialog .picked-menu>div{flex:1;min-width:0}
+#roulette-dialog .picked-photo{width:88px;height:88px;border-radius:12px;object-fit:cover}
+#roulette-dialog .pick-kicker{font-size:15px;font-weight:600;line-height:1.5;color:#65605a}
+#roulette-dialog #roulette-result strong{display:block;font-size:25px;font-weight:800;line-height:1.4;color:#232323;letter-spacing:-.6px;margin:6px 0 10px;word-break:keep-all;overflow-wrap:anywhere}
+#roulette-dialog #roulette-result>p{font-size:16px;color:#62605c;line-height:1.6;margin-top:8px;text-align:center}
+#roulette-dialog #roulette-result .result-link{display:inline-flex;align-items:center;gap:8px;min-height:36px;font-size:17px;font-weight:700;line-height:1.5;color:#a84717;margin:0;text-decoration:none}
+#roulette-dialog #spin-roulette{min-height:58px;border:0;border-radius:12px;background:#e66a20;box-shadow:none;font-size:19px;font-weight:750;transition:background .15s}
+#roulette-dialog #spin-roulette:hover:not(:disabled){background:#cc5717;filter:none;transform:none}
+#roulette-dialog #spin-roulette:active:not(:disabled){background:#b94b12;transform:none;box-shadow:none}
+#roulette-dialog #spin-roulette:disabled{opacity:.7}
+#roulette-dialog .roulette-footnote{font-size:13px;line-height:1.6;color:#67615b;margin:14px 0 0}
+@media(max-width:600px){
+ #roulette-dialog{padding:38px 20px 20px;border-radius:22px}
+ #roulette-dialog h2{font-size:25px;margin:4px 8px 10px}
+ #roulette-dialog .roulette-stage{width:min(100%,370px);margin:20px auto}
+ #roulette-dialog .wheel-hub{width:70px;height:70px;border-width:4px}
+ #roulette-dialog .wheel-hub span{font-size:12px}
+ #roulette-dialog .wheel-hub b{font-size:20px}
+ #roulette-dialog #roulette-result{padding:16px}
+ #roulette-dialog #roulette-result strong{font-size:22px}
+ #roulette-dialog .picked-photo{width:72px;height:72px}
+ #roulette-dialog .picked-menu{gap:12px}
+}
+@media(max-width:370px){
+ #roulette-dialog{padding-left:14px;padding-right:14px}
+ #roulette-dialog h2{font-size:23px}
+ #roulette-dialog .roulette-intro{font-size:15px}
+ #roulette-dialog .wheel-hub{width:58px;height:58px}
+ #roulette-dialog .wheel-hub span{font-size:11px}
+ #roulette-dialog .wheel-hub b{font-size:18px}
+ #roulette-dialog #roulette-result strong{font-size:21px}
+ #roulette-dialog .picked-photo{width:60px;height:60px}
+}
