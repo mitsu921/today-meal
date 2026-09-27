@@ -193,20 +193,23 @@ async function shrinkImage(file){
 }
 /* ── 글쓰기 (전체화면 전환) ── */
 function openWriteView(){
- if(!me){$('#c-login-modal').classList.add('open');return;}
  $('#home-view').style.display='none';
  $('#write-view').style.display='block';
+ if(location.hash!=='#write')history.replaceState(null,'','#write');
  window.scrollTo(0,0);
  if(window.gaEvent)gaEvent('write_open',{surface:'homepage'});
 }
 function closeWriteView(){
  $('#write-view').style.display='none';
+ if(location.hash==='#write')history.replaceState(null,'',location.pathname+location.search);
  $('#home-view').style.display='block';
  window.scrollTo(0,0);
 }
 $('#write-open-btn').onclick=openWriteView;
+document.querySelectorAll('.header-write').forEach(a=>a.onclick=e=>{e.preventDefault();openWriteView();});
+window.addEventListener('hashchange',()=>{if(location.hash==='#write')openWriteView();});
 $('#write-back-btn').onclick=()=>{
- if(($('#w-title').value.trim()||$('#w-body').value.trim())&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
+ if(($('#w-title').value.trim()||$('#w-body').value.trim()||wFile)&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
  closeWriteView();
 };
 document.querySelectorAll('#w-target .w-chip').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#w-target .w-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); wTarget=c.dataset.t; });
@@ -246,19 +249,38 @@ $('#import-go-btn').onclick=async()=>{
   btn.disabled=false; btn.textContent='가져오기';
  }
 };
-$('#w-photo-box').onclick=()=>$('#w-photo').click();
-$('#w-photo').onchange=async e=>{
- let file=e.target.files[0]||null;
+// Shared script compatibility for older saved-recipe pages.
+if(!$('#w-photo-change'))$('#w-photo-box').insertAdjacentHTML('afterend','<div class="photo-actions"><button type="button" id="w-photo-change">사진 선택</button><button type="button" id="w-photo-remove" hidden>삭제</button></div><p id="w-photo-status" class="editor-help" role="status"></p>');
+let photoPreviewURL='',photoRequest=0,photoBusy=false;
+const originalPhotoHint=$('#w-photo-hint').innerHTML;
+function resetWriterPhoto(){photoRequest++;photoBusy=false;wFile=null;$('#w-photo').value='';if(photoPreviewURL)URL.revokeObjectURL(photoPreviewURL);photoPreviewURL='';$('#w-photo-preview').removeAttribute('src');$('#w-photo-preview').style.display='none';$('#w-photo-hint').innerHTML=originalPhotoHint;$('#w-photo-hint').style.display='block';$('#w-photo-remove').hidden=true;$('#w-photo-change').textContent='사진 선택';$('#w-photo-status').textContent='JPG · PNG · WebP / 최대 15MB';}
+async function selectWriterPhoto(file){
  if(!file)return;
- $('#w-photo-hint').innerHTML='사진 최적화 중...';
- file=await shrinkImage(file);
- wFile=file;
- const url=URL.createObjectURL(file);
- $('#w-photo-preview').src=url; $('#w-photo-preview').style.display='block';
- $('#w-photo-hint').style.display='none';
-};
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)){toast('JPG, PNG, WebP 사진을 선택해주세요.');return;}
+ if(file.size>15*1024*1024){toast('15MB 이하 사진을 선택해주세요.');return;}
+ const request=++photoRequest;photoBusy=true;$('#w-photo-status').textContent='사진을 준비하고 있어요…';
+ try{
+  const optimized=await shrinkImage(file);if(request!==photoRequest)return;
+  const url=URL.createObjectURL(optimized);
+  try{await new Promise((resolve,reject)=>{const img=new Image();img.onload=resolve;img.onerror=reject;img.src=url;});}catch(e){URL.revokeObjectURL(url);throw new Error('사진을 읽을 수 없어요. 다른 파일을 선택해주세요.');}
+  if(request!==photoRequest){URL.revokeObjectURL(url);return;}
+  if(photoPreviewURL)URL.revokeObjectURL(photoPreviewURL);photoPreviewURL=url;wFile=optimized;
+  $('#w-photo-preview').src=url;$('#w-photo-preview').style.display='block';$('#w-photo-hint').style.display='none';$('#w-photo-remove').hidden=false;$('#w-photo-change').textContent='사진 바꾸기';$('#w-photo-status').textContent=file.name+' · 등록할 준비가 되었어요';
+ }catch(e){if(request===photoRequest){$('#w-photo-status').textContent=e.message||'사진을 준비하지 못했어요.';}}
+ finally{if(request===photoRequest)photoBusy=false;}
+}
+$('#w-photo-box').onclick=()=>$('#w-photo').click();
+$('#w-photo-change').onclick=()=>$('#w-photo').click();
+$('#w-photo-remove').onclick=resetWriterPhoto;
+$('#w-photo').onchange=e=>{selectWriterPhoto(e.target.files[0]);e.target.value='';};
+const photoDrop=$('#w-photo-box');
+['dragenter','dragover'].forEach(type=>photoDrop.addEventListener(type,e=>{e.preventDefault();photoDrop.classList.add('drag-over');}));
+['dragleave','drop'].forEach(type=>photoDrop.addEventListener(type,e=>{e.preventDefault();photoDrop.classList.remove('drag-over');}));
+photoDrop.addEventListener('drop',e=>selectWriterPhoto(e.dataTransfer.files[0]));
+$('#write-view').addEventListener('paste',e=>{const item=[...(e.clipboardData?.items||[])].find(item=>item.kind==='file'&&item.type.startsWith('image/'));if(item){e.preventDefault();selectWriterPhoto(item.getAsFile());}});
 $('#w-submit').onclick=async()=>{
- if(!me){toast('로그인이 필요해요');closeWriteView();$('#c-login-modal').classList.add('open');return;}
+ if(!me){toast('작성한 내용은 유지됩니다. 로그인 후 등록해주세요.');$('#c-login-modal').classList.add('open');return;}
+ if(photoBusy)return toast('사진 준비가 끝난 뒤 등록해주세요.');
  const title=$('#w-title').value.trim(), body=$('#w-body').value.trim();
  if(!title)return toast('레시피 이름을 적어주세요');
  if(!body)return toast('재료와 만드는 법을 적어주세요');
@@ -268,18 +290,19 @@ $('#w-submit').onclick=async()=>{
   if(wFile){
    const path=me.id+'/'+Date.now()+'.'+(wFile.name.split('.').pop()||'jpg');
    const {error:se}=await sb.storage.from('photos').upload(path,wFile);
-   if(!se)image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;
+   if(se)throw new Error('사진 업로드에 실패했어요. 내용을 유지했으니 다시 등록해주세요.');
+   image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;
   }
   const {error}=await sb.from('recipes').insert({user_id:me.id,title,body,target:wTarget,image_url});
   if(error){toast('등록 실패: '+error.message);return;}
-  await sb.from('points_ledger').insert({user_id:me.id,amount:50,reason:'레시피 작성',ref_id:title});
-  $('#w-title').value='';$('#w-body').value='';wFile=null;
-  $('#w-photo-preview').style.display='none'; $('#w-photo-hint').style.display='block'; $('#w-photo-hint').innerHTML='<img class="ico" style="width:34px;height:34px" src="/icons/camera.png"><br>대표 사진 추가하기';
+  // A points issue must not cause duplicate recipe submissions.
+  try{await sb.from('points_ledger').insert({user_id:me.id,amount:50,reason:'레시피 작성',ref_id:title});}catch(e){}
+  $('#w-title').value='';$('#w-body').value='';resetWriterPhoto();
   closeWriteView();
-  toast('레시피를 올렸어요! +50P 🎉');
+  toast('레시피를 올렸어요.');
   renderPoints(); loadFeed();
  }catch(e){ toast('오류: '+String(e).slice(0,100)); }
- finally{ btn.disabled=false; btn.textContent='등록하고 +50P 받기'; }
+ finally{ btn.disabled=false; btn.textContent='레시피 등록하기'; }
 };
 
 try{
@@ -289,3 +312,5 @@ try{
  refreshAuth().catch(()=>toast("로그인 상태를 확인하지 못했어요. 다시 시도해 주세요."));
  loadFeed();
 }catch(e){ console.error(e); feedError(); renderAuthSlot(); }
+
+if(location.hash==='#write')openWriteView();

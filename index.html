@@ -51,11 +51,11 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 .c-modal{display:none;position:fixed;inset:0;background:rgba(25,21,18,.5);z-index:80;align-items:center;justify-content:center;padding:20px}.c-modal.open{display:flex}.c-sheet{background:#fff;width:100%;max-width:440px;border-radius:20px;padding:24px;position:relative;max-height:86vh;overflow-y:auto}.c-close{position:absolute;top:14px;right:16px;background:#fff1e4;border-radius:50%;width:30px;height:30px;font-size:14px;border:0;cursor:pointer}.c-chip{padding:8px 14px;border-radius:18px;background:#fff1e4;color:var(--muted);font-size:12.5px;font-weight:700;border:0;cursor:pointer}.c-chip.active{background:var(--o);color:#fff}.c-input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit}.kakao-btn{width:100%;padding:13px;border-radius:13px;background:#FEE500;color:#191919;font-size:14px;font-weight:800;border:0;cursor:pointer}
 @media(max-width:900px){.top{gap:20px}.nav{gap:14px}.hero{grid-template-columns:1fr}.side{display:none}.cards{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.wrap{padding:0 15px}.top{height:62px}.logo{font-size:23px}.nav{display:none}.cert{padding:9px}.heroBox{height:auto;display:flex;flex-direction:column}.heroPhoto{position:relative;width:100%;height:230px;order:-1}.heroText{width:100%;height:auto;background:#fff8f0;padding:24px 20px}.hero h1{font-size:29px}.mission,.write{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.quick button{flex:1;padding:10px 5px}.foot{display:block}.apps{margin-top:12px}}
-</style><link rel="stylesheet" href="/homepage.css?v=20260927-design2"><link rel="canonical" href="https://todaymeal.co.kr/"></head><body data-page="home">
+</style><link rel="stylesheet" href="/homepage.css?v=20260927-writer"><link rel="canonical" href="https://todaymeal.co.kr/"></head><body data-page="home">
 <header class="site-header"><div class="wrap top">
 <a class="logo" href="/">TodayMeal</a>
 <nav class="nav" aria-label="주 메뉴"><a class="active" aria-current="page" href="/category.html" id="nav-recipes">레시피</a><a href="/stories.html" id="nav-stories">식생활 이야기</a><a href="/saved.html" id="nav-saved">저장한 레시피</a></nav>
-<div class="right"><span id="auth-slot">로그인 연결 중</span><a class="app-link" href="/app/">앱 열기 ↗</a></div></div></header>
+<div class="right"><a class="header-write" href="#write">레시피 올리기</a><span id="auth-slot">로그인 연결 중</span><a class="app-link" href="/app/">앱 열기 ↗</a></div></div></header>
 <main class="wrap" id="home-view">
 <section class="intro" aria-labelledby="home-heading"><div class="search-intro"><h1 id="home-heading">오늘은 무엇을 만들어볼까요?</h1><p>재료로 찾고, 레시피를 읽고, 나만의 한 끼를 준비해요.</p>
 <form id="recipe-search" role="search"><label class="sr-only" for="search-input">음식 이름이나 재료 검색</label><div class="search-field"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="음식 이름이나 재료를 검색해보세요" autocomplete="off"></div><button class="search-submit">검색</button></form>
@@ -72,11 +72,11 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 <dialog id="roulette-dialog" class="home-dialog" aria-labelledby="roulette-title"><button class="dialog-close" data-close aria-label="닫기">×</button><h2 id="roulette-title">오늘의 메뉴, 돌려서 골라요</h2><p>등록된 레시피 중에서 한 가지를 골라드려요.</p><div class="large-wheel mini-wheel" id="home-wheel" aria-hidden="true"><i></i></div><div id="roulette-result" aria-live="polite">어떤 메뉴가 나올까요?</div><button id="spin-roulette" class="orange-button">룰렛 돌리기</button></dialog>
 
 <main class="wrap write-view" id="write-view" style="display:none">
-  <button class="write-back" id="write-back-btn">‹ 홈으로 돌아가기</button>
+  <div class="writer-intro"><div><p>나만의 레시피 노트</p><h1>우리 집 한 끼를 나눠보세요</h1><span>재료, 만드는 순서, 나만의 팁까지 편하게 적어주세요.</span></div></div><button class="write-back" id="write-back-btn">‹ 홈으로 돌아가기</button>
 
   <div class="write-mode-tabs">
-    <button class="wmt active" id="wmt-direct">✏️ 직접 쓰기</button>
-    <button class="wmt" id="wmt-import">🔗 블로그에서 가져오기</button>
+    <button class="wmt active" id="wmt-direct">직접 쓰기</button>
+    <button class="wmt" id="wmt-import">내 블로그에서 가져오기</button>
   </div>
 
   <div class="import-panel" id="import-panel" style="display:none">
@@ -94,7 +94,7 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 
   <div class="write-layout">
     <div class="write-main">
-      <input class="write-title" id="w-title" placeholder="레시피 제목을 적어주세요 (예: 제육볶음)">
+      <label class="editor-label" for="w-title">레시피 제목</label><input class="write-title" id="w-title" placeholder="레시피 제목을 적어주세요 (예: 제육볶음)">
       <div class="write-target-row">
         <span class="write-label">누구에게 좋은가요?</span>
         <div id="w-target">
@@ -105,7 +105,7 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
           <button class="w-chip" data-t="남편">남편</button>
         </div>
       </div>
-      <textarea class="write-body" id="w-body" placeholder="재료와 만드는 법을 자유롭게 적어주세요.
+      <label class="editor-label" for="w-body">레시피 이야기</label><p class="editor-help">재료와 분량 → 만드는 순서 → 맛있게 먹는 팁 순으로 적으면 읽기 좋아요.</p><textarea class="write-body" id="w-body" placeholder="재료와 만드는 법을 자유롭게 적어주세요.
 
 재료: 돼지고기 300g, 양파 1개, 대파 1대 ...
 
@@ -114,13 +114,16 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 2) ..."></textarea>
     </div>
     <aside class="write-side">
-      <div class="write-photo-box" id="w-photo-box">
-        <img id="w-photo-preview" style="display:none">
-        <span id="w-photo-hint"><img class="ico" style="width:34px;height:34px" src="/icons/camera.png"><br>대표 사진 추가하기</span>
-      </div>
-      <input id="w-photo" type="file" accept="image/*" style="display:none">
-      <div class="write-tip">📸 사진이 있으면 커뮤니티 목록에서 훨씬 눈에 잘 띄어요!</div>
-      <button class="write-submit" id="w-submit">등록하고 +50P 받기</button>
+      <h2 class="photo-title">완성 사진</h2><p class="editor-help">레시피를 소개할 대표 사진 한 장을 올려주세요.</p>
+      <button type="button" class="write-photo-box" id="w-photo-box" aria-label="대표 사진 선택 또는 교체">
+        <img id="w-photo-preview" alt="업로드할 대표 사진 미리보기" style="display:none">
+        <span id="w-photo-hint"><span class="photo-plus" aria-hidden="true">＋</span><strong>사진을 끌어다 놓으세요</strong><span>또는 눌러서 파일 선택</span></span>
+      </button>
+      <input id="w-photo" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+      <div class="photo-actions"><button type="button" id="w-photo-change">사진 선택</button><button type="button" id="w-photo-remove" hidden>삭제</button></div>
+      <p id="w-photo-status" class="editor-help" role="status">JPG · PNG · WebP / 최대 15MB<br>복사한 사진을 Ctrl+V로 붙여넣을 수도 있어요.</p>
+      <div class="write-tip">등록하면 탐색 화면에 공개됩니다. 직접 만든 요리의 사진과 설명을 올려주세요.</div>
+      <button class="write-submit" id="w-submit">레시피 등록하기</button>
     </aside>
   </div>
 </main>
@@ -141,5 +144,5 @@ footer{background:#fff8f0;border-top:1px solid var(--line);padding:24px 0}.foot{
 
 <div class="toast" id="toast"></div>
 
-<script src="/homepage.js?v=20260927-design2"></script>
+<script src="/homepage.js?v=20260927-writer"></script>
 </body></html>

@@ -297,3 +297,35 @@ body[data-page="home"] .roulette-card .mini-wheel{border:4px solid #dba449;box-s
  #c-login-modal .c-sheet{padding:28px 22px}
 }
 @media(prefers-reduced-motion:reduce){#roulette-dialog #spin-roulette{transition:none}}
+
+/* Keep the roulette hub geometrically circular with balanced lettering. */
+#roulette-dialog .wheel-hub{box-sizing:border-box!important;width:72px!important;height:72px!important;min-width:72px;min-height:72px;max-width:72px;max-height:72px;aspect-ratio:1/1;flex:none;padding:0!important;border:4px solid #fff;border-radius:50%;display:grid;place-content:center;gap:1px;line-height:1;box-shadow:0 2px 5px #8a43131c;overflow:hidden}
+#roulette-dialog .wheel-hub span{font-size:12px;line-height:1.3;font-weight:500;letter-spacing:0;margin:0;padding:0}
+#roulette-dialog .wheel-hub b{font-size:19px;line-height:1.3;font-weight:700;letter-spacing:0;margin:0;padding:0}
+.header-write{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;background:#e56521;color:#fff!important;border-radius:9px;font-size:15px;font-weight:700;text-decoration:none}
+#write-view{box-sizing:border-box;width:calc(100% - 64px);max-width:1440px;margin:0 auto;padding:36px 0 70px}
+.writer-intro{margin:0 0 24px}.writer-intro p{color:#b34a18;font-size:15px;font-weight:700;margin:0 0 8px}.writer-intro h1{font-size:34px;line-height:1.4;color:#282724;margin:0 0 10px;letter-spacing:-1px}.writer-intro span{font-size:17px;color:#67625a}
+#write-view .write-back{font-size:15px;margin-bottom:24px}
+#write-view .write-mode-tabs{margin-bottom:24px}#write-view .wmt{font-size:16px;padding:12px 20px}
+#write-view .write-layout{grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
+#write-view .write-main{min-width:0;padding:32px;background:#fff;border:1px solid #e9e4db;border-radius:18px}
+.editor-label{display:block;font-size:17px;color:#39352e;font-weight:750;margin:0 0 10px}
+#write-view .write-title{box-sizing:border-box;font-size:28px;line-height:1.5;padding:10px 0 16px;font-weight:700;margin-bottom:24px}
+#write-view .write-label{font-size:15px}#write-view #w-target{display:flex;flex-wrap:wrap;gap:8px}#write-view .w-chip{font-size:15px;padding:9px 14px}
+.editor-help{font-size:15px;line-height:1.7;color:#6e665c;margin:0 0 16px;overflow-wrap:anywhere}
+#write-view .write-body{box-sizing:border-box;font-size:18px;line-height:1.9;min-height:600px;padding:24px;border-radius:12px;background:#fffdf9;color:#302e2a;resize:vertical}
+#write-view .write-side{padding:24px;border:1px solid #e9e4db;border-radius:18px;background:#fff;position:sticky;top:24px}
+.photo-title{font-size:21px;margin:0 0 8px;color:#292621}
+#write-view .write-photo-box{box-sizing:border-box;position:relative;padding:0;aspect-ratio:4/3;border:2px dashed #d7b99f;background:#fff8ef;border-radius:13px;margin:0 0 12px}
+#write-view .write-photo-box.drag-over{border-color:#d75c1c;background:#ffe3c9;outline:3px solid #f6ceaa}
+#write-view #w-photo-preview{position:absolute;inset:0;object-fit:contain;width:100%;height:100%;background:#f6f3ef}
+#write-view #w-photo-hint{display:flex;flex-direction:column;align-items:center;padding:20px}
+#write-view #w-photo-hint .photo-plus{font-size:36px;font-weight:400;line-height:1;color:#cb5b22;margin-bottom:12px}
+#write-view #w-photo-hint strong{display:block;font-size:17px;color:#4d3b2f;margin-bottom:6px}
+#write-view #w-photo-hint span{display:block;font-size:15px;color:#7a6a5b}
+.photo-actions{display:flex;gap:10px;margin-bottom:14px}.photo-actions button{padding:9px 15px;font-size:15px;border:1px solid #ded8cf;border-radius:8px;background:#fff;color:#514a42;cursor:pointer}
+#write-view .write-tip{font-size:14px;line-height:1.7;background:#f7f4ee;padding:14px;border-radius:10px}
+#write-view .write-submit{font-size:18px;min-height:56px;box-shadow:none;background:#e56521}#write-view .write-submit:disabled{opacity:.6;cursor:wait}
+@media(max-width:1000px){#write-view .write-layout{grid-template-columns:minmax(0,1fr) 310px;gap:18px}#write-view .write-main{padding:24px}#write-view .write-side{padding:20px}.site-header .right{flex-wrap:wrap;gap:10px}}
+@media(max-width:800px){#write-view{width:calc(100% - 32px);padding-top:24px}#write-view .write-layout{grid-template-columns:1fr}#write-view .write-side{position:static}#write-view .write-body{min-height:430px;font-size:17px}.writer-intro h1{font-size:28px}#write-view .write-title{font-size:24px}#write-view .write-photo-box{max-height:350px}.header-write{font-size:14px;padding:8px 12px}.site-header .top{height:auto;min-height:100px;flex-wrap:wrap;padding-top:16px;padding-bottom:16px}}
+@media(max-width:600px){#roulette-dialog .wheel-hub{width:60px!important;height:60px!important;min-width:60px;min-height:60px;max-width:60px;max-height:60px}#roulette-dialog .wheel-hub b{font-size:17px}#roulette-dialog .wheel-hub span{font-size:11px}}
