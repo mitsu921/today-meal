@@ -43,15 +43,16 @@ document.querySelectorAll('[data-keyword]').forEach(b=>b.onclick=()=>{resetHome(
 document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{homeCategory=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b);});updateHome();});
 $('#ingredient-filter').onchange=e=>{homeIngredient=e.target.value;updateHome();};
 const rouletteDialog=$('#roulette-dialog');
-rouletteDialog.innerHTML='<button class="dialog-close" data-close aria-label="닫기">×</button><span class="roulette-eyebrow">TODAYMEAL MENU PICK</span><h2 id="roulette-title">오늘의 한 끼를 골라볼까요?</h2><p class="roulette-intro">고민은 잠시 내려두고, 가볍게 돌려보세요.</p><div class="roulette-stage"><span class="roulette-pointer" aria-hidden="true"></span><div class="roulette-rim"><div id="home-wheel" class="menu-wheel" aria-hidden="true"></div><div class="wheel-hub" aria-hidden="true"><span>오늘의</span><b>한 끼</b></div></div></div><div id="roulette-result" class="pick-result" aria-live="polite"><span class="pick-kicker">오늘은 어떤 메뉴가 나올까요?</span><p>마음에 드는 메뉴가 나오면 만드는 법을 확인해요.</p></div><button id="spin-roulette" class="orange-button"><span aria-hidden="true">↻</span> 메뉴 골라보기</button><p class="roulette-footnote">등록된 레시피에서 후보를 무작위로 골라요.</p>';
+rouletteDialog.innerHTML='<button class="dialog-close" data-close aria-label="닫기">×</button><span class="roulette-eyebrow">오늘의 메뉴 룰렛</span><h2 id="roulette-title">오늘 뭐 먹지?</h2><p class="roulette-intro">맛있는 고민은 잠시, 선택은 룰렛에게.</p><div class="roulette-stage"><span class="roulette-pointer" aria-hidden="true"></span><div class="roulette-rim"><div id="home-wheel" class="menu-wheel" aria-hidden="true"></div><div class="wheel-hub" aria-hidden="true"><span>오늘의</span><b>한 끼</b></div></div></div><div id="roulette-result" class="pick-result" aria-live="polite"><span class="pick-kicker">버튼을 눌러 오늘의 한 끼를 골라보세요</span><p>마음에 들면 레시피까지 바로 볼 수 있어요.</p></div><button id="spin-roulette" class="orange-button"><span aria-hidden="true">↻</span> 메뉴 골라보기</button><p class="roulette-footnote">등록된 레시피에서 후보를 무작위로 골라요.</p>';
+function wheelShortTitle(title){const words=String(title||'메뉴').replace(/한\s*그릇|한\s*상|끓이기|만들기/g,'').trim().split(/\s+/);return words.at(-1)||'메뉴';}
 let wheelCandidates=[],wheelAngle=0;
 function prepareHomeWheel(){
  const list=feedData.filter(r=>feedData.length<2||String(r.id)!==lastChoice).slice();
  for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}
  wheelCandidates=list.slice(0,6);const wheel=$('#home-wheel');const n=wheelCandidates.length;wheelAngle=0;wheel.style.transform='rotate(0deg)';
- const colors=['#fff4df','#f6d7ad','#fff9ed','#f9e4c6','#ffedce','#f3cf9f'];
+ const colors=['#fff8ed','#ffddbb','#fff8ed','#ffddbb','#fff8ed','#ffddbb'];
  wheel.style.background=n?'conic-gradient('+wheelCandidates.map((r,i)=>colors[i]+' '+i*360/n+'deg '+(i+1)*360/n+'deg').join(',')+')':'#fff2df';
- wheel.innerHTML=wheelCandidates.map((r,i)=>{const angle=(i+.5)*360/n,rad=angle*Math.PI/180;const x=50+Math.sin(rad)*31,y=50-Math.cos(rad)*31;const src=r.image_url&&safeHomePhoto(r.image_url);return '<span class="wheel-menu" style="left:'+x+'%;top:'+y+'%">'+(src?'<img src="'+esc(src)+'" alt="">':'<span class="wheel-menu-mark" aria-hidden="true">'+String(i+1).padStart(2,'0')+'</span>')+'<span class="wheel-menu-name">'+esc(r.title)+'</span></span>';}).join('');
+ wheel.innerHTML=wheelCandidates.map((r,i)=>{const angle=(i+.5)*360/n,rad=angle*Math.PI/180;const x=50+Math.sin(rad)*33,y=50-Math.cos(rad)*33;const src=r.image_url&&safeHomePhoto(r.image_url);return '<span class="wheel-menu" style="left:'+x+'%;top:'+y+'%">'+(src?'<img src="'+esc(src)+'" alt="">':'<span class="wheel-menu-mark" aria-hidden="true">'+String(i+1).padStart(2,'0')+'</span>')+'<span class="wheel-menu-name" title="'+esc(r.title)+'">'+esc(wheelShortTitle(r.title))+'</span></span>';}).join('');
  wheel.querySelectorAll('img').forEach(img=>img.onerror=()=>{img.hidden=true;});
 }
 function openHomeWheel(){if(!rouletteBusy)prepareHomeWheel();rouletteDialog.showModal();}
@@ -119,7 +120,32 @@ function watchAuth(){
   },0);
  });
 }
+// Rebuild the shared login shell before attaching the existing auth handlers.
+const loginModal=$('#c-login-modal');
+loginModal.innerHTML=`<div class="c-sheet" role="dialog" aria-modal="true" aria-labelledby="login-heading" tabindex="-1">
+<button class="c-close" id="c-login-close" aria-label="로그인 창 닫기" type="button">×</button>
+<header class="login-heading"><span class="login-brand">TodayMeal</span><h2 id="login-heading">반가워요!</h2><p>맛있는 일상을 함께 기록해요.</p></header>
+<button class="kakao-btn" id="c-kakao-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.5 2 10.8c0 2.8 1.9 5.2 4.8 6.6L6 21l4.4-2.5H12c5.5 0 10-3.5 10-7.7S17.5 3 12 3Z"/></svg>카카오로 계속하기</button>
+<div class="login-divider"><span>또는 이메일로</span></div>
+<div class="login-tabs" aria-label="계정 이용 방식"><button class="c-chip active" id="c-tab-login" type="button" aria-pressed="true">로그인</button><button class="c-chip" id="c-tab-signup" type="button" aria-pressed="false">회원가입</button></div>
+<div id="c-nick-wrap" class="login-field" style="display:none"><label for="c-f-nick">닉네임</label><input class="c-input" id="c-f-nick" placeholder="사용할 이름" autocomplete="nickname"></div>
+<div class="login-field"><label for="c-f-email">이메일</label><input class="c-input" id="c-f-email" type="email" placeholder="example@email.com" autocomplete="email" inputmode="email"></div>
+<div class="login-field"><label for="c-f-pw">비밀번호</label><input class="c-input" id="c-f-pw" type="password" placeholder="비밀번호를 입력해주세요" autocomplete="current-password"></div>
+<p id="c-auth-msg" role="status" aria-live="polite"></p><button class="cert" id="c-auth-go" type="button">로그인</button>
+</div>`;
+let loginReturnFocus=null,loginWasOpen=false;
+new MutationObserver(()=>{const open=loginModal.classList.contains('open');if(open===loginWasOpen)return;loginWasOpen=open;if(open){loginReturnFocus=document.activeElement;$('#c-kakao-btn').focus();}else if(loginReturnFocus?.isConnected)loginReturnFocus.focus();}).observe(loginModal,{attributes:true,attributeFilter:['class']});
+loginModal.addEventListener('click',event=>{if(event.target===loginModal)loginModal.classList.remove('open');});
+loginModal.addEventListener('keydown',event=>{
+ if(event.key==='Escape'){event.preventDefault();loginModal.classList.remove('open');return;}
+ if(event.key==='Enter'&&event.target.matches('input')){event.preventDefault();$('#c-auth-go').click();}
+ if(event.key==='Tab'){const items=[...loginModal.querySelectorAll('button,input')].filter(el=>!el.disabled&&el.getClientRects().length);const first=items[0],last=items.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}
+});
 function setAuthMode(m){
+ $('#c-tab-login').setAttribute('aria-pressed',String(m==='login'));
+ $('#c-tab-signup').setAttribute('aria-pressed',String(m==='signup'));
+ $('#c-f-pw').autocomplete=m==='login'?'current-password':'new-password';
+ $('#c-f-pw').placeholder=m==='login'?'비밀번호를 입력해주세요':'6자 이상 입력해주세요';
  authMode=m;
  $('#c-tab-login').classList.toggle('active',m==='login');
  $('#c-tab-signup').classList.toggle('active',m==='signup');
