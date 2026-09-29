@@ -1,0 +1,18 @@
+(()=>{'use strict';
+const $=s=>document.querySelector(s),cards=[...document.querySelectorAll('#basics .card')],key='todaymeal-learning-saved-v1';
+let category='전체',savedOnly=false,saved=new Set(),timer;
+try{const data=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(data))saved=new Set(data.filter(id=>cards.some(c=>c.querySelector('[data-save]').dataset.save===id)));}catch(e){}
+function notice(message){$('#notice').textContent=message;$('#notice').classList.add('on');clearTimeout(timer);timer=setTimeout(()=>$('#notice').classList.remove('on'),2500);}
+function render(){const query=$('#search').value.replace(/\s/g,'').toLowerCase();let count=0;cards.forEach(card=>{const button=card.querySelector('[data-save]'),id=button.dataset.save;const match=(category==='전체'||category===card.dataset.category)&&(!savedOnly||saved.has(id))&&(card.textContent+card.dataset.keywords).replace(/\s/g,'').toLowerCase().includes(query);card.hidden=!match;if(match)count++;button.setAttribute('aria-pressed',String(saved.has(id)));button.setAttribute('aria-label',card.querySelector('h3').textContent+(saved.has(id)?' 저장 취소':' 저장'));});$('#count').textContent=count+'개의 손질법';$('#empty').hidden=count>0;}
+$('#search').addEventListener('input',render);
+document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.filter;document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));render();}));
+document.querySelectorAll('[data-save]').forEach(button=>button.addEventListener('click',()=>{const id=button.dataset.save;if(saved.has(id))saved.delete(id);else saved.add(id);try{localStorage.setItem(key,JSON.stringify([...saved]));}catch(e){notice('저장이 제한되어 현재 화면에서만 보관됩니다.');}render();}));
+$('#saved-only').addEventListener('click',()=>{savedOnly=!savedOnly;$('#saved-only').setAttribute('aria-pressed',String(savedOnly));render();});
+const tabs=[$('#tab-video'),$('#tab-basics')];
+function selectTab(tab){tabs.forEach(t=>{const on=t===tab;t.setAttribute('aria-selected',String(on));t.tabIndex=on?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});}
+tabs.forEach(tab=>{tab.addEventListener('click',()=>selectTab(tab));tab.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?tabs[0]:e.key==='End'?tabs[1]:tabs[1-tabs.indexOf(tab)];selectTab(next);next.focus();}});});
+const dialog=$('#player');let trigger;
+document.querySelectorAll('[data-video]').forEach(link=>link.addEventListener('click',e=>{if(typeof dialog.showModal!=='function')return;e.preventDefault();trigger=link;$('#player-title').textContent=link.dataset.title;$('#original').href=link.href;const frame=document.createElement('iframe');frame.src='https://www.youtube-nocookie.com/embed/'+link.dataset.video+'?autoplay=1';frame.title=link.dataset.title;frame.allow='autoplay; encrypted-media; picture-in-picture';frame.allowFullscreen=true;frame.referrerPolicy='strict-origin-when-cross-origin';$('#frame').replaceChildren(frame);dialog.showModal();}));
+$('#close-player').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{$('#frame').replaceChildren();trigger?.focus();});dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+window.addEventListener('storage',e=>{if(e.key!==key)return;try{const d=JSON.parse(e.newValue||'[]');saved=new Set(Array.isArray(d)?d:[]);render();}catch(e){}});render();
+})();
