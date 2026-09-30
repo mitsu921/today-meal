@@ -100,8 +100,10 @@ img.cover{width:100%;border-radius:16px;margin:10px 0}
 .cta{display:block;text-align:center;margin-top:26px;padding:14px;background:#e8703a;color:#fff;border-radius:12px;font-weight:800;text-decoration:none}
 a{color:#e8703a}
 </style>
+<link rel="stylesheet" href="/site-layout.css?v=20260930-1">
 </head>
-<body>
+<body data-layout="detail">
+<header class="tm-header"><div class="tm-header-inner"><a class="tm-brand" href="/" aria-label="TodayMeal 홈">TodayMeal</a><nav class="tm-nav" aria-label="주 메뉴"><a id="nav-recipes" href="/category.html">레시피 탐색</a><a id="nav-kids" href="/kids.html" aria-current="page">아이와 요리</a><a id="nav-learn" href="/learn.html">요리 배우기</a><a id="nav-stories" href="/stories.html">식생활 이야기</a><a id="nav-saved" href="/saved.html">저장한 레시피</a></nav><div class="tm-actions"><a class="tm-write" href="/#write">레시피 올리기</a><a class="tm-app" href="/app/">앱 열기 ↗</a></div></div></header>
 <div class="wrap">
   <a class="back" href="/category.html">‹ 레시피 목록으로</a>
   <h1>${esc(title)}</h1>
