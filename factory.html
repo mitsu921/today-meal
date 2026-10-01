@@ -68,7 +68,7 @@ button:disabled{opacity:.55}
   <textarea id="f-ing" style="height:110px" placeholder="두부 1모&#10;계란 3개&#10;..."></textarea>
 
   <label>🔪 만드는 법 (한 줄에 한 단계)</label>
-  <textarea id="f-steps" style="height:150px" placeholder="1) ...&#10;2) ..."></textarea>
+  <textarea id="f-steps" style="height:150px" placeholder="1) ...&#10;&#10;2) ..."></textarea>
 
   <label>💡 요리 팁</label>
   <textarea id="f-tip" style="height:60px"></textarea>
@@ -202,7 +202,7 @@ JSON만, 백틱 금지:
     $('#f-serv').value=d.servings||2;
     $('#f-level').value=['쉬움','보통','손이 감'].includes(d.level)?d.level:'보통';
     $('#f-ing').value=(d.ingredients||[]).join('\n');
-    $('#f-steps').value=(d.steps||[]).map((s,i)=>(i+1)+') '+s).join('\n');
+    $('#f-steps').value=(d.steps||[]).map((s,i)=>(i+1)+') '+String(s).replace(/^\s*\d+[.)]\s*/, '').trim()).join('\n\n');
     $('#f-tip').value=d.tip||'';
     $('#f-kcal').value=Math.round(d.kcal||0);$('#f-carb').value=Math.round(d.carb||0);
     $('#f-prot').value=Math.round(d.protein||0);$('#f-fat').value=Math.round(d.fat||0);
@@ -225,7 +225,7 @@ $('#submit').onclick=async()=>{
   if(photoFile&&!$('#photo-reviewed').checked)return msg('사진과 레시피를 확인한 뒤 사진 확인 항목을 체크해주세요.');
   const title=$('#f-title').value.trim();
   if(!title)return msg('제목을 적어주세요');
-  const ing=$('#f-ing').value.trim(), steps=$('#f-steps').value.trim();
+  const ing=$('#f-ing').value.trim(), steps=$('#f-steps').value.trim().replace(/\r\n?/g,'\n').replace(/\n+[ \t]*(?=\d+[.)][ \t]*)/g,'\n\n');
   if(!ing||!steps)return msg('재료와 만드는 법을 채워주세요');
   $('#submit').disabled=true;$('#submit').textContent='올리는 중...';
   try{
@@ -258,3 +258,4 @@ $('#submit').onclick=async()=>{
 <script src="./factory-editor.js?v=20260924-edit1"></script>
 </body>
 </html>
+
