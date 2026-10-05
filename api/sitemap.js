@@ -1,7 +1,8 @@
+import { PUBLIC_PATHS } from '../scripts/public-pages.mjs';
 const SB_URL = 'https://jnwlaevfvhxpmmnkmyrw.supabase.co';
 const SB_KEY = 'sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35';
 const SITE = 'https://todaymeal.co.kr';
-const STATIC_PATHS = ['/', '/category.html', '/stories.html', '/articles/tofu.html', '/articles/weekly-plan.html', '/articles/kids-table.html', '/news.html', '/privacy.html', '/terms.html'];
+const STATIC_PATHS = PUBLIC_PATHS;
 const xmlEscape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&apos;'}[c]));
 export default async function handler(req, res) {
   const ids = new Set();

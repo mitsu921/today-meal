@@ -1,6 +1,33 @@
 {
   "rewrites": [
-    { "source": "/r/:id", "destination": "/api/recipe?id=:id" },
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+    {
+      "source": "/r/:id",
+      "destination": "/api/recipe?id=:id"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/recipe-library",
+      "destination": "/api/recipe-library"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/news.html",
+      "destination": "/stories.html",
+      "permanent": true
+    },
+    {
+      "source": "/recipes/banana-pancake",
+      "destination": "/recipes/banana-pancake.html",
+      "permanent": true
+    },
+    {
+      "source": "/classes/egg-roll",
+      "destination": "/classes/egg-roll.html",
+      "permanent": true
+    }
   ]
 }

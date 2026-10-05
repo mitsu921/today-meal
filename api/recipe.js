@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   let recipe = null;
   try {
     const url = `${SB_URL}/rest/v1/recipes?id=eq.${id}&select=*,profiles(nickname),likes(count),comments(count)`;
-    const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } });
+    const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }, signal: AbortSignal.timeout(10000) });
     if(!r.ok)throw new Error("recipe fetch failed");
     const data = await r.json();
     recipe = Array.isArray(data) ? data[0] : null;
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     const line=raw.trim();if(!line)continue;
     if(/^[\[【]?\s*재료(?:\s|[·:：\]】]|$)/.test(line)){section='ingredients';continue;}
     if(/^[\[【]?\s*(만드는\s*법|조리\s*(방법|순서)|만들기)(?:\s|[:：\]】]|$)/.test(line)){section='steps';continue;}
-    if(/^[\[【]|^(우리 집 팁|요리 팁|보관|주의)/.test(line)){section='';continue;}
+    if(/^[\[【]|^(우리 집 팁|요리 팁|보관|주의|팁|AI 작성|사진|출처|운영자 확인)/.test(line)){section='';continue;}
     if(section==='ingredients')ingredients.push(line.replace(/^[-•·]\s*/,''));
     if(section==='steps')instructions.push({"@type":"HowToStep",text:line.replace(/^\d+[.)]\s*/, '')});
   }
@@ -103,16 +103,18 @@ a{color:#e8703a}
 <link rel="stylesheet" href="/site-layout.css?v=20260930-1">
 </head>
 <body data-layout="detail">
-<header class="tm-header"><div class="tm-header-inner"><a class="tm-brand" href="/" aria-label="TodayMeal 홈">TodayMeal</a><nav class="tm-nav" aria-label="주 메뉴"><a id="nav-recipes" href="/category.html">레시피 탐색</a><a id="nav-kids" href="/kids.html" aria-current="page">아이와 요리</a><a id="nav-learn" href="/learn.html">요리 배우기</a><a id="nav-stories" href="/stories.html">식생활 이야기</a><a id="nav-saved" href="/saved.html">저장한 레시피</a></nav><div class="tm-actions"><a class="tm-write" href="/#write">레시피 올리기</a><a class="tm-app" href="/app/">앱 열기 ↗</a></div></div></header>
-<div class="wrap">
+<header class="tm-header"><div class="tm-header-inner"><a class="tm-brand" href="/" aria-label="TodayMeal 홈">TodayMeal</a><nav class="tm-nav" aria-label="주 메뉴"><a id="nav-recipes" href="/category.html">레시피 탐색</a><a id="nav-kids" href="/kids.html">아이와 요리</a><a id="nav-learn" href="/learn.html">요리 배우기</a><a id="nav-stories" href="/stories.html">식생활 이야기</a><a id="nav-saved" href="/saved.html">저장한 레시피</a></nav><div class="tm-actions"><a class="tm-write" href="/#write">레시피 올리기</a><a class="tm-app" href="/app/">앱 열기 ↗</a></div></div></header>
+<main class="wrap">
   <a class="back" href="/category.html">‹ 레시피 목록으로</a>
   <h1>${esc(title)}</h1>
-  <div class="meta">${esc(nickname)} · ${new Date(created).toLocaleDateString("ko-KR")} · ♥ ${likeCount} 추천 · 💬 ${cmtCount}</div>
+  <div class="meta">${esc(nickname)} · ${created ? new Date(created).toLocaleDateString("ko-KR") : "작성일 미표시"} · ♥ ${likeCount} 추천 · 💬 ${cmtCount}</div>
   ${img ? `<img class="cover" src="${esc(img)}" alt="${esc(title)}">` : ""}
   ${nutriHtml}
   <div class="body">${esc(bodyText)}</div>
+  <p><a href="/editorial.html">콘텐츠·사진 안내</a> · <a href="/contact.html">이 레시피 오류 제보</a></p>
   <a class="cta" href="/app/">📱 앱에서 이 레시피에 추천·댓글 남기기</a>
-</div>
+</main>
+<nav class="trust-links" aria-label="사이트 안내"><a href="/about.html">서비스 소개</a><a href="/editorial.html">콘텐츠 안내</a><a href="/contact.html">문의·오류 제보</a><a href="/recipe-library">전체 레시피 목록</a></nav>
 </body>
 </html>`;
 
