@@ -209,7 +209,7 @@ $('#write-open-btn').onclick=openWriteView;
 document.querySelectorAll('.header-write').forEach(a=>a.onclick=e=>{e.preventDefault();openWriteView();});
 window.addEventListener('hashchange',()=>{if(location.hash==='#write')openWriteView();});
 $('#write-back-btn').onclick=()=>{
- if(($('#w-title').value.trim()||$('#w-body').value.trim()||wFile)&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
+ if(($('#w-title').value.trim()||$('#w-body').value.trim()||wFile||['help','ingredients','steps','tip'].some(k=>$('#w-kids-'+k)?.value.trim()))&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
  closeWriteView();
 };
 document.querySelectorAll('#w-target .w-chip').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#w-target .w-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); wTarget=c.dataset.t; });
@@ -278,10 +278,25 @@ const photoDrop=$('#w-photo-box');
 ['dragleave','drop'].forEach(type=>photoDrop.addEventListener(type,e=>{e.preventDefault();photoDrop.classList.remove('drag-over');}));
 photoDrop.addEventListener('drop',e=>selectWriterPhoto(e.dataTransfer.files[0]));
 $('#write-view').addEventListener('paste',e=>{const item=[...(e.clipboardData?.items||[])].find(item=>item.kind==='file'&&item.type.startsWith('image/'));if(item){e.preventDefault();selectWriterPhoto(item.getAsFile());}});
+function syncKidsWriter(){
+ const kids=$('#w-publish-to')?.value==='kids';
+ if(!$('#w-kids-fields'))return;
+ $('#w-kids-fields').hidden=!kids;$('#w-general-fields').hidden=kids;
+ const targets=$('#w-target')?.closest('.write-target-row');if(targets)targets.hidden=kids;
+}
+$('#w-publish-to')?.addEventListener('change',syncKidsWriter);
+if(new URLSearchParams(location.search).get('publish')==='kids'&&$('#w-publish-to'))$('#w-publish-to').value='kids';
+syncKidsWriter();
 $('#w-submit').onclick=async()=>{
  if(!me){toast('작성한 내용은 유지됩니다. 로그인 후 등록해주세요.');$('#c-login-modal').classList.add('open');return;}
  if(photoBusy)return toast('사진 준비가 끝난 뒤 등록해주세요.');
- const title=$('#w-title').value.trim(), body=$('#w-body').value.trim();
+ const title=$('#w-title').value.trim();
+ const publishKids=$('#w-publish-to')?.value==='kids';
+ let body=$('#w-body').value.trim();
+ if(publishKids){
+  try{body=window.TMKidsPublishing.compose({mode:$('#w-kids-mode').value,time:$('#w-kids-time').value,help:$('#w-kids-help').value,ingredients:$('#w-kids-ingredients').value,steps:$('#w-kids-steps').value,tip:$('#w-kids-tip').value});}catch(e){return toast(e.message);}
+  if(!wFile)return toast('아이와 요리에 올릴 음식 사진을 선택해주세요.');
+ }
  if(!title)return toast('레시피 이름을 적어주세요');
  if(!body)return toast('재료와 만드는 법을 적어주세요');
  const btn=$('#w-submit'); btn.disabled=true; btn.textContent='올리는 중...';
@@ -293,11 +308,12 @@ $('#w-submit').onclick=async()=>{
    if(se)throw new Error('사진 업로드에 실패했어요. 내용을 유지했으니 다시 등록해주세요.');
    image_url=sb.storage.from('photos').getPublicUrl(path).data.publicUrl;
   }
-  const {error}=await sb.from('recipes').insert({user_id:me.id,title,body,target:wTarget,image_url});
+  const {error}=await sb.from('recipes').insert({user_id:me.id,title,body,target:publishKids?"아이":wTarget,image_url});
   if(error){toast('등록 실패: '+error.message);return;}
   // A points issue must not cause duplicate recipe submissions.
   try{await sb.from('points_ledger').insert({user_id:me.id,amount:50,reason:'레시피 작성',ref_id:title});}catch(e){}
   $('#w-title').value='';$('#w-body').value='';resetWriterPhoto();
+  if(publishKids){['help','ingredients','steps','tip'].forEach(k=>$('#w-kids-'+k).value='');location.assign('/kids.html?published=1');return;}
   closeWriteView();
   toast('레시피를 올렸어요.');
   renderPoints(); loadFeed();

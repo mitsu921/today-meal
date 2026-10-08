@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import '../kids-publishing.js';
+const api=globalThis.TMKidsPublishing;
+const input={mode:'전자레인지',time:12,help:'2단계: 뜨거운 용기 꺼내기',ingredients:'밥 1공기\n치즈 1장',steps:'1) 재료를 준비해요.\n2) 어른이 가열해요.',tip:'기기 출력에 따라 상태를 확인해요.'};
+test('kids submission round trips through existing public recipe body',()=>{const body=api.compose(input);assert(body.includes('1) 재료를 준비해요.\n\n2) 어른이 가열해요.'));const r=api.parse({id:17,title:'치즈밥',body,image_url:'https://example.com/a.jpg'});assert.equal(r.mode,input.mode);assert.equal(r.help,input.help);assert.equal(r.time,12);assert.equal(r.ingredients.length,2);assert.equal(r.sourceId,17);});
+test('general and malformed recipes are not presented as kids submissions',()=>{assert.equal(api.parse({id:2,body:'일반 레시피'}),null);assert.equal(api.parse({id:2,body:'\n[아이와 요리]\n요리 방식: 불 없이'}),null);assert.throws(()=>api.compose({...input,time:0}));assert.throws(()=>api.compose({...input,help:''}));assert.throws(()=>api.compose({...input,steps:'한 단계'}));assert.throws(()=>api.compose({...input,tip:'[아이와 요리]'}));});

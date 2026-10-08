@@ -16,7 +16,7 @@ function photo(r){if(r.image)return '<div class="food-photo '+esc(r.image)+'" ro
 function savedPage(){const target=$('#saved-content');if(!target)return;let html='';saved.forEach(id=>{const r=recipes.find(x=>x.id===id);if(r){html+='<article class="card"><a href="'+recipeUrl(r)+'">'+photo(r)+'</a><div class="copy"><h3>'+esc(r.title)+'</h3><p>조리 약 '+r.time+'분</p><div class="card-actions"><a href="'+recipeUrl(r)+'">레시피 보기 →</a>'+(r.video?'<a href="/classes/'+r.id+'.html">영상 수업 →</a>':'')+'<button class="save-button" data-save="'+r.id+'" aria-pressed="true">'+icon+'<span>저장됨</span></button></div></div></article>';}else if(id.startsWith('basic:')){const i=BASIC.findIndex(b=>'basic:'+b[0]===id);if(i<0)return;html+='<article class="card"><a class="photo '+(i===4?'meat-placeholder':'tile t'+i)+'" href="/learn/'+BASIC[i][0]+'.html" aria-label="'+BASIC[i][1]+' 읽기"></a><div class="copy"><h3>'+BASIC[i][1]+'</h3><div class="card-actions"><a href="/learn/'+BASIC[i][0]+'.html">손질법 보기 →</a><button class="save-button" data-save="'+id+'">'+icon+'<span>저장됨</span></button></div></div></article>';}});target.innerHTML=html;$('#saved-empty').hidden=!!html;refreshSaves()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-save]');if(!b)return;const id=keyFor(b);if(saved.has(id))saved.delete(id);else saved.add(id);write(saveKey,[...saved]);refreshSaves();savedPage();renderBasics();});
 // Kids discovery: search across names AND ingredient lists.
-let mode='불 없이';function renderKids(){if(!$('#kids-cards'))return;const q=normal($('#kids-search').value);let count=0;all('#kids-cards [data-recipe]').forEach(c=>{const r=recipes.find(x=>x.id===c.dataset.recipe);const show=(mode==='전체'||r.mode===mode)&&normal(r.title+' '+r.ingredients.map(x=>x.name).join(' ')).includes(q);c.hidden=!show;if(show)count++;});$('#kids-count').textContent=count+'개의 요리 · 조리 시간은 예상치예요';$('#kids-empty').hidden=count>0;}
+let mode='전체';function renderKids(){if(!$('#kids-cards'))return;const q=normal($('#kids-search').value);let count=0;all('#kids-cards [data-recipe]').forEach(c=>{const r=recipes.find(x=>x.id===c.dataset.recipe);const show=!!r&&(mode==='전체'||r.mode===mode)&&normal(r.title+' '+r.ingredients.map(x=>x.name).join(' ')).includes(q);c.hidden=!show;if(show)count++;});$('#kids-count').textContent=count+'개의 요리 · 조리 시간은 예상치예요';$('#kids-empty').hidden=count>0;}
 all('[data-mode-filter]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.modeFilter;all('[data-mode-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderKids()}));$('#kids-search')?.addEventListener('input',renderKids);
 // Basic preparation filters and tabbed videos.
 let category='전체',onlySaved=false;function renderBasics(){if(!$('#basics'))return;const q=normal($('#search').value);let count=0;all('#basics .card').forEach(c=>{const id='basic:'+c.querySelector('[data-save]').dataset.save;const show=(category==='전체'||category===c.dataset.category)&&(!onlySaved||saved.has(id))&&normal(c.textContent+c.dataset.keywords).includes(q);c.hidden=!show;if(show)count++;});$('#count').textContent=count+'개의 손질법';$('#empty').hidden=count>0;}
@@ -46,4 +46,34 @@ if($('#add-ingredient')){
 }
 window.addEventListener('storage',e=>{if(e.key===saveKey){const d=read(saveKey,[]);saved=new Set(Array.isArray(d)?d:[]);refreshSaves();savedPage();renderBasics()}});
 refreshSaves();renderKids();renderBasics();savedPage();
+
+// Extend the curated catalogue with explicitly submitted kids recipes.
+async function loadKidsPublic(){
+ if(!$('#kids-cards')&&!$('#saved-content'))return;
+ const status=$('#kids-public-status');
+ try{
+  if(!window.TMKidsPublishing)throw Error('module');
+  const rows=[];const url='https://jnwlaevfvhxpmmnkmyrw.supabase.co/rest/v1/recipes';
+  const key='sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35';
+  for(let offset=0;;offset+=100){
+   if(offset>=10000)throw Error('limit');
+   const query=new URLSearchParams({select:'id,title,body,image_url,created_at',body:'like.*[아이와 요리]*',order:'created_at.desc,id.desc',limit:'100',offset:String(offset)});
+   const response=await fetch(url+'?'+query,{headers:{apikey:key,Authorization:'Bearer '+key},signal:AbortSignal.timeout(12000)});
+   if(!response.ok)throw Error('fetch');const data=await response.json();if(!Array.isArray(data))throw Error('shape');rows.push(...data);if(data.length<100)break;
+  }
+  const existing=new Set(recipes.map(r=>r.id));
+  const added=rows.map(window.TMKidsPublishing.parse).filter(r=>r&&!existing.has(r.id));recipes.push(...added);
+  if($('#kids-cards')){
+   $('#kids-cards').insertAdjacentHTML('afterbegin',added.map(r=>'<article class="card" data-recipe="'+esc(r.id)+'" data-mode="'+esc(r.mode)+'"><a href="'+recipeUrl(r)+'">'+photo(r)+'</a><div class="copy"><h3><a href="'+recipeUrl(r)+'">'+esc(r.title)+'</a></h3><p>'+esc(r.mode)+' · 조리 약 '+r.time+'분</p><span class="tag">어른이 도와줘요: '+esc(r.help)+'</span><div class="card-actions"><a href="'+recipeUrl(r)+'">레시피 보기 →</a><button class="save-button" data-save="'+esc(r.id)+'" aria-pressed="false">'+icon+'<span>저장하기</span></button></div></div></article>').join(''));
+   renderKids();
+  }
+  if(status)status.textContent=added.length?'함께 올린 아이 요리 '+added.length+'개 · 최신 등록 순으로 표시합니다.':'아이와 만든 요리를 올려보세요. 아래 기본 레시피도 함께 이용할 수 있습니다.';
+  refreshSaves();savedPage();
+ }catch(e){
+  const host=status||$('#saved-content');
+  if(host){const note=document.createElement('p');note.textContent='등록된 아이 요리를 불러오지 못했습니다. ';const retry=document.createElement('button');retry.textContent='다시 불러오기';retry.onclick=()=>{note.remove();loadKidsPublic()};note.append(retry);if(status)status.replaceChildren(note);else host.prepend(note);}
+ }
+}
+loadKidsPublic();
+
 })();
