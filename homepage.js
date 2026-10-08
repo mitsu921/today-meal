@@ -21,6 +21,7 @@ function homeImage(r){const src=r.image_url&&safeHomePhoto(r.image_url);return s
 const initialRecipeMarkup=$('#recipes')?.dataset.staticRecipes?$('#recipes').innerHTML:'';
 function feedError(){if(initialRecipeMarkup&&!isSavedPage&&!homeLoaded){homeFailed=true;$('#recipes').setAttribute('aria-busy','false');$('#recipes').innerHTML=initialRecipeMarkup+'<div class="empty-state">최신 목록을 불러오지 못했어요. 위 레시피는 바로 열어볼 수 있어요.<br><button id="retry-home">다시 불러오기</button></div>';$('#retry-home').onclick=()=>loadFeed();return;}homeFailed=true;homeLoaded=false;$('#recipes').setAttribute('aria-busy','false');$('#recipes').innerHTML='<div class="empty-state">레시피를 불러오지 못했어요.<br><button id="retry-home">다시 불러오기</button></div>';$('#retry-home').onclick=()=>loadFeed();}
 async function loadFeed(){
+ if(document.body.dataset.writer==='kids')return;
  if(!sb){feedError();return;}homeFailed=false;$('#recipes').setAttribute('aria-busy','true');
  try{let rows=[];for(let start=0;;start+=100){const {data,error}=await sb.from('recipes').select('id,title,body,target,image_url,created_at,likes(count),comments(count)').order('created_at',{ascending:false}).order('id',{ascending:false}).range(start,start+99);if(error)throw error;rows.push(...(data||[]));if(!data||data.length<100)break;}
  feedData=rows;homeLoaded=true;renderCards();}catch(e){feedError();}
@@ -29,7 +30,7 @@ function renderCards(){
  const rows=filteredHome();const el=$('#recipes');el.setAttribute('aria-busy','false');
  $('#recipes-heading').textContent=savedOnly?'저장한 레시피':(homeQuery||homeCategory!=='전체'||homeIngredient?'검색한 레시피':'오늘 둘러볼 레시피');
  $('#search-status').textContent=(homeQuery?'“'+homeQuery+'” · ':'')+rows.length+'개의 레시피'+(savedOnly?' · 이 브라우저에 저장돼요':'');
- el.innerHTML=rows.map(r=>'<article class="recipe-row"><a class="recipe-photo" href="/r/'+encodeURIComponent(r.id)+'">'+homeImage(r)+'</a><div class="recipe-copy"><a href="/r/'+encodeURIComponent(r.id)+'"><h3>'+esc(r.title)+'</h3></a><p>'+esc(r.target||'집에서 만드는 한 끼')+'</p><small>'+esc(homeCategoryOf(r))+' · 추천 '+likeCount(r)+'</small></div><button class="bookmark '+(homeSaved.includes(String(r.id))?'is-saved':'')+'" data-save="'+esc(r.id)+'" aria-label="'+esc(r.title)+' 저장" aria-pressed="'+homeSaved.includes(String(r.id))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></article>').join('')||'<div class="empty-state">'+(savedOnly?'저장한 레시피가 없어요. 레시피 옆 저장 버튼을 눌러보세요.':'조건에 맞는 레시피가 없어요. 다른 재료로 찾아보세요.')+'<br><button id="clear-home">전체 레시피 보기</button></div>';
+ el.innerHTML=rows.map(r=>'<article class="recipe-row"><a class="recipe-photo" href="/r/'+encodeURIComponent(r.id)+'">'+homeImage(r)+'</a><div class="recipe-copy"><a href="/r/'+encodeURIComponent(r.id)+'"><h3>'+esc(r.title)+'</h3></a><p>'+(r.body?.includes('\n[아이와 요리]\n')?'<span class="kids-activity-badge">아이와 함께 만들기</span>':esc(r.target||'집에서 만드는 한 끼'))+'</p><small>'+esc(homeCategoryOf(r))+' · 추천 '+likeCount(r)+'</small></div><button class="bookmark '+(homeSaved.includes(String(r.id))?'is-saved':'')+'" data-save="'+esc(r.id)+'" aria-label="'+esc(r.title)+' 저장" aria-pressed="'+homeSaved.includes(String(r.id))+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></article>').join('')||'<div class="empty-state">'+(savedOnly?'저장한 레시피가 없어요. 레시피 옆 저장 버튼을 눌러보세요.':'조건에 맞는 레시피가 없어요. 다른 재료로 찾아보세요.')+'<br><button id="clear-home">전체 레시피 보기</button></div>';
  el.querySelectorAll('img').forEach(img=>img.onerror=()=>{const span=document.createElement('span');span.className='photo-placeholder';span.textContent='사진 준비 중';img.replaceWith(span);});
  el.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{const id=b.dataset.save;homeSaved=homeSaved.includes(id)?homeSaved.filter(x=>x!==id):[...homeSaved,id];try{localStorage.setItem('todaymeal-home-saved-v1',JSON.stringify(homeSaved));}catch(e){toast('브라우저 저장이 제한되어 이번 화면에서만 보관돼요.');}renderCards();});
  if($('#clear-home'))$('#clear-home').onclick=()=>{if(isSavedPage)location.href='/';else resetHome();};
@@ -200,6 +201,7 @@ function openWriteView(){
  if(window.gaEvent)gaEvent('write_open',{surface:'homepage'});
 }
 function closeWriteView(){
+ if(document.body.dataset.writer==='kids'){location.assign('/kids.html');return;}
  $('#write-view').style.display='none';
  if(location.hash==='#write')history.replaceState(null,'',location.pathname+location.search);
  $('#home-view').style.display='block';
@@ -209,7 +211,7 @@ $('#write-open-btn').onclick=openWriteView;
 document.querySelectorAll('.header-write').forEach(a=>a.onclick=e=>{e.preventDefault();openWriteView();});
 window.addEventListener('hashchange',()=>{if(location.hash==='#write')openWriteView();});
 $('#write-back-btn').onclick=()=>{
- if(($('#w-title').value.trim()||$('#w-body').value.trim()||wFile||['help','ingredients','steps','tip'].some(k=>$('#w-kids-'+k)?.value.trim()))&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
+ if(($('#w-title').value.trim()||$('#w-body').value.trim()||$('#w-ingredients')?.value.trim()||$('#w-tip')?.value.trim()||wFile||['help','ingredients','steps','tip'].some(k=>$('#w-kids-'+k)?.value.trim()))&&!confirm('작성 중인 내용이 있어요. 나가시겠어요?'))return;
  closeWriteView();
 };
 document.querySelectorAll('#w-target .w-chip').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#w-target .w-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active'); wTarget=c.dataset.t; });
@@ -285,7 +287,7 @@ function syncKidsWriter(){
  const targets=$('#w-target')?.closest('.write-target-row');if(targets)targets.hidden=kids;
 }
 $('#w-publish-to')?.addEventListener('change',syncKidsWriter);
-if(new URLSearchParams(location.search).get('publish')==='kids'&&$('#w-publish-to'))$('#w-publish-to').value='kids';
+if(new URLSearchParams(location.search).get('publish')==='kids'&&document.body.dataset.writer!=='kids')location.replace('/kids-write.html');
 syncKidsWriter();
 $('#w-submit').onclick=async()=>{
  if(!me){toast('작성한 내용은 유지됩니다. 로그인 후 등록해주세요.');$('#c-login-modal').classList.add('open');return;}
@@ -293,7 +295,14 @@ $('#w-submit').onclick=async()=>{
  const title=$('#w-title').value.trim();
  const publishKids=$('#w-publish-to')?.value==='kids';
  let body=$('#w-body').value.trim();
+ if(!publishKids&&$('#w-ingredients')){
+  const ingredients=$('#w-ingredients').value.trim(),tip=$('#w-tip').value.trim();
+  if(!ingredients&&!$('#import-url').value.trim())return toast('재료와 분량을 적어주세요');
+  if(!body)return toast('만드는 법을 적어주세요');
+  body=(ingredients?'재료\n'+ingredients+'\n\n만드는 법\n':'')+body+(tip?'\n\n요리 팁\n'+tip:'');
+ }
  if(publishKids){
+  try{window.TMRecipeWriter.syncSteps();}catch(e){return toast(e.message);}
   try{body=window.TMKidsPublishing.compose({mode:$('#w-kids-mode').value,time:$('#w-kids-time').value,help:$('#w-kids-help').value,ingredients:$('#w-kids-ingredients').value,steps:$('#w-kids-steps').value,tip:$('#w-kids-tip').value});}catch(e){return toast(e.message);}
   if(!wFile)return toast('아이와 요리에 올릴 음식 사진을 선택해주세요.');
  }
@@ -312,13 +321,13 @@ $('#w-submit').onclick=async()=>{
   if(error){toast('등록 실패: '+error.message);return;}
   // A points issue must not cause duplicate recipe submissions.
   try{await sb.from('points_ledger').insert({user_id:me.id,amount:50,reason:'레시피 작성',ref_id:title});}catch(e){}
-  $('#w-title').value='';$('#w-body').value='';resetWriterPhoto();
+  $('#w-title').value='';$('#w-body').value='';if($('#w-ingredients'))$('#w-ingredients').value='';if($('#w-tip'))$('#w-tip').value='';resetWriterPhoto();
   if(publishKids){['help','ingredients','steps','tip'].forEach(k=>$('#w-kids-'+k).value='');location.assign('/kids.html?published=1');return;}
   closeWriteView();
   toast('레시피를 올렸어요.');
   renderPoints(); loadFeed();
  }catch(e){ toast('오류: '+String(e).slice(0,100)); }
- finally{ btn.disabled=false; btn.textContent='레시피 등록하기'; }
+ finally{ btn.disabled=false; btn.textContent=publishKids?'아이 요리 활동 올리기':'레시피 등록하기'; }
 };
 
 try{
@@ -330,3 +339,5 @@ try{
 }catch(e){ console.error(e); feedError(); renderAuthSlot(); }
 
 if(location.hash==='#write')openWriteView();
+
+if(document.body.dataset.writer==='kids')openWriteView();
