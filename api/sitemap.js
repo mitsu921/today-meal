@@ -1,12 +1,12 @@
-import { PUBLIC_PATHS } from '../scripts/public-pages.mjs';
 const SB_URL = 'https://jnwlaevfvhxpmmnkmyrw.supabase.co';
 const SB_KEY = 'sb_publishable_9yGKdu0Sh_hsboktuwYJhw_RQCu0W35';
 const SITE = 'https://todaymeal.co.kr';
-const STATIC_PATHS = PUBLIC_PATHS;
 const xmlEscape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&apos;'}[c]));
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const ids = new Set();
   try {
+    // Native import() can load this ESM manifest from a CommonJS Vercel function.
+    const { PUBLIC_PATHS: STATIC_PATHS } = await import('../scripts/public-pages.mjs');
     // Small pages avoid the database's default response limit.
     for (let offset = 0; ; offset += 100) {
       const response = await fetch(`${SB_URL}/rest/v1/recipes?select=id&order=id.asc&limit=100&offset=${offset}`, {
@@ -35,3 +35,4 @@ export default async function handler(req, res) {
     res.status(503).send('Sitemap temporarily unavailable');
   }
 }
+
