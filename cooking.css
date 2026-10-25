@@ -11,3 +11,5 @@ nav{gap:22px}nav a{font-size:16px}.wrap>section{scroll-margin-top:24px}.cards.th
 .basic-prep{background-image:url(/assets/ingredient-prep.webp);background-size:300% 300%}.basic-prep-1{background-position:50% 0}.basic-prep-2{background-position:100% 0}.basic-prep-3{background-position:0 50%}.basic-prep-4{background-position:50% 50%}.basic-prep-5{background-position:100% 50%}
 
 .basic-text{display:flex!important;align-items:center;justify-content:center;background:#eef2e9;color:#3e5136;font-size:28px;font-weight:700;text-decoration:none}
+
+.basic-image{display:block;overflow:hidden}.basic-image img{display:block;width:100%;height:100%;object-fit:cover}
