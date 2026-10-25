@@ -1,4 +1,6 @@
+import {guides} from './ingredient-guides.mjs';
 export const PUBLIC_PATHS = [
+  ...guides.filter(g => g.id !== 'onion').map(g => `/learn/${g.id}.html`),
   "/",
   "/category.html",
   "/recipe-library",
