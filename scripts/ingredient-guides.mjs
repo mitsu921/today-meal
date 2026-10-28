@@ -1,3 +1,4 @@
+import {seafoodGuides} from './seafood-ingredient-guides.mjs';
 import {meatGuides} from './meat-ingredient-guides.mjs';
 import {moreGuides,originalTips} from './more-ingredient-guides.mjs';
 export const guides = [
@@ -10,4 +11,4 @@ export const guides = [
 ];
 
 for(const g of guides){g.category='채소';g.tips=[originalTips[g.id]];}
-guides.push(...moreGuides,...meatGuides);
+guides.push(...moreGuides,...meatGuides,...seafoodGuides);

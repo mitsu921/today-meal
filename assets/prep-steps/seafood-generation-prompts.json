@@ -1,0 +1,38 @@
+[
+  {
+    "id": "shrimp",
+    "prompt": "Use case: photorealistic-natural. Asset type: ingredient preparation process photo strip for a Korean cooking guide. Create a tall 4:9 image with EXACTLY THREE equal-height panels stacked vertically, each panel 4:3, edge-to-edge with no gutters. Subject: raw gray shrimp, never cooked pink. Three panels: TOP: adult hands peeling shell and legs from a raw gray shrimp, heads already removed, a few intact raw shrimp on dedicated white cutting board. MIDDLE: close view adult using a wooden toothpick to lift a thin dark intestinal tract from the curved BACK of a peeled shrimp, on white board. BOTTOM: peeled deveined raw shrimp in a clean metal colander, gently draining after rinse, no faucet or splashing. Consistent warm ivory counter, dedicated clean white plastic cutting board, soft natural daylight, realistic species anatomy. Close overhead views, safe adult hand positions, no text or numbers, no logos, no garnish, no vegetables or ready-to-eat food in work area. Educational raw seafood preparation, no blood, no graphic organs. Keep each action wholly within its equal panel.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "squid",
+    "prompt": "Use case: photorealistic-natural. Asset type: ingredient preparation process photo strip for a Korean cooking guide. Create a tall 4:9 image with EXACTLY THREE equal-height panels stacked vertically, each panel 4:3, edge-to-edge with no gutters. Subject: raw squid with elongated mantle and tentacles, not cuttlefish. Three panels: TOP: opened raw squid mantle flat on white cutting board with tentacles set alongside, transparent cartilage quill removed and visible beside it, no organs or ink mess. MIDDLE: adult hands gently rubbing tentacle suction cups over a metal colander, wet clean raw squid, no splashing. BOTTOM: adult safely cutting opened white squid mantle into even strips on dedicated white cutting board, curled fingers safely away from blade. Consistent warm ivory counter, dedicated clean white plastic cutting board, soft natural daylight, realistic species anatomy. Close overhead views, safe adult hand positions, no text or numbers, no logos, no garnish, no vegetables or ready-to-eat food in work area. Educational raw seafood preparation, no blood, no graphic organs. Keep each action wholly within its equal panel.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "octopus",
+    "prompt": "Use case: photorealistic-natural. Asset type: ingredient preparation process photo strip for a Korean cooking guide. Create a tall 4:9 image with EXACTLY THREE equal-height panels stacked vertically, each panel 4:3, edge-to-edge with no gutters. Subject: small Korean long-arm octopus nakji, thin long arms and small oval mantle, NOT giant octopus. Three panels: TOP: already cleaned raw small long-arm octopus on white board, mantle opened neatly and empty, all eight long slender arms visible, kitchen shears resting beside it, no organs or gore. MIDDLE: adult hands gently rubbing the small raw octopus arms and suction cups in a clean stainless bowl, no flour, no bubbles, no cooked color. BOTTOM: cleaned raw small octopus drained in metal colander, slender arms curled naturally, not chopped, no garnish. Consistent warm ivory counter, dedicated clean white plastic cutting board, soft natural daylight, realistic species anatomy. Close overhead views, safe adult hand positions, no text or numbers, no logos, no garnish, no vegetables or ready-to-eat food in work area. Educational raw seafood preparation, no blood, no graphic organs. Keep each action wholly within its equal panel.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "blue-crab",
+    "prompt": "Use case: photorealistic-natural. Asset type: ingredient preparation process photo strip for a Korean cooking guide. Create a tall 4:9 image with EXACTLY THREE equal-height panels stacked vertically, each panel 4:3, edge-to-edge with no gutters. Subject: raw Korean blue swimming crab kkotge, blue-gray shell, NOT red cooked crab. Three panels: TOP: raw thawed swimming crab being gently brushed with small food brush on white board, wearing protective gloves, no active live crab movement. MIDDLE: raw swimming crab upper carapace already removed and set aside, exposed body on white board, gray feathery gills visibly removed to the side, no gore, safe preparation illustration. BOTTOM: cleaned raw crab body separated into two halves with legs attached, dedicated kitchen shears resting on board, raw gray-blue shell. Consistent warm ivory counter, dedicated clean white plastic cutting board, soft natural daylight, realistic species anatomy. Close overhead views, safe adult hand positions, no text or numbers, no logos, no garnish, no vegetables or ready-to-eat food in work area. Educational raw seafood preparation, no blood, no graphic organs. Keep each action wholly within its equal panel.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "mussels",
+    "prompt": "Use case: photorealistic-natural. Asset type: ingredient preparation process photo strip for a Korean cooking guide. Create a tall 4:9 image with EXACTLY THREE equal-height panels stacked vertically, each panel 4:3, edge-to-edge with no gutters. Subject: raw fresh black-blue shell mussels, NOT clams. Three panels: TOP: adult hands examining one intact closed mussel above a shallow tray of intact closed mussels. MIDDLE: close adult hands gently pulling small fibrous beard toward hinge of a raw closed mussel, small food brush resting beside board. BOTTOM: washed raw closed mussels drained in a metal colander, no open cooked shells, no steam, no garnish. Consistent warm ivory counter, dedicated clean white plastic cutting board, soft natural daylight, realistic species anatomy. Close overhead views, safe adult hand positions, no text or numbers, no logos, no garnish, no vegetables or ready-to-eat food in work area. Educational raw seafood preparation, no blood, no graphic organs. Keep each action wholly within its equal panel.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "clams",
+    "prompt": "Use case: photorealistic-natural. Asset type: ingredient preparation process photo strip for a Korean cooking guide. Create a tall 4:9 image with EXACTLY THREE equal-height panels stacked vertically, each panel 4:3, edge-to-edge with no gutters. Subject: raw Manila clams Korean bajirak, small oval ridged patterned gray-brown shells. Three panels: TOP: adult examining one closed intact Manila clam above shallow stainless tray of closed patterned clams. MIDDLE: small group of intact clams resting in a shallow perforated insert within a food-safe bowl of clear brine, partially covered loosely by clean cloth, no sealed lid, no spoons or coins. BOTTOM: adult hands gently rubbing clam shells over a stainless colander to remove exterior sand, wet raw closed clams, no splashing. Consistent warm ivory counter, dedicated clean white plastic cutting board, soft natural daylight, realistic species anatomy. Close overhead views, safe adult hand positions, no text or numbers, no logos, no garnish, no vegetables or ready-to-eat food in work area. Educational raw seafood preparation, no blood, no graphic organs. Keep each action wholly within its equal panel.",
+    "method": "built-in image_gen",
+    "panels": 3
+  }
+]
