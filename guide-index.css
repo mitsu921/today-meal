@@ -1,0 +1,46 @@
+/* Photo-first ingredient directory. Scoped to keep article and home layouts stable. */
+.guide-index{max-width:1440px;padding:40px 32px 64px;color:#25221f}
+.guide-index h1{font-size:clamp(34px,3.6vw,52px);font-weight:850;letter-spacing:-1.8px;margin:0 0 8px}
+.guide-index>.guide-intro{font-size:20px;color:#625b55;margin:0 0 20px;max-width:none}
+.guide-index .guide-search{display:flex;align-items:center;gap:14px;padding:16px 20px;margin:0 0 22px;min-height:60px;border:1px solid #dedbd7;background:#f8f7f5;border-radius:12px}
+.guide-index .guide-search svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;flex:none}
+.guide-index .guide-search input{font-size:18px;min-width:0;outline-offset:4px}
+.guide-index .guide-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #e8e3dd;margin-bottom:18px}
+.guide-index .tabs{margin:0;border:0;gap:18px;flex-wrap:nowrap;flex-shrink:0}
+.guide-index .tabs button{font-size:17px;font-weight:650;padding:17px 8px;white-space:nowrap}
+.guide-index .tabs button[aria-selected=true]{color:#b84416;border-color:#ed6327}
+.guide-index #guide-category-controls{min-width:0}
+.guide-index .guide-filters{display:flex;flex-direction:row;position:static;align-items:center;gap:8px;margin:0;padding:6px 0;width:auto;overflow:visible}
+.guide-index .guide-filters button{background:#f7f4ef;color:#403a35;border:1px solid transparent;border-radius:24px;padding:9px 16px;font-size:15px;line-height:1.5;font-weight:650;white-space:nowrap;min-height:44px;text-align:center}
+.guide-index .guide-filters button[aria-pressed=true]{background:#e85c1b;color:#fff;box-shadow:none}
+.guide-index .guide-filters button:hover{border-color:#d95a22}
+.guide-index .guide-body{display:block}
+.guide-index .guide-toolbar{margin:0 0 16px;align-items:center;gap:12px}
+.guide-index .guide-toolbar .status{font-size:15px;color:#655e57}
+.guide-index .guide-toolbar button{font-size:14px;min-height:40px;border-radius:8px}
+.guide-index .guide-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.guide-index .guide-grid .card{display:flex;flex-direction:column;border-radius:14px;background:#faf7f2;transition:box-shadow .15s ease}
+.guide-index .guide-grid .card:hover{box-shadow:0 5px 18px #4b311012}
+.guide-index .guide-card-visual{display:block;aspect-ratio:4/3;overflow:hidden;background:#f2ece3}
+.guide-index .guide-card-visual>.prep-photo,.guide-index .guide-card-visual>.guide-prep-image,.guide-index .guide-card-visual>.legacy-photo{width:100%;height:100%;border-radius:0;object-fit:cover}
+.guide-index .guide-card-visual>.guide-tools{height:100%;margin:0;display:grid;place-content:center;text-align:center;font-size:28px;font-weight:700}
+.guide-index .guide-grid .copy{padding:20px 22px 22px;display:flex;flex-direction:column;align-items:flex-start;flex:1}
+.guide-index .guide-grid h3{font-size:28px;line-height:1.35;font-weight:800;letter-spacing:-.8px;margin:0 0 9px;word-break:keep-all}
+.guide-index .guide-grid p{font-size:16px;color:#5c554e;line-height:1.65;margin:0 0 18px;word-break:keep-all}
+.guide-index .guide-card-cta{display:inline-flex;align-items:center;gap:16px;padding:11px 18px;min-height:46px;border-radius:11px;background:#df5417;color:#fff;font-size:16px;font-weight:700;margin-top:auto;line-height:1.5}
+.guide-index .guide-card-cta:hover{background:#be4310;color:#fff}
+.guide-index .save{width:40px;height:42px;top:12px;right:12px;padding:10px;border-color:#e6dfd6;box-shadow:0 2px 5px #0000000a}
+.guide-index .guide-note{font-size:13px;color:#696158;margin-top:16px}
+.guide-index .guide-beginner{display:flex;align-items:center;gap:30px;padding:26px 28px;background:#faf5ec;margin:26px 0 36px;border-radius:14px}
+.guide-index .guide-beginner-heading{display:flex;align-items:center;gap:20px;flex:1;min-width:240px}
+.guide-index .guide-beginner-heading svg{width:52px;height:52px;flex:none;fill:none;stroke:#3c342b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.guide-index .guide-beginner-heading p{font-size:15px;color:#b84416;margin:0 0 4px;font-weight:700}
+.guide-index .guide-beginner h2{font-size:22px;margin:0;line-height:1.4}
+.guide-index .guide-beginner .guide-inline{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;flex:2}
+.guide-index .guide-beginner .guide-inline a{border:0;border-left:1px solid #e2d7c6;padding:4px 0 4px 22px;font-weight:700;font-size:16px;white-space:normal}
+.guide-index .guide-beginner small{display:block;font-size:13px;font-weight:400;color:#6a6259;margin-top:5px}
+.guide-index .guide-reads{gap:20px}.guide-index .guide-read h3{font-size:20px}.guide-index .guide-read p{font-size:16px}
+@media(max-width:1150px){.guide-index .guide-controls{align-items:flex-start;flex-direction:column;gap:0}.guide-index #guide-category-controls{width:100%;padding:4px 0 12px}.guide-index .guide-beginner{align-items:flex-start;flex-direction:column}.guide-index .guide-beginner .guide-inline{width:100%}.guide-index .guide-grid{gap:20px}.guide-index .guide-grid h3{font-size:25px}}
+@media(max-width:850px){.guide-index{padding:30px 22px 48px}.guide-index .guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.guide-index>.guide-intro{font-size:18px}.guide-index .guide-grid .copy{padding:18px}.guide-index .guide-beginner .guide-inline{gap:12px}.guide-index .guide-beginner .guide-inline a{padding-left:12px;font-size:15px}}
+@media(max-width:560px){.guide-index{padding:26px 18px 40px}.guide-index h1{font-size:32px;letter-spacing:-1px}.guide-index>.guide-intro{font-size:17px;line-height:1.6}.guide-index .guide-search{padding:13px 14px;min-height:54px;margin-bottom:12px}.guide-index .guide-search input{font-size:16px}.guide-index .tabs{width:100%;gap:0}.guide-index .tabs button{font-size:14px;flex:1;padding:15px 5px}.guide-index .guide-filters{gap:7px;overflow-x:auto;padding:5px 3px 10px}.guide-index .guide-filters button{font-size:14px;padding:9px 14px}.guide-index .guide-grid{grid-template-columns:1fr;gap:20px}.guide-index .guide-grid h3{font-size:27px}.guide-index .guide-grid p{font-size:16px}.guide-index .guide-grid .copy{padding:20px}.guide-index .guide-card-cta{min-height:46px}.guide-index .guide-toolbar button{font-size:13px}.guide-index .guide-beginner{padding:22px;gap:20px}.guide-index .guide-beginner .guide-inline{grid-template-columns:1fr;gap:12px}.guide-index .guide-beginner .guide-inline a{border-left:0;border-top:1px solid #e2d7c6;padding:12px 0 0}.guide-index .guide-beginner-heading{min-width:0;gap:14px}.guide-index .guide-beginner h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.guide-index .guide-grid .card{transition:none}}
