@@ -1,0 +1,38 @@
+[
+  {
+    "id": "beef-bulgogi",
+    "prompt": "Use case: photorealistic-natural. Asset type: a single educational food preparation photo strip for TodayMeal. Generate a tall 4:9 image comprising EXACTLY THREE equal-height photographic panels stacked vertically, each panel 4:3. Edge to edge, no gutters, no frames, no text, no labels, no logos. Subject: thin sliced beef for Korean bulgogi. Panels top to bottom: 1. Thin raw beef slices spread on a dedicated white cutting board, gently blotting moisture with disposable paper towel. 2. Adult hands safely cutting a few slices across visible muscle grain into shorter pieces, fingertips curled safely away from knife. 3. Prepared short beef slices placed with tongs in a clean shallow lidded food storage box (lid beside box), no marinade. Soft natural daylight, warm ivory kitchen counter, realistic food textures, top-down close view, consistent white dedicated plastic cutting board across panels, clean adult hands only where needed. No running water or sink, no rinsing raw meat, no vegetables or cooked food in same prep area, no blood pools, no gloves required. No unsafe knife grip. Exact equal panels are essential for cropping into independent step pictures.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "beef-stew",
+    "prompt": "Use case: photorealistic-natural. Asset type: a single educational food preparation photo strip for TodayMeal. Generate a tall 4:9 image comprising EXACTLY THREE equal-height photographic panels stacked vertically, each panel 4:3. Edge to edge, no gutters, no frames, no text, no labels, no logos. Subject: lean raw beef chunks for Korean soup. Panels top to bottom: 1. Lean raw beef block on dedicated white board with disposable paper towel blotting surface. 2. Adult safely trimming a small tough white membrane from beef on board with a knife, fingers away from blade. 3. Even small beef cubes neatly gathered on dedicated board, knife resting beside board. Soft natural daylight, warm ivory kitchen counter, realistic food textures, top-down close view, consistent white dedicated plastic cutting board across panels, clean adult hands only where needed. No running water or sink, no rinsing raw meat, no vegetables or cooked food in same prep area, no blood pools, no gloves required. No unsafe knife grip. Exact equal panels are essential for cropping into independent step pictures.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "pork-belly",
+    "prompt": "Use case: photorealistic-natural. Asset type: a single educational food preparation photo strip for TodayMeal. Generate a tall 4:9 image comprising EXACTLY THREE equal-height photographic panels stacked vertically, each panel 4:3. Edge to edge, no gutters, no frames, no text, no labels, no logos. Subject: raw pork belly for Korean grilling. Panels top to bottom: 1. Raw pork belly strips showing pink meat and white fat layers on dedicated white board, blotting with disposable paper. 2. Adult safely cutting belly strips across their length into uniform grilling pieces, fingers curled well away. 3. Uniform raw pork belly pieces laid in a single layer in a clean shallow storage container, lid alongside. Soft natural daylight, warm ivory kitchen counter, realistic food textures, top-down close view, consistent white dedicated plastic cutting board across panels, clean adult hands only where needed. No running water or sink, no rinsing raw meat, no vegetables or cooked food in same prep area, no blood pools, no gloves required. No unsafe knife grip. Exact equal panels are essential for cropping into independent step pictures.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "pork-tenderloin",
+    "prompt": "Use case: photorealistic-natural. Asset type: a single educational food preparation photo strip for TodayMeal. Generate a tall 4:9 image comprising EXACTLY THREE equal-height photographic panels stacked vertically, each panel 4:3. Edge to edge, no gutters, no frames, no text, no labels, no logos. Subject: raw pork tenderloin for Korean stir fry. Panels top to bottom: 1. Whole lean raw pork tenderloin lying horizontally on dedicated white cutting board. 2. Safe close-up of adult carefully trimming silver membrane while tenderloin rests on board, blade directed away from curled fingertips. 3. Tenderloin cut across grain into uniform medallions and a small group of stir fry strips, raw, on dedicated board. Soft natural daylight, warm ivory kitchen counter, realistic food textures, top-down close view, consistent white dedicated plastic cutting board across panels, clean adult hands only where needed. No running water or sink, no rinsing raw meat, no vegetables or cooked food in same prep area, no blood pools, no gloves required. No unsafe knife grip. Exact equal panels are essential for cropping into independent step pictures.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "chicken-breast",
+    "prompt": "Use case: photorealistic-natural. Asset type: a single educational food preparation photo strip for TodayMeal. Generate a tall 4:9 image comprising EXACTLY THREE equal-height photographic panels stacked vertically, each panel 4:3. Edge to edge, no gutters, no frames, no text, no labels, no logos. Subject: boneless skinless raw chicken breast. Panels top to bottom: 1. Raw chicken breast on dedicated white board, adult blotting with a disposable paper towel. 2. An already butterflied chicken breast opened like a book flat on board, knife resting safely beside board, no hand cutting toward fingers. 3. Even strips cut from chicken breast arranged neatly on dedicated board, raw pale pink, no vegetables. Soft natural daylight, warm ivory kitchen counter, realistic food textures, top-down close view, consistent white dedicated plastic cutting board across panels, clean adult hands only where needed. No running water or sink, no rinsing raw meat, no vegetables or cooked food in same prep area, no blood pools, no gloves required. No unsafe knife grip. Exact equal panels are essential for cropping into independent step pictures.",
+    "method": "built-in image_gen",
+    "panels": 3
+  },
+  {
+    "id": "chicken-thigh",
+    "prompt": "Use case: photorealistic-natural. Asset type: a single educational food preparation photo strip for TodayMeal. Generate a tall 4:9 image comprising EXACTLY THREE equal-height photographic panels stacked vertically, each panel 4:3. Edge to edge, no gutters, no frames, no text, no labels, no logos. Subject: boneless raw chicken thigh meat. Panels top to bottom: 1. Unfolded boneless raw chicken thigh laid flat on dedicated white board. 2. Adult using kitchen shears safely to trim a small loose piece of excess skin/fat at edge of thigh, fingers away. 3. Even bite-size boneless thigh pieces arranged in a clean shallow storage box, lid beside box. Soft natural daylight, warm ivory kitchen counter, realistic food textures, top-down close view, consistent white dedicated plastic cutting board across panels, clean adult hands only where needed. No running water or sink, no rinsing raw meat, no vegetables or cooked food in same prep area, no blood pools, no gloves required. No unsafe knife grip. Exact equal panels are essential for cropping into independent step pictures.",
+    "method": "built-in image_gen",
+    "panels": 3
+  }
+]
