@@ -1,0 +1,38 @@
+/* Comfortable reading layout for ingredient articles only. */
+.guide-detail{max-width:1000px;padding:30px 24px 56px;font-size:16px;color:#302c28}
+.guide-detail h1{font-size:32px;margin-bottom:12px;letter-spacing:-1px}
+.guide-detail .guide-crumb{margin-bottom:18px}
+.guide-detail .guide-intro{font-size:16px;line-height:1.85;max-width:760px;margin-bottom:12px;color:#625c55}
+.guide-detail h2{font-size:22px}
+.guide-detail .guide-meta{font-size:12px}
+.guide-dishes{margin:28px 0;padding:24px;background:#faf8f4;border:1px solid #eee7de;border-radius:12px;scroll-margin-top:20px}
+.guide-detail .guide-eyebrow{font-size:13px;color:#a34b26;font-weight:700;margin:0 0 4px}
+.guide-dishes h2{margin:0 0 8px}
+.guide-detail .guide-dish-intro{font-size:15px;margin:0 0 16px}
+.guide-dish-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.guide-dish-nav a{padding:8px 12px;background:#fff;border:1px solid #e3d8cb;border-radius:20px;font-size:14px}
+.guide-dish-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.guide-dish-card{background:white;border:1px solid #e9e3db;padding:18px;border-radius:9px;scroll-margin-top:20px;min-width:0}
+.guide-dish-card:target{outline:2px solid #bc744e;outline-offset:3px}
+.guide-dish-card h3{font-size:18px;line-height:1.5;margin:0 0 6px;word-break:keep-all}
+.guide-detail .guide-cut-name{font-size:15px;font-weight:650;color:#95451f;margin:0 0 8px}
+.guide-size{display:inline-block;font-size:13px;background:#f7f2e9;padding:4px 8px;border-radius:4px}
+.guide-dish-card ol{padding-left:20px;margin:14px 0 0;font-size:15px;line-height:1.85}
+.guide-dish-card li+li{margin-top:10px}
+.guide-detail .guide-dish-why{border-top:1px solid #eee6db;padding-top:12px;margin:16px 0 0;font-size:14px;color:#665c52}
+.guide-dish-why strong{display:block;font-size:13px;color:#554a40;margin-bottom:4px}
+.guide-detail .guide-dish-note{font-size:13px;color:#72685d;margin:16px 0 10px}
+.guide-detail .guide-basic-link{font-size:14px;text-decoration:underline;text-underline-offset:4px}
+.guide-detail .guide-tools{font-size:14px;margin:20px 0 8px}
+.guide-detail .guide-toc{gap:10px 18px;margin-bottom:28px}
+.guide-detail .guide-step{display:grid;grid-template-columns:210px minmax(0,1fr);gap:24px;align-items:start;padding:20px 0;margin:0}
+.guide-detail .guide-step .prep-photo,.guide-detail .guide-step .guide-step-frame{width:100%;max-width:210px;margin:0}
+.guide-detail .guide-step-copy h3{font-size:19px;line-height:1.5;margin:0 0 12px}
+.guide-step-copy h3 span{font-size:14px;color:#b25b32;margin-right:10px}
+.guide-step-copy ul{margin:0;padding-left:20px;font-size:16px;line-height:1.85}
+.guide-step-copy li+li{margin-top:8px}
+.guide-detail .guide-basics>p{font-size:15px;color:#6d6258}
+.guide-detail .guide-section{margin-top:32px}
+.guide-detail #safety{font-size:14px;line-height:1.85}
+@media(max-width:760px){.guide-dish-grid{grid-template-columns:1fr}.guide-detail{padding:24px 18px 40px}.guide-detail h1{font-size:28px}.guide-dishes{padding:18px}.guide-detail .guide-step{grid-template-columns:150px minmax(0,1fr);gap:18px}.guide-dish-card{padding:16px}.guide-detail .guide-step-copy h3{font-size:18px}}
+@media(max-width:480px){.guide-detail .guide-step{grid-template-columns:1fr;gap:16px}.guide-detail .guide-step .prep-photo,.guide-detail .guide-step .guide-step-frame{max-width:240px}.guide-detail h2{font-size:21px}}
